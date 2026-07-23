@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background: #f6f4fb;
+  color: #2b2a3d;
+}
+
+::selection {
+  background: rgba(111, 107, 199, 0.25);
+}
+
+@layer components {
+  /* Frosted card used throughout the app shell */
+  .card {
+    @apply bg-white/75 backdrop-blur-sm border border-white/60 rounded-4xl shadow-card;
+  }
+
+  .card-flat {
+    @apply bg-white/60 border border-white/50 rounded-2xl;
+  }
+
+  .btn-primary {
+    @apply bg-lavender text-white rounded-full px-6 py-3 font-medium text-sm
+      shadow-glow-lavender
+      hover:bg-lavender-deep active:scale-[0.98] transition
+      disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-white/70 border border-ink/10 text-ink rounded-full px-6 py-3 font-medium text-sm
+      hover:border-lavender/40 hover:bg-white transition
+      disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .input {
+    @apply w-full rounded-2xl border border-ink/10 px-4 py-3 text-sm bg-white/80
+      placeholder:text-ink-soft/60
+      focus:outline-none focus:ring-2 focus:ring-lavender/40 focus:border-lavender/40;
+  }
+
+  /* Selectable chip — category / difficulty / duration pickers */
+  .chip {
+    @apply px-4 py-2 rounded-full text-sm border transition select-none
+      border-ink/10 text-ink-soft hover:border-ink/25 hover:text-ink;
+  }
+  .chip-active {
+    @apply bg-ink text-white border-ink;
+  }
+
+  /* Section eyebrow label */
+  .eyebrow {
+    @apply text-xs font-medium uppercase tracking-wider text-ink-soft/70;
+  }
+}
+
+/* Visible keyboard focus everywhere, on top of any focus:ring utilities */
+:focus-visible {
+  outline: 2px solid theme("colors.lavender.DEFAULT");
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Thin, quiet scrollbars for transcript / topic lists */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(111, 107, 199, 0.35) transparent;
+}
+.scroll-thin::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: rgba(111, 107, 199, 0.35);
+  border-radius: 999px;
+}
+
+/* Respect reduced-motion preferences for ambient / speaking animations */
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe\:animate-drift,
+  .motion-safe\:animate-drift-slow,
+  .motion-safe\:animate-wave,
+  .motion-safe\:animate-rise {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,56 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: soulfluent
+      POSTGRES_PASSWORD: soulfluent
+      POSTGRES_DB: soulfluent
+    ports:
+      - "5346:5432"
+    volumes:
+      - soulfluent_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U soulfluent"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: soulfluent
+      MINIO_ROOT_PASSWORD: soulfluent123
+    # 9010/9011 chosen deliberately to avoid clashing with the 9000/9001
+    # MinIO instance already running for other projects on this machine.
+    ports:
+      - "9010:9000"
+      - "9011:9001"
+    volumes:
+      - soulfluent_minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+
+volumes:
+  soulfluent_db_data:
+  soulfluent_minio_data:
