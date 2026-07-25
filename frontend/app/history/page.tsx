@@ -45,60 +45,72 @@ export default function HistoryPage() {
   if (loading || !user) return null;
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <div className="mb-6">
-        <h1 className="font-display text-2xl text-ink mb-1">Your sessions</h1>
-        <p className="text-sm text-ink-soft">Every conversation you've practiced, in one place.</p>
+    <div className="py-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 className="font-display text-3xl text-ink font-semibold tracking-tight mb-1">Your Session History</h1>
+          <p className="text-sm text-slate-600">Review past conversations, transcripts, and AI fluency reports.</p>
+        </div>
+        <Link href="/" className="btn-primary !py-2.5 !px-5 text-xs sm:text-sm self-start sm:self-auto shrink-0 shadow-sm">
+          + Start New Session
+        </Link>
       </div>
 
       {loadingSessions ? (
-        <div className="space-y-3">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="card-flat h-[68px] animate-pulse" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="card h-40 animate-pulse bg-slate-100/60 border-slate-200/60" />
           ))}
         </div>
       ) : sessions.length === 0 ? (
-        <div className="card p-8 flex flex-col items-center text-center">
-          <div className="w-14 h-14 rounded-full bg-lavender-soft flex items-center justify-center mb-4">
-            <MessagesSquare size={22} className="text-lavender-deep" />
+        <div className="card p-12 flex flex-col items-center text-center max-w-lg mx-auto">
+          <div className="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center mb-4">
+            <MessagesSquare size={26} className="text-lavender" />
           </div>
-          <p className="text-sm font-medium mb-1">No sessions yet</p>
-          <p className="text-sm text-ink-soft mb-5">
-            Your first Group Discussion is one tap away.
+          <h2 className="text-base font-semibold text-slate-900 mb-1">No practice sessions yet</h2>
+          <p className="text-sm text-slate-500 mb-6 max-w-xs">
+            Start your first AI Group Discussion to build fluency and track your progress over time.
           </p>
           <Link href="/" className="btn-primary">
-            Start your first session
+            Start your first session →
           </Link>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {sessions.map((s) => (
             <Link
               key={s.id}
               href={s.status === "active" ? `/session/${s.id}` : `/session/${s.id}/report`}
-              className="card p-4 flex items-center justify-between gap-4 hover:shadow-glow-lavender transition block"
+              className="card p-5 flex flex-col justify-between hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 group"
             >
-              <div className="min-w-0">
-                <p className="font-medium text-sm truncate">{s.topic}</p>
-                <p className="text-xs text-ink-soft mt-1 flex items-center gap-1.5 flex-wrap">
-                  <span className="capitalize">{s.category.replace(/_/g, " ")}</span>
-                  <span aria-hidden>·</span>
-                  <span className="capitalize">{s.difficulty}</span>
-                  <span aria-hidden>·</span>
-                  <span className="inline-flex items-center gap-1">
-                    <Clock size={11} /> {s.duration_minutes}m
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    {s.category.replace(/_/g, " ")}
                   </span>
-                  <span aria-hidden>·</span>
-                  <span>{timeAgo(s.started_at)}</span>
-                </p>
+                  <span
+                    className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full capitalize ${
+                      STATUS_STYLE[s.status] || STATUS_STYLE.abandoned
+                    }`}
+                  >
+                    {s.status}
+                  </span>
+                </div>
+                <h3 className="font-semibold text-slate-900 text-base leading-snug group-hover:text-lavender transition-colors line-clamp-2 mb-4">
+                  {s.topic}
+                </h3>
               </div>
-              <span
-                className={`shrink-0 text-xs font-medium px-2.5 py-1 rounded-full capitalize ${
-                  STATUS_STYLE[s.status] || STATUS_STYLE.abandoned
-                }`}
-              >
-                {s.status}
-              </span>
+
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <div className="flex items-center gap-3">
+                  <span className="capitalize font-medium text-slate-700">{s.difficulty}</span>
+                  <span aria-hidden>·</span>
+                  <span className="inline-flex items-center gap-1 font-medium">
+                    <Clock size={12} className="text-slate-400" /> {s.duration_minutes}m
+                  </span>
+                </div>
+                <span>{timeAgo(s.started_at)}</span>
+              </div>
             </Link>
           ))}
         </div>

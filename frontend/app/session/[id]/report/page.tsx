@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { Sparkles, ArrowRight, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { api, FeedbackReport } from "@/lib/api";
 import ScoreGauge from "@/components/ScoreGauge";
@@ -11,7 +11,13 @@ import ScoreGauge from "@/components/ScoreGauge";
 // Sub-score keys get a persona-ish color so the report visually rhymes with
 // the transcript the person just came from, rather than defaulting to one
 // flat accent for every bar.
-const SUBSCORE_COLOR = ["bg-lavender", "bg-sage", "bg-apricot", "bg-lavender-deep", "bg-sage-deep", "bg-apricot-deep"];
+const SUBSCORE_COLOR = [
+  "bg-gradient-to-r from-indigo-500 to-indigo-600",
+  "bg-gradient-to-r from-emerald-500 to-teal-500",
+  "bg-gradient-to-r from-amber-500 to-orange-500",
+  "bg-gradient-to-r from-purple-500 to-pink-500",
+  "bg-gradient-to-r from-cyan-500 to-blue-500",
+];
 
 function MetricRow({ label, value }: { label: string; value: string | number }) {
   return (
@@ -62,103 +68,148 @@ export default function ReportPage() {
   const am = report.argument_metrics;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-5 pb-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="eyebrow mb-1">Session report</p>
-          <h1 className="font-display text-2xl text-ink">How it went</h1>
+    <div className="py-4 space-y-6 pb-6">
+      {/* User-friendly Top Action Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => {
+              if (typeof window !== "undefined" && window.history.length > 2) {
+                router.back();
+              } else {
+                router.push("/history");
+              }
+            }}
+            className="btn-secondary !py-2 !px-3.5 text-xs flex items-center gap-2 font-semibold text-slate-700 hover:text-slate-900 border-slate-200/90 shadow-sm transition-all"
+            aria-label="Go back"
+          >
+            <ArrowLeft size={14} />
+            <span>Back to Sessions</span>
+          </button>
+          <span className="hidden sm:inline text-slate-300">|</span>
+          <div className="hidden sm:block">
+            <p className="eyebrow text-[10px]">Session Report</p>
+            <h1 className="text-sm font-bold text-slate-900 truncate">Performance Breakdown</h1>
+          </div>
         </div>
-        <Link href="/" className="btn-secondary !py-2 !px-4 text-xs shrink-0">
-          New session
-        </Link>
+
+        <div className="flex items-center gap-2.5 self-start sm:self-auto">
+          <Link href="/history" className="btn-secondary !py-2 !px-4 text-xs font-semibold">
+            All History
+          </Link>
+          <Link href="/" className="btn-primary !py-2 !px-4 text-xs font-semibold shadow-sm">
+            + Start New Session
+          </Link>
+        </div>
       </div>
 
-      <div className="card p-5 sm:p-6 flex flex-col sm:flex-row items-center gap-6 sm:gap-8 motion-safe:animate-rise">
-        <ScoreGauge score={report.overall_score} label="Overall score" />
-        {/* A row-list (label · bar · value) rather than a wrapping grid — each
-            row is self-contained, so a long label like "Argument Quality"
-            wrapping to two lines can never push a sibling's bar out of line. */}
-        <div className="flex-1 w-full space-y-3">
-          {Object.entries(report.sub_scores).map(([key, val], i) => (
-            <div key={key} className="flex items-center gap-3">
-              <span className="w-24 sm:w-32 shrink-0 text-xs text-ink-soft capitalize leading-tight">
-                {key.replace(/_/g, " ")}
-              </span>
-              <div className="flex-1 h-2 rounded-full bg-ink/5 overflow-hidden">
-                <div
-                  className={`h-full rounded-full ${SUBSCORE_COLOR[i % SUBSCORE_COLOR.length]}`}
-                  style={{ width: `${Math.max(0, Math.min(100, val))}%` }}
-                />
+      {/* Main Title & Topic Card */}
+      <div className="space-y-1">
+        <p className="eyebrow text-slate-500">Feedback Summary</p>
+        <h1 className="font-display text-2xl sm:text-3xl text-ink font-semibold tracking-tight">
+          Performance Analysis
+        </h1>
+      </div>
+
+      {/* Main Score Hero Banner */}
+      <div className="card p-6 sm:p-8 flex flex-col md:flex-row items-center gap-8 border-slate-200/80 shadow-md">
+        <ScoreGauge score={report.overall_score} label="Overall Score" />
+
+        <div className="flex-1 w-full space-y-4">
+          <h3 className="eyebrow">Detailed Competency Scores</h3>
+          <div className="space-y-3">
+            {Object.entries(report.sub_scores).map(([key, val], i) => (
+              <div key={key} className="flex items-center gap-4">
+                <span className="w-28 sm:w-36 shrink-0 text-xs font-semibold text-slate-700 capitalize leading-tight">
+                  {key.replace(/_/g, " ")}
+                </span>
+                <div className="flex-1 h-3 rounded-full bg-slate-100 overflow-hidden p-0.5 border border-slate-200/50">
+                  <div
+                    className={`h-full rounded-full ${SUBSCORE_COLOR[i % SUBSCORE_COLOR.length]} transition-all duration-500`}
+                    style={{ width: `${Math.max(0, Math.min(100, val))}%` }}
+                  />
+                </div>
+                <span className="w-8 shrink-0 text-right text-sm font-bold tabular-nums text-slate-900">
+                  {Math.round(val)}
+                </span>
               </div>
-              <span className="w-7 shrink-0 text-right text-sm font-medium tabular-nums">
-                {Math.round(val)}
-              </span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="grid sm:grid-cols-3 gap-4">
-        <div className="card p-5">
-          <h3 className="font-medium mb-2 text-sm">Fluency</h3>
-          <MetricRow label="Words per minute" value={fm.words_per_minute} />
-          <MetricRow label="Filler words" value={fm.filler_word_count} />
-          <MetricRow label="Sentence completion" value={`${Math.round(fm.sentence_completion_rate * 100)}%`} />
-          <MetricRow label="Avg. sentence length" value={fm.average_sentence_length} />
+      {/* Metric Breakdown Grid: 3 columns on sm+ */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div className="card p-5 border-slate-200/80">
+          <h3 className="font-semibold text-slate-900 text-sm mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
+            <span>Fluency</span>
+            <span className="w-2 h-2 rounded-full bg-lavender" />
+          </h3>
+          <MetricRow label="Words / Min" value={fm.words_per_minute} />
+          <MetricRow label="Filler Words" value={fm.filler_word_count} />
+          <MetricRow label="Sentence Completion" value={`${Math.round(fm.sentence_completion_rate * 100)}%`} />
+          <MetricRow label="Avg. Sentence Length" value={fm.average_sentence_length} />
         </div>
-        <div className="card p-5">
-          <h3 className="font-medium mb-2 text-sm">Vocabulary</h3>
-          <MetricRow
-            label="Richness score"
-            value={`${Math.round(vm.vocabulary_richness_score * 100)}%`}
-          />
-          <MetricRow label="Grammar issues" value={vm.grammar_errors?.length ?? 0} />
-          <MetricRow label="Repeated phrases" value={vm.repeated_phrases?.length ?? 0} />
+
+        <div className="card p-5 border-slate-200/80">
+          <h3 className="font-semibold text-slate-900 text-sm mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
+            <span>Vocabulary</span>
+            <span className="w-2 h-2 rounded-full bg-sage" />
+          </h3>
+          <MetricRow label="Richness Score" value={`${Math.round(vm.vocabulary_richness_score * 100)}%`} />
+          <MetricRow label="Grammar Issues" value={vm.grammar_errors?.length ?? 0} />
+          <MetricRow label="Repeated Phrases" value={vm.repeated_phrases?.length ?? 0} />
         </div>
-        <div className="card p-5">
-          <h3 className="font-medium mb-2 text-sm">Argument Quality</h3>
-          <MetricRow label="Points made" value={am.distinct_points_made} />
-          <MetricRow label="Points defended" value={am.points_successfully_defended} />
-          <MetricRow label="Talk time" value={`${am.talk_time_percentage}%`} />
+
+        <div className="card p-5 border-slate-200/80">
+          <h3 className="font-semibold text-slate-900 text-sm mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
+            <span>Argument Quality</span>
+            <span className="w-2 h-2 rounded-full bg-apricot" />
+          </h3>
+          <MetricRow label="Points Made" value={am.distinct_points_made} />
+          <MetricRow label="Points Defended" value={am.points_successfully_defended} />
+          <MetricRow label="Talk Time Share" value={`${am.talk_time_percentage}%`} />
           <MetricRow label="Relevance" value={`${Math.round(am.relevance_score * 100)}%`} />
         </div>
       </div>
 
       {vm.phrases_to_avoid?.length > 0 && (
-        <div className="card p-5">
-          <h3 className="font-medium mb-3 text-sm">Phrases to swap out</h3>
-          <div className="space-y-2.5">
+        <div className="card p-6 border-slate-200/80">
+          <h3 className="font-semibold text-slate-900 text-sm mb-4">Phrases to Swap Out</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {vm.phrases_to_avoid.map((phrase: string, i: number) => (
-              <div key={i} className="flex items-center gap-3 text-sm flex-wrap">
-                <span className="line-through text-ink-soft/70">{phrase}</span>
-                <ArrowRight size={14} className="text-lavender shrink-0" />
-                <span className="font-medium">{vm.replacement_suggestions?.[i]}</span>
+              <div key={i} className="card-flat p-3 flex items-center gap-3 text-xs bg-slate-50/70 border-slate-200">
+                <span className="line-through text-slate-400 font-medium">{phrase}</span>
+                <ArrowRight size={14} className="text-indigo-500 shrink-0" />
+                <span className="font-semibold text-slate-900">{vm.replacement_suggestions?.[i]}</span>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      <div className="grid sm:grid-cols-2 gap-4">
-        <div className="card p-5">
-          <h3 className="font-medium mb-2.5 text-sm flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-sage" /> Best moments
+      {/* Best Moments & Focus Areas Side-by-Side */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="card p-6 border-emerald-200/80 bg-emerald-50/30">
+          <h3 className="font-semibold text-slate-900 text-sm mb-3 flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Best Moments
           </h3>
-          <ul className="space-y-2 text-sm text-ink-soft">
+          <ul className="space-y-2.5 text-xs text-slate-700">
             {report.highlight_reel.best_moments?.map((m, i) => (
-              <li key={i} className="pl-3 border-l-2 border-sage/40">
+              <li key={i} className="pl-3 border-l-2 border-emerald-400 font-medium leading-relaxed">
                 {m}
               </li>
             ))}
           </ul>
         </div>
-        <div className="card p-5">
-          <h3 className="font-medium mb-2.5 text-sm flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-apricot" /> Focus areas
+
+        <div className="card p-6 border-amber-200/80 bg-amber-50/30">
+          <h3 className="font-semibold text-slate-900 text-sm mb-3 flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Focus Areas
           </h3>
-          <ul className="space-y-2 text-sm text-ink-soft">
+          <ul className="space-y-2.5 text-xs text-slate-700">
             {report.highlight_reel.improvement_areas?.map((m, i) => (
-              <li key={i} className="pl-3 border-l-2 border-apricot/40">
+              <li key={i} className="pl-3 border-l-2 border-amber-400 font-medium leading-relaxed">
                 {m}
               </li>
             ))}
@@ -166,15 +217,16 @@ export default function ReportPage() {
         </div>
       </div>
 
-      <div className="card p-5 bg-lavender-soft/60 border-lavender/20">
-        <h3 className="font-medium mb-1.5 text-sm flex items-center gap-1.5">
-          <Sparkles size={14} className="text-lavender-deep" /> What to practice next
+      {/* Recommendation Card */}
+      <div className="card p-6 bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-100">
+        <h3 className="font-semibold text-slate-900 text-sm mb-2 flex items-center gap-2">
+          <Sparkles size={16} className="text-indigo-600" /> AI Recommendation for Next Session
         </h3>
-        <p className="text-sm text-ink-soft leading-relaxed">{report.recommendation}</p>
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">{report.recommendation}</p>
       </div>
 
-      <p className="text-center text-xs text-ink-soft/50">
-        {report.total_tokens.toLocaleString()} tokens · ${report.total_cost_usd.toFixed(4)} this session
+      <p className="text-center text-xs text-slate-400 font-mono">
+        {report.total_tokens.toLocaleString()} tokens processed · ${report.total_cost_usd.toFixed(4)} estimated cost
       </p>
     </div>
   );

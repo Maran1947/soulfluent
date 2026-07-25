@@ -63,125 +63,195 @@ export default function HomePage() {
   if (loading || !user) return null;
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-6">
-        <h1 className="font-display text-3xl text-ink mb-2">Start a Group Discussion</h1>
-        <p className="text-ink-soft text-sm leading-relaxed">
-          Two AI voices, one live conversation. They react to exactly what you say.
+    <div className="py-4">
+      {/* Top Banner Header */}
+      <div className="mb-8">
+        <h1 className="font-display text-3xl sm:text-4xl text-ink font-semibold tracking-tight mb-2">
+          Start a Group Discussion
+        </h1>
+        <p className="text-slate-600 text-sm sm:text-base max-w-2xl leading-relaxed">
+          Practice speaking naturally with intelligent AI personas who challenge, react, and build upon your points in real time.
         </p>
       </div>
 
-      {/* Persona intro strip — the two personas are the product's core hook,
-          so they get a permanent presence right where a session begins. */}
-      <div className="flex gap-3 mb-6">
-        <div className="card-flat flex-1 p-3.5 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-sage text-white flex items-center justify-center font-display font-semibold shrink-0">
-            R
-          </div>
-          <div className="min-w-0">
-            <p className="text-sm font-medium">Riya</p>
-            <p className="text-xs text-ink-soft truncate">Empathetic peacemaker</p>
-          </div>
-        </div>
-        <div className="card-flat flex-1 p-3.5 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-apricot text-white flex items-center justify-center font-display font-semibold shrink-0">
-            M
-          </div>
-          <div className="min-w-0">
-            <p className="text-sm font-medium">Meera</p>
-            <p className="text-xs text-ink-soft truncate">Confident contrarian</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="card p-6 space-y-6">
-        <div>
-          <label className="eyebrow block mb-2.5">Category</label>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => {
-                setCategory("");
-                setTopic("");
-              }}
-              className={`chip ${category === "" ? "chip-active" : ""}`}
-            >
-              Surprise me
-            </button>
-            {Object.keys(categories).map((cat) => (
-              <button
-                key={cat}
-                onClick={() => {
-                  setCategory(cat);
-                  setTopic("");
-                }}
-                className={`chip ${category === cat ? "chip-active" : ""}`}
-              >
-                {CATEGORY_LABELS[cat] || cat}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {category && (
-          <div>
-            <label className="eyebrow block mb-2.5">Topic</label>
-            <div className="space-y-2 max-h-48 overflow-y-auto pr-1 scroll-thin">
-              {(categories[category] || []).map((t) => (
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left Column: Configuration Form (7 cols on lg) */}
+        <div className="lg:col-span-7 space-y-6">
+          <div className="card p-6 sm:p-8 space-y-6">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <label className="eyebrow">1. Category</label>
+                {category && (
+                  <button
+                    onClick={() => {
+                      setCategory("");
+                      setTopic("");
+                    }}
+                    className="text-xs text-lavender font-medium hover:underline"
+                  >
+                    Reset category
+                  </button>
+                )}
+              </div>
+              <div className="flex flex-wrap gap-2">
                 <button
-                  key={t}
-                  onClick={() => setTopic(t)}
-                  className={`w-full text-left px-4 py-2.5 rounded-xl text-sm border transition ${
-                    topic === t
-                      ? "border-lavender bg-lavender-soft text-ink"
-                      : "border-ink/10 hover:border-ink/20"
-                  }`}
+                  onClick={() => {
+                    setCategory("");
+                    setTopic("");
+                  }}
+                  className={`chip ${category === "" ? "chip-active" : ""}`}
                 >
-                  {t}
+                  ✨ Surprise me
                 </button>
-              ))}
+                {Object.keys(categories).map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setCategory(cat);
+                      setTopic("");
+                    }}
+                    className={`chip ${category === cat ? "chip-active" : ""}`}
+                  >
+                    {CATEGORY_LABELS[cat] || cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {category && (
+              <div className="motion-safe:animate-rise">
+                <label className="eyebrow block mb-3">2. Select Topic</label>
+                <div className="space-y-2 max-h-56 overflow-y-auto pr-1 scroll-thin">
+                  {(categories[category] || []).map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setTopic(t)}
+                      className={`w-full text-left px-4 py-3 rounded-2xl text-sm border font-medium transition-all duration-200 ${
+                        topic === t
+                          ? "border-lavender bg-indigo-50/80 text-lavender-deep shadow-sm"
+                          : "border-slate-200/80 bg-white/60 hover:border-slate-300 hover:bg-white text-slate-700"
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div>
+              <label className="eyebrow block mb-3">3. Difficulty Level</label>
+              <div className="grid grid-cols-3 gap-2">
+                {DIFFICULTIES.map((d) => (
+                  <button
+                    key={d.key}
+                    onClick={() => setDifficulty(d.key)}
+                    className={`chip px-3 py-2.5 text-center font-medium ${
+                      difficulty === d.key ? "chip-active" : ""
+                    }`}
+                  >
+                    {d.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="eyebrow block mb-3">4. Target Duration</label>
+              <div className="grid grid-cols-4 gap-2">
+                {DURATIONS.map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => setDuration(d)}
+                    className={`chip px-3 py-2.5 text-center font-semibold tabular-nums ${
+                      duration === d ? "chip-active" : ""
+                    }`}
+                  >
+                    {d} mins
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {error && (
+              <p className="text-sm text-rose-600 bg-rose-50 border border-rose-200/80 rounded-2xl px-4 py-3 font-medium">
+                {error}
+              </p>
+            )}
+
+            <button
+              onClick={handleStart}
+              disabled={creating}
+              className="btn-primary w-full py-4 text-base shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 font-semibold tracking-wide"
+            >
+              {creating ? "Setting up your GD session…" : "Start Group Discussion →"}
+            </button>
+          </div>
+        </div>
+
+        {/* Right Column: Persona Showcase & How It Works (5 cols on lg) */}
+        <div className="lg:col-span-5 space-y-6">
+          {/* Persona Card */}
+          <div className="card p-6 border-slate-200/80">
+            <h2 className="eyebrow mb-4">Your Discussion Partners</h2>
+            <div className="space-y-4">
+              <div className="card-flat p-4 flex items-start gap-3.5 bg-emerald-50/50 border-emerald-100">
+                <div className="w-11 h-11 rounded-2xl bg-sage text-white flex items-center justify-center font-display font-semibold text-lg shrink-0 shadow-sm">
+                  R
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold text-slate-900">Riya</p>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-semibold">
+                      Empathetic
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                    Summarizes key arguments, bridges views, and ensures everyone gets a fair chance to present ideas.
+                  </p>
+                </div>
+              </div>
+
+              <div className="card-flat p-4 flex items-start gap-3.5 bg-amber-50/50 border-amber-100">
+                <div className="w-11 h-11 rounded-2xl bg-apricot text-white flex items-center justify-center font-display font-semibold text-lg shrink-0 shadow-sm">
+                  M
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold text-slate-900">Meera</p>
+                    <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-semibold">
+                      Contrarian
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                    Challenges assumptions, presents sharp counter-points, and tests your ability to defend arguments under pressure.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        )}
 
-        <div>
-          <label className="eyebrow block mb-2.5">Difficulty</label>
-          <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
-            {DIFFICULTIES.map((d) => (
-              <button
-                key={d.key}
-                onClick={() => setDifficulty(d.key)}
-                className={`chip min-w-0 px-1.5 sm:px-4 py-2 text-xs sm:text-sm text-center truncate ${
-                  difficulty === d.key ? "chip-active" : ""
-                }`}
-              >
-                {d.label}
-              </button>
-            ))}
+          {/* Quick Guide Card */}
+          <div className="card p-6 bg-gradient-to-br from-indigo-50/60 to-purple-50/60 border-indigo-100/80">
+            <h3 className="font-display font-semibold text-slate-900 text-base mb-3 flex items-center gap-2">
+              💡 How GD Sessions Work
+            </h3>
+            <ul className="space-y-2.5 text-xs text-slate-600">
+              <li className="flex items-start gap-2">
+                <span className="font-semibold text-indigo-600 shrink-0">1.</span>
+                <span>Hold the microphone button to record your thoughts in natural English.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="font-semibold text-indigo-600 shrink-0">2.</span>
+                <span>Riya & Meera listen and take turns responding to your points via realistic voice audio.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="font-semibold text-indigo-600 shrink-0">3.</span>
+                <span>Get a complete AI breakdown on Fluency, Filler words, and Argument Quality upon completion.</span>
+              </li>
+            </ul>
           </div>
         </div>
-
-        <div>
-          <label className="eyebrow block mb-2.5">Duration</label>
-          <div className="grid grid-cols-4 gap-2">
-            {DURATIONS.map((d) => (
-              <button
-                key={d}
-                onClick={() => setDuration(d)}
-                className={`chip min-w-0 px-1.5 sm:px-4 text-center tabular-nums ${
-                  duration === d ? "chip-active" : ""
-                }`}
-              >
-                {d}m
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {error && <p className="text-sm text-rose-500 bg-rose-50 rounded-xl px-3 py-2">{error}</p>}
-
-        <button onClick={handleStart} disabled={creating} className="btn-primary w-full">
-          {creating ? "Setting up your session…" : "Start Group Discussion"}
-        </button>
       </div>
     </div>
   );

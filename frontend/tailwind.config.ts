@@ -6,15 +6,15 @@ const config: Config = {
     extend: {
       colors: {
         // Base
-        ink: "#2B2A3D", // deep plum-grey, not pure black — warmer
-        "ink-soft": "#6B6980",
-        canvas: "#F6F4FB",
+        ink: "#0F172A", // Deep slate for high legibility
+        "ink-soft": "#475569", // Refined slate mute
+        canvas: "#F8FAFC",
         // Signature accents, one per bottom-nav tab — and per GD persona
-        lavender: { DEFAULT: "#6F6BC7", soft: "#EDEBFB", deep: "#524FA0" }, // Practice / You
-        sage: { DEFAULT: "#5FA88E", soft: "#E7F3EE", deep: "#3E7E68" }, // Learn / Riya (calm)
-        apricot: { DEFAULT: "#E7A66D", soft: "#FCEFE1", deep: "#C97E3F" }, // Games / Meera (bold)
+        lavender: { DEFAULT: "#6366F1", soft: "#EEF2FF", deep: "#4F46E5" }, // Practice / You (Indigo-Lavender)
+        sage: { DEFAULT: "#10B981", soft: "#ECFDF5", deep: "#059669" }, // Learn / Riya (Emerald-Sage)
+        apricot: { DEFAULT: "#F59E0B", soft: "#FFFBEB", deep: "#D97706" }, // Games / Meera (Warm Amber)
         // Ambient gradient stops
-        dawn: { peach: "#FDEEDF", lavender: "#EFEBFB", sage: "#E7F2EE" },
+        dawn: { peach: "#FFF7ED", lavender: "#F5F3FF", sage: "#ECFDF5" },
       },
       fontFamily: {
         display: ["var(--font-display)", "serif"],
@@ -23,13 +23,15 @@ const config: Config = {
       },
       borderRadius: {
         xl2: "1.25rem",
+        "3xl": "1.5rem",
         "4xl": "2rem",
       },
       boxShadow: {
-        card: "0 8px 30px -12px rgba(111,107,199,0.25)",
-        "glow-lavender": "0 6px 20px -6px rgba(111,107,199,0.55)",
-        "glow-sage": "0 6px 20px -6px rgba(95,168,142,0.55)",
-        "glow-apricot": "0 6px 20px -6px rgba(231,166,109,0.55)",
+        card: "0 10px 30px -5px rgba(15, 23, 42, 0.05), 0 4px 12px -3px rgba(15, 23, 42, 0.03)",
+        "card-hover": "0 20px 40px -15px rgba(99, 102, 241, 0.15), 0 8px 16px -6px rgba(15, 23, 42, 0.06)",
+        "glow-lavender": "0 8px 25px -5px rgba(99, 102, 241, 0.35)",
+        "glow-sage": "0 8px 25px -5px rgba(16, 185, 129, 0.35)",
+        "glow-apricot": "0 8px 25px -5px rgba(245, 158, 11, 0.35)",
       },
       keyframes: {
         drift: {

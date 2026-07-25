@@ -29,42 +29,44 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-center max-w-sm mx-auto px-5 py-12">
-      <Wordmark tagline="Welcome back — ready for another conversation?" />
-      <form onSubmit={handleSubmit} className="card p-6 space-y-4 motion-safe:animate-rise">
+    <div className="min-h-screen flex flex-col justify-center max-w-md mx-auto px-4 py-12">
+      <Wordmark tagline="Welcome back — ready for another practice conversation?" />
+      <form onSubmit={handleSubmit} className="card p-8 space-y-5 motion-safe:animate-rise shadow-xl border-slate-200/80">
         <div>
-          <label className="block text-sm font-medium mb-1.5">Email</label>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Email Address</label>
           <input
             type="email"
             required
             autoComplete="email"
+            placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="input"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1.5">Password</label>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Password</label>
           <input
             type="password"
             required
             autoComplete="current-password"
+            placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="input"
           />
         </div>
         {error && (
-          <p className="text-sm text-rose-500 bg-rose-50 rounded-xl px-3 py-2">{error}</p>
+          <p className="text-xs font-medium text-rose-600 bg-rose-50 border border-rose-200/80 rounded-xl px-3.5 py-2.5">{error}</p>
         )}
-        <button type="submit" disabled={submitting} className="btn-primary w-full">
-          {submitting ? "Logging in…" : "Log in"}
+        <button type="submit" disabled={submitting} className="btn-primary w-full py-3.5 shadow-md">
+          {submitting ? "Logging in…" : "Log in to SoulFluent →"}
         </button>
       </form>
-      <p className="text-center text-sm text-ink-soft mt-5">
+      <p className="text-center text-sm text-slate-600 mt-6">
         No account yet?{" "}
-        <Link href="/register" className="text-lavender-deep font-medium">
-          Sign up
+        <Link href="/register" className="text-indigo-600 font-semibold hover:underline">
+          Sign up for free
         </Link>
       </p>
     </div>
