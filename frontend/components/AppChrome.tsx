@@ -10,23 +10,24 @@ const NO_CHROME_PREFIXES = ["/login", "/register"];
 export default function AppChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "/";
   
-  // Hide chrome ONLY for auth pages and live meeting room (NOT for /session/[id]/report)
+  // Hide header & bottom nav for auth pages and live meeting room
   const isReportPage = pathname.includes("/report");
   const isLiveSessionRoom = pathname.startsWith("/session") && !isReportPage;
-  const hideChrome = NO_CHROME_PREFIXES.some((p) => pathname.startsWith(p)) || isLiveSessionRoom;
+  const hideHeaderNav = NO_CHROME_PREFIXES.some((p) => pathname.startsWith(p)) || isLiveSessionRoom;
 
-  if (hideChrome) {
+  if (hideHeaderNav) {
     return (
-      <div className="min-h-screen text-ink selection:bg-lavender/20 flex flex-col">
-        <main className="w-full flex-1 flex flex-col">{children}</main>
+      <div className="min-h-screen text-slate-900 dark:text-slate-100 flex flex-col relative">
+        <AmbientBackground />
+        <main className="w-full flex-1 flex flex-col relative z-10">{children}</main>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen text-ink selection:bg-lavender/20">
+    <div className="min-h-screen text-slate-900 dark:text-slate-100 relative">
       <AmbientBackground />
-      <div className="w-full max-w-7xl mx-auto min-h-screen px-4 sm:px-6 lg:px-8 relative flex flex-col">
+      <div className="w-full max-w-7xl mx-auto min-h-screen px-4 sm:px-6 lg:px-8 relative flex flex-col z-10">
         <AppHeader />
         <main className="flex-1 pb-24 md:pb-12">{children}</main>
         <BottomNav />

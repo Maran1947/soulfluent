@@ -1,52 +1,46 @@
 "use client";
 
-import { useState } from "react";
-import { Sun, Moon, Droplets } from "lucide-react";
+import React from "react";
+import { Sun, Moon } from "lucide-react";
+import { useTheme } from "@/lib/theme";
 
 type Props = {
-  themeMode: "dark" | "light";
-  onToggle: () => void;
+  themeMode?: "dark" | "light";
+  onToggle?: (e?: React.MouseEvent) => void;
+  className?: string;
 };
 
-export default function ThemeToggle({ themeMode, onToggle }: Props) {
-  const [ripple, setRipple] = useState(false);
-  const isLight = themeMode === "light";
+export default function ThemeToggle({
+  themeMode: propThemeMode,
+  onToggle: propOnToggle,
+  className = "",
+}: Props) {
+  const globalTheme = useTheme();
 
-  function handleClick() {
-    setRipple(true);
-    onToggle();
-    setTimeout(() => setRipple(false), 750);
-  }
+  const currentTheme = propThemeMode ?? globalTheme.theme;
+  const isLight = currentTheme === "light";
+
+  const handleSwitch = (e?: React.MouseEvent) => {
+    if (propOnToggle) {
+      propOnToggle(e);
+    } else {
+      globalTheme.toggleTheme(e);
+    }
+  };
 
   return (
     <button
-      onClick={handleClick}
-      aria-label={`Switch to ${isLight ? "Dark" : "Light"} Mode`}
-      title={`Switch to ${isLight ? "Dark" : "Light"} Mode`}
-      className={`relative overflow-hidden group flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all duration-300 shadow-sm select-none ${
-        isLight
-          ? "bg-gradient-to-r from-sky-400 via-indigo-500 to-cyan-400 text-white border-sky-300/80 shadow-sky-500/20 animate-liquid-flow"
-          : "bg-gradient-to-r from-indigo-950 via-slate-900 to-blue-950 text-amber-300 border-slate-700/80 shadow-slate-950/40 animate-liquid-flow"
-      }`}
+      type="button"
+      onClick={(e) => handleSwitch(e)}
+      aria-label={`Switch to ${isLight ? "Dark" : "Light"} mode`}
+      title={`Switch to ${isLight ? "Dark" : "Light"} mode`}
+      className={`w-8 h-8 rounded-xl flex items-center justify-center border border-slate-200/90 dark:border-rose-900/40 bg-white/90 dark:bg-[#131722] text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#1c2232] hover:border-[#F25C40]/40 transition-all shadow-xs cursor-pointer ${className}`}
     >
-      {/* Liquid Water Wave Ripple Overlay */}
-      {ripple && (
-        <span
-          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full animate-liquid-ripple pointer-events-none ${
-            isLight ? "bg-amber-300/60" : "bg-sky-400/60"
-          }`}
-        />
+      {isLight ? (
+        <Moon size={15} className="text-slate-700 transition-transform duration-300 hover:-rotate-12" />
+      ) : (
+        <Sun size={15} className="text-amber-400 transition-transform duration-300 hover:rotate-45" />
       )}
-
-      <div className="relative z-10 flex items-center gap-1.5">
-        <span className="transition-transform duration-500 ease-out transform group-hover:rotate-180 group-hover:scale-110 flex items-center">
-          {isLight ? <Sun size={15} className="text-amber-200 fill-amber-200/40" /> : <Moon size={15} className="text-indigo-300 fill-indigo-300/30" />}
-        </span>
-        <span className="tracking-tight text-xs font-semibold">
-          {isLight ? "Light Mode" : "Dark Mode"}
-        </span>
-        <Droplets size={12} className="opacity-60 animate-pulse" />
-      </div>
     </button>
   );
 }

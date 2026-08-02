@@ -1,7 +1,5 @@
 "use client";
 
-// Tier reads as a word, not just a number — "overall score" is an abstract
-// concept, the tier label is what someone actually acts on.
 function tier(score: number): { color: string; deep: string; label: string } {
   if (score >= 80) return { color: "#5FA88E", deep: "#3E7E68", label: "Strong" };
   if (score >= 60) return { color: "#6F6BC7", deep: "#524FA0", label: "Solid" };
@@ -26,7 +24,7 @@ export default function ScoreGauge({ score, label }: { score: number; label?: st
             <stop offset="100%" stopColor={t.deep} />
           </linearGradient>
         </defs>
-        <circle cx="70" cy="70" r={radius} fill="none" stroke="#EFEBFB" strokeWidth="12" />
+        <circle cx="70" cy="70" r={radius} fill="none" strokeWidth="12" className="stroke-slate-200 dark:stroke-slate-800" />
         <circle
           cx="70"
           cy="70"
@@ -47,15 +45,15 @@ export default function ScoreGauge({ score, label }: { score: number; label?: st
           fontSize="32"
           fontWeight="600"
           fontFamily="var(--font-display)"
-          fill="#2B2A3D"
+          className="fill-slate-900 dark:fill-slate-100"
         >
           {Math.round(clamped)}
         </text>
-        <text x="70" y="90" textAnchor="middle" fontSize="11" fill="#6B6980">
+        <text x="70" y="90" textAnchor="middle" fontSize="11" className="fill-slate-500 dark:fill-slate-400">
           {t.label}
         </text>
       </svg>
-      {label && <span className="text-sm text-ink-soft">{label}</span>}
+      {label && <span className="text-sm text-slate-600 dark:text-slate-400">{label}</span>}
     </div>
   );
 }

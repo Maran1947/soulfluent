@@ -8,6 +8,7 @@ import { api, GDMessage, GDSession } from "@/lib/api";
 import MicButton from "@/components/MicButton";
 import ParticipantCard from "@/components/ParticipantCard";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "@/lib/theme";
 
 const PERSONA_BUBBLE: Record<string, { dark: string; light: string }> = {
   riya: {
@@ -53,7 +54,7 @@ export default function SessionPage() {
   const [error, setError] = useState("");
   const [ending, setEnding] = useState(false);
   const [showChat, setShowChat] = useState(true);
-  const [themeMode, setThemeMode] = useState<"dark" | "light">("dark");
+  const { theme: themeMode } = useTheme();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const transcriptEndRef = useRef<HTMLDivElement | null>(null);
@@ -173,12 +174,6 @@ export default function SessionPage() {
         </div>
 
         <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
-          {/* Water Flow Liquid Theme Toggle Button */}
-          <ThemeToggle
-            themeMode={themeMode}
-            onToggle={() => setThemeMode((m) => (m === "dark" ? "light" : "dark"))}
-          />
-
           {/* Timer Badge */}
           <div
             className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tabular-nums border transition-colors ${
@@ -209,6 +204,9 @@ export default function SessionPage() {
               {messages.length}
             </span>
           </button>
+
+          {/* Theme Toggle at extreme top right corner */}
+          <ThemeToggle />
         </div>
       </div>
 

@@ -3,66 +3,97 @@
 @tailwind utilities;
 
 html {
-  color-scheme: light;
+  color-scheme: light dark;
+}
+
+.dark html {
+  color-scheme: dark;
 }
 
 body {
-  background: #f8fafc;
+  background: #faf5f3;
   color: #0f172a;
+}
+
+.dark body {
+  background: #0f121a;
+  color: #f8fafc;
 }
 
 ::selection {
-  background: rgba(99, 102, 241, 0.2);
-  color: #0f172a;
+  background: rgba(242, 92, 64, 0.25);
+  color: inherit;
+}
+
+/* Telegram / Linear Style Radial Circular Ripple Sweep View Transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+.dark::view-transition-old(root) {
+  z-index: 9999;
+}
+
+.dark::view-transition-new(root) {
+  z-index: 1;
 }
 
 @layer components {
-  /* Frosted card used throughout the app shell */
+  /* Warm Coral / Terracotta executive card container */
   .card {
-    @apply bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl shadow-card transition-all duration-200;
+    @apply bg-white dark:bg-[#181d29] border border-[#fce3dc] dark:border-rose-900/30 rounded-2xl shadow-[0_20px_50px_rgba(242,92,64,0.06)] dark:shadow-[0_4px_25px_rgba(0,0,0,0.6)] transition-all duration-200;
   }
 
   .card-flat {
-    @apply bg-slate-50/80 border border-slate-200/70 rounded-2xl;
+    @apply bg-[#fcfbfb] dark:bg-[#131722] border border-[#f5e7e3] dark:border-rose-900/30 rounded-xl;
   }
 
   .btn-primary {
-    @apply bg-lavender text-white rounded-full px-6 py-3 font-semibold text-sm
-      shadow-glow-lavender
-      hover:bg-lavender-deep active:scale-[0.98] transition-all duration-200
-      disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none;
+    @apply bg-[#f25c40] hover:bg-[#e04b30] text-white rounded-xl px-5 py-3.5 font-semibold text-sm
+      shadow-md shadow-[#f25c40]/25 active:scale-[0.99] transition-all duration-200
+      disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
   }
 
   .btn-secondary {
-    @apply bg-white border border-slate-200 text-ink rounded-full px-6 py-3 font-semibold text-sm
-      shadow-sm hover:border-lavender/40 hover:bg-slate-50 transition-all duration-200
-      disabled:opacity-40 disabled:cursor-not-allowed;
+    @apply bg-white dark:bg-[#181d29] border border-slate-200/90 dark:border-rose-900/30 text-slate-800 dark:text-slate-200 rounded-xl px-5 py-3 font-semibold text-sm
+      shadow-sm hover:bg-[#faf5f3] dark:hover:bg-[#202737] hover:border-[#f25c40]/30 dark:hover:border-rose-700/50 transition-all duration-200
+      disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .input {
-    @apply w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm bg-white/90
-      placeholder:text-slate-400
-      focus:outline-none focus:ring-2 focus:ring-lavender/40 focus:border-lavender;
+    @apply w-full rounded-xl border border-slate-200/90 dark:border-rose-900/30 px-3.5 py-2.5 text-sm bg-white dark:bg-[#181d29] text-slate-900 dark:text-slate-100
+      placeholder:text-slate-400 dark:placeholder:text-slate-500
+      focus:outline-none focus:ring-2 focus:ring-[#f25c40]/20 focus:border-[#f25c40] dark:focus:border-[#f25c40] transition-all;
   }
 
   /* Selectable chip — category / difficulty / duration pickers */
   .chip {
-    @apply px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 select-none
-      border-slate-200 text-slate-600 bg-white/70 hover:border-slate-300 hover:text-slate-900 hover:bg-white;
+    @apply px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 select-none
+      border-slate-200/90 dark:border-rose-900/30 text-slate-700 dark:text-rose-100 bg-white dark:bg-[#181d29] hover:border-[#f25c40]/40 dark:hover:border-rose-700 hover:text-slate-900 dark:hover:text-white hover:bg-[#faf5f3] dark:hover:bg-[#202737];
   }
   .chip-active {
-    @apply bg-ink text-white border-ink shadow-sm;
+    @apply bg-[#f25c40] text-white border-[#f25c40] shadow-sm;
   }
 
   /* Section eyebrow label */
   .eyebrow {
-    @apply text-xs font-semibold uppercase tracking-wider text-slate-500;
+    @apply text-[11px] font-bold uppercase tracking-wider text-[#f25c40]/80 dark:text-rose-300/70;
   }
 }
 
-/* Visible keyboard focus everywhere, on top of any focus:ring utilities */
+/* Visible keyboard focus everywhere */
 :focus-visible {
-  outline: 2px solid theme("colors.lavender.DEFAULT");
+  outline: 2px solid #f25c40;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -70,61 +101,22 @@ body {
 /* Thin, quiet scrollbars for transcript / topic lists */
 .scroll-thin {
   scrollbar-width: thin;
-  scrollbar-color: rgba(111, 107, 199, 0.35) transparent;
+  scrollbar-color: rgba(242, 92, 64, 0.35) transparent;
 }
 .scroll-thin::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 .scroll-thin::-webkit-scrollbar-thumb {
-  background: rgba(111, 107, 199, 0.35);
+  background: rgba(242, 92, 64, 0.35);
   border-radius: 999px;
 }
 
-/* Fluid Liquid Water Ripple & Flow Animations for Theme Switcher */
-@keyframes liquidRipple {
-  0% {
-    transform: scale(0);
-    opacity: 0.9;
-  }
-  50% {
-    transform: scale(2.2);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(3.5);
-    opacity: 0;
-  }
-}
-
-.animate-liquid-ripple {
-  animation: liquidRipple 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes liquidFlow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.animate-liquid-flow {
-  background-size: 200% 200%;
-  animation: liquidFlow 6s ease-in-out infinite;
-}
-
-/* Respect reduced-motion preferences for ambient / speaking animations */
+/* Respect reduced-motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .motion-safe\:animate-drift,
   .motion-safe\:animate-drift-slow,
   .motion-safe\:animate-wave,
-  .motion-safe\:animate-rise,
-  .animate-liquid-ripple,
-  .animate-liquid-flow {
+  .motion-safe\:animate-rise {
     animation: none !important;
   }
 }

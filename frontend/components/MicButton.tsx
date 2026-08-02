@@ -133,8 +133,8 @@ export default function MicButton({ disabled, compact = false, onRecordingComple
           aria-label={labelText}
           className={`relative select-none w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 ${
             recording
-              ? "bg-rose-600 border border-rose-500 shadow-[0_0_20px_rgba(225,29,72,0.6)] scale-105"
-              : "bg-indigo-600 border border-indigo-500 text-white hover:bg-indigo-500 shadow-md"
+              ? "bg-rose-600 border border-rose-500 shadow-[0_0_20px_rgba(242,92,64,0.6)] scale-105"
+              : "bg-[#F25C40] border border-[#FA5A3A] text-white hover:bg-[#E04B30] shadow-md shadow-[#F25C40]/20"
           } disabled:opacity-40 disabled:cursor-not-allowed`}
         >
           {recording && (
@@ -181,8 +181,8 @@ export default function MicButton({ disabled, compact = false, onRecordingComple
         className={`relative select-none w-20 h-20 rounded-full flex items-center justify-center transition-all duration-200
           ${
             recording
-              ? "bg-rose-500 shadow-[0_10px_30px_-8px_rgba(244,63,94,0.6)] scale-105"
-              : "bg-lavender shadow-glow-lavender hover:bg-lavender-deep"
+              ? "bg-rose-500 shadow-[0_10px_30px_-8px_rgba(242,92,64,0.6)] scale-105"
+              : "bg-[#F25C40] shadow-md shadow-[#F25C40]/25 hover:bg-[#E04B30]"
           }
           disabled:opacity-40 disabled:cursor-not-allowed`}
       >
@@ -206,7 +206,7 @@ export default function MicButton({ disabled, compact = false, onRecordingComple
           <Mic size={26} className="relative z-10 text-white" strokeWidth={2.2} />
         )}
       </button>
-      <p className="text-xs font-medium text-ink-soft">
+      <p className="text-xs font-medium text-slate-600 dark:text-slate-400">
         {labelText}
       </p>
     </div>

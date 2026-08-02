@@ -1,16 +1,25 @@
-// Shared brand mark for the two screens that exist outside AppChrome
-// (login/register have no header). A single breathing dot echoes the
-// ambient background orbs — the same "calm, alive" signature, just closer up.
 export default function Wordmark({ tagline }: { tagline?: string }) {
   return (
-    <div className="text-center mb-8">
-      <div className="inline-flex items-center gap-2 mb-3">
-        <span className="relative w-2.5 h-2.5 rounded-full bg-lavender">
-          <span className="absolute inset-0 rounded-full bg-lavender/60 motion-safe:animate-ping" />
+    <div className="text-left mb-8">
+      <div className="flex items-center gap-3 mb-3">
+        {/* Coral Audio Soundwave Badge Icon */}
+        <div className="w-11 h-11 bg-gradient-to-br from-[#FA5A3A] to-[#F25C40] rounded-2xl flex items-center justify-center gap-[3px] shadow-md shadow-[#F25C40]/20 shrink-0">
+          <span className="w-[3px] h-3.5 bg-white rounded-full"></span>
+          <span className="w-[3px] h-5 bg-white rounded-full"></span>
+          <span className="w-[3px] h-6 bg-white rounded-full"></span>
+          <span className="w-[3px] h-4 bg-white rounded-full"></span>
+          <span className="w-[3px] h-2.5 bg-white rounded-full"></span>
+        </div>
+        <span className="text-2xl font-bold tracking-tight">
+          <span className="text-slate-900 dark:text-slate-100">Soul</span>
+          <span className="text-[#F25C40]">Fluent</span>
         </span>
-        <span className="font-display italic text-2xl text-ink tracking-tight">SoulFluent</span>
       </div>
-      {tagline && <p className="text-sm text-ink-soft">{tagline}</p>}
+      {tagline && (
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-xs">
+          {tagline}
+        </p>
+      )}
     </div>
   );
 }

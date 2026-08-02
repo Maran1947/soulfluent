@@ -1,6 +1,7 @@
 "use client";
 
-import { Mic, MicOff } from "lucide-react";
+import { MicOff } from "lucide-react";
+import { useTheme } from "@/lib/theme";
 
 const PERSONA_CONFIG: Record<
   string,
@@ -8,7 +9,7 @@ const PERSONA_CONFIG: Record<
 > = {
   riya: { avatarBg: "bg-emerald-600", ringColor: "ring-emerald-500", accentBg: "bg-emerald-500", role: "AI Moderator" },
   meera: { avatarBg: "bg-amber-600", ringColor: "ring-amber-500", accentBg: "bg-amber-500", role: "AI Challenger" },
-  user: { avatarBg: "bg-indigo-600", ringColor: "ring-indigo-500", accentBg: "bg-indigo-500", role: "You" },
+  user: { avatarBg: "bg-[#F25C40]", ringColor: "ring-[#F25C40]", accentBg: "bg-[#F25C40]", role: "You" },
 };
 
 const FALLBACK_CONFIG = { avatarBg: "bg-slate-700", ringColor: "ring-slate-500", accentBg: "bg-slate-500", role: "Participant" };
@@ -17,33 +18,35 @@ export default function ParticipantCard({
   name,
   isSpeaking,
   isUser = false,
-  themeMode = "dark",
+  themeMode: propThemeMode,
 }: {
   name: string;
   isSpeaking: boolean;
   isUser?: boolean;
   themeMode?: "dark" | "light";
 }) {
+  const globalTheme = useTheme();
+  const themeMode = propThemeMode ?? globalTheme.theme;
+  const isLight = themeMode === "light";
+
   const key = isUser ? "user" : name.toLowerCase();
   const config = PERSONA_CONFIG[key] || FALLBACK_CONFIG;
   const initial = name.charAt(0).toUpperCase();
-
-  const isLight = themeMode === "light";
 
   return (
     <div
       className={`relative overflow-hidden rounded-2xl border transition-all duration-300 aspect-[4/3] sm:aspect-video flex flex-col items-center justify-center ${
         isLight
           ? isSpeaking
-            ? "bg-emerald-50/60 border-emerald-500 ring-2 ring-emerald-500/80 shadow-[0_0_20px_rgba(16,185,129,0.25)]"
-            : "bg-slate-100/80 border-slate-200/90 hover:border-slate-300 shadow-sm"
+            ? "bg-[#FDEEE9]/60 border-[#F25C40] ring-2 ring-[#F25C40]/80 shadow-[0_0_20px_rgba(242,92,64,0.25)]"
+            : "bg-white border-[#fce3dc] hover:border-[#f25c40]/40 shadow-sm"
           : isSpeaking
-          ? "bg-slate-900 border-emerald-500 ring-2 ring-emerald-500/80 shadow-[0_0_25px_rgba(16,185,129,0.3)]"
-          : "bg-slate-900 border-slate-800/80 hover:border-slate-700"
+          ? "bg-[#181d29] border-[#F25C40] ring-2 ring-[#F25C40]/80 shadow-[0_0_25px_rgba(242,92,64,0.3)]"
+          : "bg-[#181d29] border-rose-900/30 hover:border-rose-800/50"
       }`}
     >
       {/* Background subtle mesh glow */}
-      <div className={`absolute inset-0 opacity-10 bg-gradient-to-br ${isLight ? "from-indigo-100 via-transparent to-slate-200" : "from-white via-transparent to-black"}`} />
+      <div className={`absolute inset-0 opacity-10 bg-gradient-to-br ${isLight ? "from-[#FA5A3A] via-transparent to-slate-200" : "from-white via-transparent to-black"}`} />
 
       {/* Main Center Avatar */}
       <div className="relative flex flex-col items-center justify-center z-10">
@@ -59,12 +62,12 @@ export default function ParticipantCard({
         </div>
       </div>
 
-      {/* Google Meet Bottom Overlay Tag */}
+      {/* Bottom Overlay Tag */}
       <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between z-20 pointer-events-none">
         <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl backdrop-blur-md border shadow-sm ${
           isLight
-            ? "bg-white/90 border-slate-200 text-slate-800"
-            : "bg-slate-950/80 border-slate-800/80 text-white"
+            ? "bg-white/90 border-[#fce3dc] text-slate-800"
+            : "bg-[#0f121a]/80 border-rose-900/30 text-white"
         }`}>
           <div className="flex items-center gap-1.5">
             {isSpeaking ? (
@@ -72,13 +75,13 @@ export default function ParticipantCard({
                 {[0, 1, 2].map((i) => (
                   <span
                     key={i}
-                    className="w-[3px] rounded-full bg-emerald-500 motion-safe:animate-wave"
+                    className="w-[3px] rounded-full bg-[#F25C40] motion-safe:animate-wave"
                     style={{ height: "100%", animationDelay: `${i * 0.15}s` }}
                   />
                 ))}
               </div>
             ) : (
-              <MicOff size={13} className={isLight ? "text-slate-400" : "text-slate-400"} />
+              <MicOff size={13} className="text-slate-400" />
             )}
             <span className={`text-xs font-semibold ${isLight ? "text-slate-900" : "text-slate-100"}`}>{name}</span>
           </div>
