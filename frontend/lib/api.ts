@@ -126,6 +126,7 @@ export const api = {
   getTopics: () => request<{ categories: Record<string, string[]> }>("/gd/topics"),
 
   createSession: (payload: {
+    mode?: "gd" | "debate";
     topic?: string;
     category?: string;
     difficulty?: string;

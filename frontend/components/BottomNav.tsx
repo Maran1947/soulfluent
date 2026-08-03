@@ -2,26 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, MessagesSquare, Gamepad2 } from "lucide-react";
+import { History, MessagesSquare } from "lucide-react";
 
 const TABS = [
-  {
-    href: "/learn",
-    label: "Learn",
-    icon: BookOpen,
-    match: (p: string) => p.startsWith("/learn"),
-  },
   {
     href: "/",
     label: "Practice",
     icon: MessagesSquare,
-    match: (p: string) => p === "/" || p.startsWith("/session") || p.startsWith("/history"),
+    match: (p: string) => p === "/" || p.startsWith("/session"),
   },
   {
-    href: "/games",
-    label: "Games",
-    icon: Gamepad2,
-    match: (p: string) => p.startsWith("/games"),
+    href: "/history",
+    label: "History",
+    icon: History,
+    match: (p: string) => p.startsWith("/history"),
   },
 ];
 
@@ -38,7 +32,7 @@ export default function BottomNav() {
             <Link
               key={tab.href}
               href={tab.href}
-              className={`flex flex-col items-center justify-center gap-0.5 rounded-full px-5 py-2 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center gap-0.5 rounded-full px-6 py-2 transition-all duration-200 ${
                 active
                   ? "bg-[#F25C40] text-white font-semibold shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"

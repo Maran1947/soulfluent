@@ -15,9 +15,8 @@ function greeting(): string {
 }
 
 const NAV_ITEMS = [
-  { href: "/", label: "Practice", icon: MessagesSquare, match: (p: string) => p === "/" || p.startsWith("/session") || p.startsWith("/history") },
-  { href: "/learn", label: "Learn", icon: BookOpen, match: (p: string) => p.startsWith("/learn") },
-  { href: "/games", label: "Games", icon: Gamepad2, match: (p: string) => p.startsWith("/games") },
+  { href: "/", label: "Practice", icon: MessagesSquare, match: (p: string) => p === "/" || p.startsWith("/session") },
+  { href: "/history", label: "History", icon: History, match: (p: string) => p.startsWith("/history") },
 ];
 
 export default function AppHeader() {
@@ -48,7 +47,7 @@ export default function AppHeader() {
 
   return (
     <header className="py-5 mb-4 flex items-center justify-between border-b border-slate-200/60 dark:border-rose-900/40 transition-colors">
-      {/* Brand logo & Greeting */}
+      {/* Brand logo */}
       <div className="flex items-center gap-6">
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="w-8 h-8 bg-gradient-to-br from-[#FA5A3A] to-[#F25C40] rounded-xl flex items-center justify-center gap-[2px] shadow-sm shadow-[#F25C40]/20 shrink-0">
@@ -62,10 +61,6 @@ export default function AppHeader() {
             <span className="text-[#F25C40]">Fluent</span>
           </span>
         </Link>
-
-        <div className="hidden sm:block pl-4 border-l border-slate-200 dark:border-rose-900/40 text-xs text-slate-500 dark:text-slate-400">
-          <p>{greeting()}, <span className="font-semibold text-slate-700 dark:text-slate-200">{user.name.split(" ")[0]}</span></p>
-        </div>
       </div>
 
       {/* Desktop Navigation Links */}
@@ -92,11 +87,6 @@ export default function AppHeader() {
 
       {/* Profile & User Menu */}
       <div className="flex items-center gap-3">
-        <div className="sm:hidden text-right">
-          <p className="text-[11px] text-slate-500 dark:text-slate-400">{greeting()}</p>
-          <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">{user.name.split(" ")[0]}</p>
-        </div>
-
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setOpen((v) => !v)}

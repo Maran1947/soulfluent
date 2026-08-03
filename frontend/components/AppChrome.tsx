@@ -27,9 +27,9 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen text-slate-900 dark:text-slate-100 relative">
       <AmbientBackground />
-      <div className="w-full max-w-7xl mx-auto min-h-screen px-4 sm:px-6 lg:px-8 relative flex flex-col z-10">
+      <div className="w-full max-w-5xl mx-auto min-h-screen px-4 sm:px-6 relative flex flex-col z-10">
         <AppHeader />
-        <main className="flex-1 pb-24 md:pb-12">{children}</main>
+        <main className="flex-1 flex flex-col items-center justify-center pb-12">{children}</main>
         <BottomNav />
       </div>
     </div>
