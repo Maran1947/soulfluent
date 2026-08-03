@@ -9,11 +9,12 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
 if TYPE_CHECKING:
-    from app.models.gd_session import GDSession
+    from app.models.session import Session
 
 
 class User(Base):
     __tablename__ = "users"
+    __table_args__ = {"schema": "auth"}
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
@@ -25,6 +26,6 @@ class User(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-    sessions: Mapped[list["GDSession"]] = relationship(
+    sessions: Mapped[list["Session"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )

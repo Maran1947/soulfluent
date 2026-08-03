@@ -3,7 +3,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
-from app.models.gd_session import Difficulty, SessionStatus
+from app.models.session import Difficulty, SessionStatus
 
 
 class CreateSessionRequest(BaseModel):

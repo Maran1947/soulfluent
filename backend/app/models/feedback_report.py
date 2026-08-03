@@ -9,18 +9,19 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
 if TYPE_CHECKING:
-    from app.models.gd_session import GDSession
+    from app.models.session import Session
 
 
 class FeedbackReport(Base):
     __tablename__ = "feedback_reports"
+    __table_args__ = {"schema": "analytics"}
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     session_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
-        ForeignKey("gd_sessions.id", ondelete="CASCADE"),
+        ForeignKey("conversation.sessions.id", ondelete="CASCADE"),
         nullable=False,
         unique=True,
     )
@@ -37,4 +38,4 @@ class FeedbackReport(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-    session: Mapped["GDSession"] = relationship(back_populates="report")
+    session: Mapped["Session"] = relationship(back_populates="report")

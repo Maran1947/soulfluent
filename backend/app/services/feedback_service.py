@@ -7,7 +7,7 @@ import uuid
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.gd_message import GDMessage
+from app.models.message import Message
 from app.services.gemini_service import analyze_session
 
 FILLER_WORDS = ["um", "uh", "like", "basically", "you know", "sort of", "actually", "i mean"]
@@ -33,7 +33,7 @@ def _sentence_completion_rate(user_turns: list[str]) -> float:
     return round(completed / len(user_turns), 2)
 
 
-def compute_objective_metrics(messages: list[GDMessage]) -> dict:
+def compute_objective_metrics(messages: list[Message]) -> dict:
     user_msgs = [m for m in messages if m.speaker == "user"]
     ai_msgs = [m for m in messages if m.speaker != "user"]
 
@@ -76,7 +76,7 @@ def compute_objective_metrics(messages: list[GDMessage]) -> dict:
     }
 
 
-def _build_transcript(messages: list[GDMessage], persona_names: dict[str, str]) -> str:
+def _build_transcript(messages: list[Message], persona_names: dict[str, str]) -> str:
     lines = []
     for m in messages:
         label = "user" if m.speaker == "user" else persona_names.get(m.speaker, m.speaker)
@@ -86,7 +86,7 @@ def _build_transcript(messages: list[GDMessage], persona_names: dict[str, str]) 
 
 async def build_feedback_report(
     topic: str,
-    messages: list[GDMessage],
+    messages: list[Message],
     persona_names: dict[str, str],
     db: AsyncSession | None = None,
     session_id: uuid.UUID | None = None,

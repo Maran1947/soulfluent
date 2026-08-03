@@ -12,8 +12,8 @@ from sqlalchemy.orm import selectinload
 from app.api.deps import get_current_user
 from app.config import get_settings
 from app.database import get_db
-from app.models.gd_message import GDMessage
-from app.models.gd_session import GDSession, SessionStatus
+from app.models.message import Message
+from app.models.session import Session, SessionStatus
 from app.models.user import User
 from app.schemas.gd import (
     CreateSessionRequest,
@@ -52,7 +52,7 @@ def _wav_duration_seconds(wav_bytes: bytes) -> float:
         return wf.getnframes() / float(wf.getframerate())
 
 
-def _session_to_out(session: GDSession) -> SessionOut:
+def _session_to_out(session: Session) -> SessionOut:
     personas = [
         PersonaOut(key=p.key, name=p.name, personality=p.personality, voice_name=p.voice_name)
         for p in get_personas(session.personas)
@@ -72,11 +72,11 @@ def _session_to_out(session: GDSession) -> SessionOut:
 
 async def _get_owned_session(
     session_id: uuid.UUID, user: User, db: AsyncSession, with_messages: bool = False
-) -> GDSession:
-    stmt = select(GDSession).where(GDSession.id == session_id)
+) -> Session:
+    stmt = select(Session).where(Session.id == session_id)
     if with_messages:
         stmt = stmt.options(
-            selectinload(GDSession.messages), selectinload(GDSession.report)
+            selectinload(Session.messages), selectinload(Session.report)
         )
     result = await db.execute(stmt)
     session = result.scalar_one_or_none()
@@ -106,7 +106,7 @@ async def create_session(
         )
 
     topic = payload.topic or random_topic()
-    session = GDSession(
+    session = Session(
         user_id=current_user.id,
         topic=topic,
         category=payload.category,
@@ -129,9 +129,9 @@ async def list_sessions(
     current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)
 ):
     result = await db.execute(
-        select(GDSession)
-        .where(GDSession.user_id == current_user.id)
-        .order_by(GDSession.started_at.desc())
+        select(Session)
+        .where(Session.user_id == current_user.id)
+        .order_by(Session.started_at.desc())
     )
     return [_session_to_out(s) for s in result.scalars().all()]
 
@@ -197,7 +197,7 @@ async def submit_turn(
         session.id, user_turn_index, "user", _extension_for_mime(mime_type)
     )
     await upload_audio(user_audio_key, audio_bytes, mime_type)
-    user_message = GDMessage(
+    user_message = Message(
         session_id=session.id,
         turn_index=user_turn_index,
         speaker="user",
@@ -235,7 +235,7 @@ async def submit_turn(
     ai_turn_index = session.turn_index
     ai_audio_key = build_audio_key(session.id, ai_turn_index, speaker_persona.key, "wav")
     await upload_audio(ai_audio_key, ai_audio, "audio/wav")
-    ai_message = GDMessage(
+    ai_message = Message(
         session_id=session.id,
         turn_index=ai_turn_index,
         speaker=speaker_persona.key,
@@ -328,7 +328,7 @@ async def get_report(
 ):
     session = await _get_owned_session(session_id, current_user, db)
     result = await db.execute(
-        select(GDSession).where(GDSession.id == session_id).options(selectinload(GDSession.report))
+        select(Session).where(Session.id == session_id).options(selectinload(Session.report))
     )
     session = result.scalar_one()
     if session.report is None:
