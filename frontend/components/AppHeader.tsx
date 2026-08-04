@@ -41,7 +41,40 @@ export default function AppHeader() {
     };
   }, []);
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <header className="py-5 mb-4 flex items-center justify-between border-b border-slate-200/60 dark:border-rose-900/40 transition-colors">
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="w-8 h-8 bg-gradient-to-br from-[#FA5A3A] to-[#F25C40] rounded-xl flex items-center justify-center gap-[2px] shadow-sm shadow-[#F25C40]/20 shrink-0">
+            <span className="w-[2px] h-2.5 bg-white rounded-full"></span>
+            <span className="w-[2px] h-4 bg-white rounded-full"></span>
+            <span className="w-[2px] h-5 bg-white rounded-full"></span>
+            <span className="w-[2px] h-3 bg-white rounded-full"></span>
+          </div>
+          <span className="text-xl font-bold tracking-tight">
+            <span className="text-slate-900 dark:text-white">Soul</span>
+            <span className="text-[#F25C40]">Fluent</span>
+          </span>
+        </Link>
+
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <Link
+            href="/login"
+            className="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+          >
+            Sign In
+          </Link>
+          <Link
+            href="/register"
+            className="px-4 py-2 rounded-xl text-xs font-extrabold bg-[#F25C40] text-white shadow-xs hover:bg-[#FA5A3A] transition-all"
+          >
+            Get Started
+          </Link>
+        </div>
+      </header>
+    );
+  }
 
   const initial = user.name.charAt(0).toUpperCase();
 

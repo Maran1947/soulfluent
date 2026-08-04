@@ -23,6 +23,7 @@ import {
   Zap,
   UserCheck,
 } from "lucide-react";
+import LandingPage from "@/components/LandingPage";
 
 const CATEGORIES: { key: string; label: string; icon: any; desc: string }[] = [
   { key: "current_affairs", label: "Current Affairs", icon: Globe, desc: "Geopolitics & tech trends" },
@@ -203,9 +204,7 @@ export default function HomePage() {
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (!loading && !user) router.push("/login");
-  }, [loading, user, router]);
+
 
   useEffect(() => {
     api.getTopics().then((res) => {
@@ -259,7 +258,8 @@ export default function HomePage() {
     }
   }
 
-  if (loading || !user) return null;
+  if (loading) return null;
+  if (!user) return <LandingPage />;
 
   const currentTopics = category ? categories[category] || [] : [];
   const topicOptions = currentTopics.map((t) => ({ value: t, label: t }));
