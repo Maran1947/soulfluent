@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:soulfluent_mobile/config/constants.dart';
+import 'package:soulfluent_mobile/models/user.dart';
+import 'package:soulfluent_mobile/services/api_service.dart';
+
+class AuthProvider extends ChangeNotifier {
+  final ApiService _apiService;
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+
+  User? _currentUser;
+  String? _token;
+  bool _isLoading = true;
+  String? _errorMessage;
+
+  User? get currentUser => _currentUser;
+  String? get token => _token;
+  bool get isAuthenticated => _token != null && _currentUser != null;
+  bool get isLoading => _isLoading;
+  String? get errorMessage => _errorMessage;
+
+  AuthProvider(this._apiService) {
+    _initAuth();
+  }
+
+  Future<void> _initAuth() async {
+    try {
+      _token = await _storage.read(key: AppConstants.tokenKey);
+      if (_token != null) {
+        _apiService.setAuthToken(_token);
+        _currentUser = await _apiService.getMe();
+      }
+    } catch (e) {
+      _token = null;
+      _currentUser = null;
+      await _storage.delete(key: AppConstants.tokenKey);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> login(String email, String password) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final res = await _apiService.login(email, password);
+      _token = res.accessToken;
+      _currentUser = res.user;
+      _apiService.setAuthToken(_token);
+      await _storage.write(key: AppConstants.tokenKey, value: _token);
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> register(String email, String password, String name) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final res = await _apiService.register(email, password, name);
+      _token = res.accessToken;
+      _currentUser = res.user;
+      _apiService.setAuthToken(_token);
+      await _storage.write(key: AppConstants.tokenKey, value: _token);
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<void> logout() async {
+    _token = null;
+    _currentUser = null;
+    _apiService.setAuthToken(null);
+    await _storage.delete(key: AppConstants.tokenKey);
+    notifyListeners();
+  }
+}

@@ -1,0 +1,92 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildpath
+.cproject
+.data/
+.git/
+.hg/
+.idea/
+.metadata
+.output/
+.project
+.pydevproject
+.settings/
+.svn/
+.vscode/
+bin/
+*.iml
+
+# Flutter / Dart / Pub
+**/doc/api/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+**/build/
+
+# Symbol listing & obfuscation maps
+app.*.symbols
+app.*.map.json
+out/
+
+# Android
+**/android/app/profile
+**/android/app/release
+**/android/app/debug
+**/android/build/
+android/.gradle/
+android/.kotlin/
+android/captures/
+android/gradleApp.setting
+android/local.properties
+android/*.iml
+android/*/*.iml
+android/*.ipr
+android/*.iws
+android/.idea/
+
+# iOS / macOS
+**/ios/Runner/GeneratedPluginRegistrant.h
+**/ios/Runner/GeneratedPluginRegistrant.m
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.flt
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Runner.xcodeproj/project.xcworkspace
+**/ios/Runner.xcworkspace/
+**/ios/DerivedData/
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/profile/
+**/ios/release/
+**/ios/debug/
+
+# Coverage
+coverage/
+
+# Environment / Secrets
+.env
+.env.*
+!.env.example
+
+# Credentials & Keystores
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+
+# Exceptions to above rules
+!**/ios/Runner/GeneratedPluginRegistrant.h
+!**/ios/Runner/GeneratedPluginRegistrant.m
