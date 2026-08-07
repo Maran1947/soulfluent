@@ -10,10 +10,13 @@ class CreateSessionRequest(BaseModel):
     topic: str | None = Field(default=None, description="If omitted, a random topic is chosen")
     category: str = "general"
     difficulty: Difficulty = Difficulty.intermediate
-    duration_minutes: int = Field(default=10, ge=5, le=20)
+    duration_minutes: int = Field(default=10, ge=1, le=60)
     persona_keys: list[str] | None = Field(
         default=None, description="Defaults to the two MVP personas if omitted"
     )
+    day_number: int | None = None
+    initial_ai_text: str | None = None
+    scaffold_phrases: list[str] | None = None
 
 
 class PersonaOut(BaseModel):

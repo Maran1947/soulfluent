@@ -87,6 +87,9 @@ class ApiService {
     required String difficulty,
     int durationMinutes = 10,
     List<String>? personaKeys,
+    int? dayNumber,
+    String? initialAiText,
+    List<String>? scaffoldPhrases,
   }) async {
     final response = await http.post(
       Uri.parse('$baseUrl/gd/sessions'),
@@ -98,6 +101,9 @@ class ApiService {
         'duration_minutes': durationMinutes,
         if (personaKeys != null && personaKeys.isNotEmpty)
           'persona_keys': personaKeys,
+        if (dayNumber != null) 'day_number': dayNumber,
+        if (initialAiText != null) 'initial_ai_text': initialAiText,
+        if (scaffoldPhrases != null) 'scaffold_phrases': scaffoldPhrases,
       }),
     );
 
@@ -107,6 +113,53 @@ class ApiService {
     }
 
     return GDSession.fromJson(jsonDecode(response.body));
+  }
+
+  // Curriculum APIs
+  Future<Map<String, dynamic>> getCurriculum() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/curriculum'),
+      headers: _headers,
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load curriculum');
+    }
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> getCurriculumProgress() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/curriculum/progress'),
+      headers: _headers,
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load curriculum progress');
+    }
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> updateCurriculumProgress({
+    int? currentDay,
+    String? activeTrack,
+    bool? reviewMode,
+    int? completedDay,
+    bool? reset,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/curriculum/progress'),
+      headers: _headers,
+      body: jsonEncode({
+        if (currentDay != null) 'current_day': currentDay,
+        if (activeTrack != null) 'active_track': activeTrack,
+        if (reviewMode != null) 'review_mode': reviewMode,
+        if (completedDay != null) 'completed_day': completedDay,
+        if (reset != null) 'reset': reset,
+      }),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update curriculum progress');
+    }
+    return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
   Future<GDSession> getSession(String sessionId) async {

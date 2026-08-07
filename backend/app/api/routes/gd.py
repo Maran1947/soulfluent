@@ -106,6 +106,14 @@ async def create_session(
         )
 
     topic = payload.topic or random_topic()
+    config_data = {}
+    if payload.day_number is not None:
+        config_data["day_number"] = payload.day_number
+    if payload.initial_ai_text:
+        config_data["initial_ai_text"] = payload.initial_ai_text
+    if payload.scaffold_phrases:
+        config_data["scaffold_phrases"] = payload.scaffold_phrases
+
     session = Session(
         user_id=current_user.id,
         topic=topic,
@@ -113,6 +121,7 @@ async def create_session(
         difficulty=payload.difficulty,
         duration_minutes=payload.duration_minutes,
         personas=persona_keys,
+        config=config_data,
         status=SessionStatus.active,
         turn_index=0,
         last_speaker="",
@@ -121,6 +130,48 @@ async def create_session(
     db.add(session)
     await db.commit()
     await db.refresh(session)
+
+    if payload.initial_ai_text:
+        primary_persona_key = persona_keys[0]
+        speaker_persona = PERSONAS.get(primary_persona_key, PERSONAS["riya"])
+        try:
+            ai_audio = await synthesize_speech(
+                payload.initial_ai_text, speaker_persona.voice_name, db=db, session_id=session.id
+            )
+            ai_duration = _wav_duration_seconds(ai_audio)
+            ai_audio_key = build_audio_key(session.id, 0, speaker_persona.key, "wav")
+            await upload_audio(ai_audio_key, ai_audio, "audio/wav")
+
+            ai_message = Message(
+                session_id=session.id,
+                turn_index=0,
+                speaker=speaker_persona.key,
+                text=payload.initial_ai_text,
+                audio_duration_seconds=ai_duration,
+                audio_key=ai_audio_key,
+            )
+            db.add(ai_message)
+            session.turn_index = 1
+            session.last_speaker = speaker_persona.key
+            session.silent_turns = update_silent_turns(session, speaker_persona.key)
+            await db.commit()
+            await db.refresh(session)
+        except Exception as e:
+            # Fallback if TTS fails on startup
+            ai_message = Message(
+                session_id=session.id,
+                turn_index=0,
+                speaker=speaker_persona.key,
+                text=payload.initial_ai_text,
+                audio_duration_seconds=3.0,
+                audio_key="",
+            )
+            db.add(ai_message)
+            session.turn_index = 1
+            session.last_speaker = speaker_persona.key
+            await db.commit()
+            await db.refresh(session)
+
     return _session_to_out(session)
 
 

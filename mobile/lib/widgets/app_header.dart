@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soulfluent_mobile/providers/auth_provider.dart';
+import 'package:soulfluent_mobile/providers/gd_provider.dart';
 import 'package:soulfluent_mobile/providers/theme_provider.dart';
 
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -104,52 +105,119 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                   const SizedBox(height: 12),
 
                   // Session History Link
-                  ListTile(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    leading: const Icon(Icons.history, color: Color(0xFFF25C40)),
-                    title: Text(
-                      'Session History',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                        color: currentIsDark ? Colors.white : const Color(0xFF0F172A),
+                  Material(
+                    color: Colors.transparent,
+                    child: ListTile(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      leading: const Icon(Icons.history, color: Color(0xFFF25C40)),
+                      title: Text(
+                        'Session History',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: currentIsDark ? Colors.white : const Color(0xFF0F172A),
+                        ),
                       ),
+                      trailing: const Icon(Icons.chevron_right, size: 20),
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        Navigator.pushNamed(context, '/history');
+                      },
                     ),
-                    trailing: const Icon(Icons.chevron_right, size: 20),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      Navigator.pushNamed(context, '/history');
+                  ),
+
+                  // Learner Track Setting Dropdown
+                  Consumer<GDProvider>(
+                    builder: (context, gd, _) {
+                      final activeTrack = gd.activeTrack;
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: currentIsDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: currentIsDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'LEARNER TRACK',
+                              style: TextStyle(
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.bold,
+                                color: currentIsDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                                letterSpacing: 0.05,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: activeTrack,
+                                isExpanded: true,
+                                dropdownColor: currentIsDark ? const Color(0xFF1E293B) : Colors.white,
+                                icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFFF25C40)),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: currentIsDark ? Colors.white : const Color(0xFF0F172A),
+                                ),
+                                onChanged: (String? val) {
+                                  if (val != null) {
+                                    gd.setActiveTrack(val);
+                                  }
+                                },
+                                items: const [
+                                  DropdownMenuItem(
+                                    value: 'A',
+                                    child: Text('Track A · Unfreeze (Default)'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'B',
+                                    child: Text('Track B · Scratch'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
                     },
                   ),
 
                   // Theme Toggle Switch
-                  ListTile(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    leading: Icon(
-                      currentIsDark ? Icons.dark_mode : Icons.light_mode,
-                      color: const Color(0xFFF59E0B),
-                    ),
-                    title: Text(
-                      'Theme',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                        color: currentIsDark ? Colors.white : const Color(0xFF0F172A),
+                  Material(
+                    color: Colors.transparent,
+                    child: ListTile(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      leading: Icon(
+                        currentIsDark ? Icons.dark_mode : Icons.light_mode,
+                        color: const Color(0xFFF59E0B),
                       ),
-                    ),
-                    subtitle: Text(
-                      currentIsDark ? 'Dark Mode' : 'Light Mode',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: currentIsDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                      title: Text(
+                        'Theme',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: currentIsDark ? Colors.white : const Color(0xFF0F172A),
+                        ),
                       ),
-                    ),
-                    trailing: Switch(
-                      value: currentIsDark,
-                      activeColor: const Color(0xFFF25C40),
-                      onChanged: (val) {
-                        context.read<ThemeProvider>().toggleTheme(val);
-                      },
+                      subtitle: Text(
+                        currentIsDark ? 'Dark Mode' : 'Light Mode',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: currentIsDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                        ),
+                      ),
+                      trailing: Switch(
+                        value: currentIsDark,
+                        activeColor: const Color(0xFFF25C40),
+                        onChanged: (val) {
+                          context.read<ThemeProvider>().toggleTheme(val);
+                        },
+                      ),
                     ),
                   ),
 
@@ -158,24 +226,27 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                   const SizedBox(height: 8),
 
                   // Logout
-                  ListTile(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    leading: const Icon(Icons.logout, color: Colors.redAccent),
-                    title: const Text(
-                      'Log out',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                        color: Colors.redAccent,
+                  Material(
+                    color: Colors.transparent,
+                    child: ListTile(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      leading: const Icon(Icons.logout, color: Colors.redAccent),
+                      title: const Text(
+                        'Log out',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: Colors.redAccent,
+                        ),
                       ),
+                      onTap: () async {
+                        Navigator.pop(ctx);
+                        await auth.logout();
+                        if (context.mounted) {
+                          Navigator.pushReplacementNamed(context, '/auth');
+                        }
+                      },
                     ),
-                    onTap: () async {
-                      Navigator.pop(ctx);
-                      await auth.logout();
-                      if (context.mounted) {
-                        Navigator.pushReplacementNamed(context, '/auth');
-                      }
-                    },
                   ),
 
                   const SizedBox(height: 12),

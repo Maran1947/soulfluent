@@ -114,19 +114,50 @@ class GDArenaScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  PersonaCard(
-                    personaKey: 'riya',
-                    name: 'Riya',
-                    personality: 'Empathetic Peacemaker (Warm, encouraging)',
-                    isSpeaking: gd.activeSpeaker == 'riya',
-                  ),
-                  const SizedBox(height: 12),
-                  PersonaCard(
-                    personaKey: 'meera',
-                    name: 'Meera',
-                    personality: 'Confident Contrarian (Sharp, analytical)',
-                    isSpeaking: gd.activeSpeaker == 'meera',
-                  ),
+                  ...session.personas.map((p) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: PersonaCard(
+                        personaKey: p.key,
+                        name: p.name,
+                        personality: p.personality,
+                        isSpeaking: gd.activeSpeaker == p.key,
+                      ),
+                    );
+                  }).toList(),
+                  if (gd.activeScaffoldPhrases.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: gd.activeScaffoldPhrases.map((phrase) {
+                          return Container(
+                            margin: const EdgeInsets.only(right: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF1E293B),
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(color: const Color(0xFFF25C40).withOpacity(0.5)),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.tips_and_updates, size: 12, color: Color(0xFFF25C40)),
+                                const SizedBox(width: 6),
+                                Text(
+                                  phrase,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

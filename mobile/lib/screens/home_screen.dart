@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:soulfluent_mobile/config/theme.dart';
 import 'package:soulfluent_mobile/providers/auth_provider.dart';
 import 'package:soulfluent_mobile/providers/gd_provider.dart';
+import 'package:soulfluent_mobile/screens/path_screen.dart';
 import 'package:soulfluent_mobile/widgets/app_header.dart';
 import 'package:soulfluent_mobile/widgets/logo_widgets.dart';
 
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _activeTab = 0; // 0 = 30-Day Path, 1 = Free Practice GD & Debate
   int currentStep = 1; // 1 to 4
 
   String selectedMode = 'gd'; // 'gd' or 'debate'
@@ -175,183 +177,212 @@ class _HomeScreenState extends State<HomeScreen> {
     final subtitleColor = isDark ? AppTheme.textMuted : AppTheme.textMutedLight;
 
     return Scaffold(
-      appBar: const AppHeader(
-        title: 'SoulFluent',
-      ),
-      body: Stack(
+      appBar: _activeTab == 1 ? const AppHeader(title: 'SoulFluent') : null,
+      backgroundColor: isDark ? AppTheme.background : AppTheme.lightBackground,
+      body: IndexedStack(
+        index: _activeTab,
         children: [
-          // Ambient Waves Background
-          Positioned.fill(
-            child: CustomPaint(
-              painter: BackgroundWavesPainter(
-                color: AppTheme.primary,
-                isDark: isDark,
-              ),
-            ),
-          ),
-
-          SafeArea(
-            child: Column(
-              children: [
-                // Top Welcome & Stepper Bar
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                  child: Column(
-                    children: [
-                      // User Greeting Subtitle
-                      Row(
-                        children: [
-                          Text(
-                            'Welcome, ${user?.name ?? 'Practitioner'} 👋',
-                            style: GoogleFonts.outfit(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: headingColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Stepper Navigation Header Card (1 Practice Mode | 2 Topic / Prompt | 3 AI Voice Partners | 4 Setup & Launch)
-                      _buildStepperHeader(isDark, cardBg, borderColor, headingColor, subtitleColor),
-                    ],
+          const PathScreen(),
+          Stack(
+            children: [
+              // Ambient Waves Background
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: BackgroundWavesPainter(
+                    color: AppTheme.primary,
+                    isDark: isDark,
                   ),
                 ),
+              ),
 
-                // Step Content Card
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
-                    child: Container(
-                      constraints: const BoxConstraints(maxWidth: 520),
-                      decoration: BoxDecoration(
-                        color: cardBg,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: borderColor),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(isDark ? 0.3 : 0.06),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(22),
+              SafeArea(
+                child: Column(
+                  children: [
+                    // Top Welcome & Stepper Bar
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // Step Indicator Badge ("✨ Step X of 4")
-                          Center(
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFEBE5),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.auto_awesome,
-                                    size: 14,
-                                    color: AppTheme.primary,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    'Step $currentStep of 4',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppTheme.primary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 16),
-
-                          // Dynamic Step Content Body
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 250),
-                            child: _buildStepContent(currentStep, isDark, headingColor, subtitleColor, borderColor, cardBg, gd),
-                          ),
-
-                          const SizedBox(height: 28),
-
-                          // Action Buttons (Back & Continue / Launch)
+                          // User Greeting Subtitle
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              if (currentStep > 1)
-                                OutlinedButton.icon(
-                                  onPressed: _prevStep,
-                                  icon: const Icon(Icons.arrow_back_rounded, size: 16),
-                                  label: Text(
-                                    'Back',
-                                    style: GoogleFonts.inter(fontWeight: FontWeight.w600),
-                                  ),
-                                  style: OutlinedButton.styleFrom(
-                                    foregroundColor: headingColor,
-                                    side: BorderSide(color: borderColor),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                                  ),
-                                )
-                              else
-                                const SizedBox.shrink(),
-
-                              ElevatedButton(
-                                onPressed: gd.isLoading ? null : _nextStep,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.primary,
-                                  foregroundColor: Colors.white,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                              Text(
+                                'Welcome, ${user?.name ?? 'Practitioner'} 👋',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: headingColor,
                                 ),
-                                child: gd.isLoading
-                                    ? const SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          color: Colors.white,
-                                          strokeWidth: 2,
-                                        ),
-                                      )
-                                    : Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            currentStep == 4 ? 'Start Session' : 'Continue',
-                                            style: GoogleFonts.inter(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 6),
-                                          Icon(
-                                            currentStep == 4 ? Icons.rocket_launch_rounded : Icons.arrow_forward_rounded,
-                                            size: 18,
-                                          ),
-                                        ],
-                                      ),
                               ),
                             ],
                           ),
+                          const SizedBox(height: 10),
+
+                          // Stepper Navigation Header Card (1 Practice Mode | 2 Topic / Prompt | 3 AI Voice Partners | 4 Setup & Launch)
+                          _buildStepperHeader(isDark, cardBg, borderColor, headingColor, subtitleColor),
                         ],
                       ),
                     ),
-                  ),
+
+                    // Step Content Card
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 520),
+                          decoration: BoxDecoration(
+                            color: cardBg,
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(color: borderColor),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(isDark ? 0.3 : 0.06),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          padding: const EdgeInsets.all(22),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              // Step Indicator Badge ("✨ Step X of 4")
+                              Center(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFEBE5),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    '✨ Step $currentStep of 4',
+                                    style: GoogleFonts.inter(
+                                      color: AppTheme.primary,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 18),
+
+                              // Dynamic Step Body
+                              if (currentStep == 1)
+                                _buildStep1PracticeMode(isDark, headingColor, subtitleColor, borderColor)
+                              else if (currentStep == 2)
+                                _buildStep2Topic(isDark, headingColor, subtitleColor, borderColor, cardBg, gd)
+                              else if (currentStep == 3)
+                                _buildStep3VoicePartners(isDark, headingColor, subtitleColor, borderColor, cardBg)
+                              else
+                                _buildStep4Launch(isDark, headingColor, subtitleColor, borderColor, cardBg),
+
+                              const SizedBox(height: 24),
+
+                              // Navigation Buttons Footer (Back / Continue)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  if (currentStep > 1)
+                                    OutlinedButton.icon(
+                                      onPressed: _prevStep,
+                                      icon: const Icon(Icons.arrow_back_rounded, size: 16),
+                                      label: Text(
+                                        'Back',
+                                        style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                                      ),
+                                      style: OutlinedButton.styleFrom(
+                                        foregroundColor: headingColor,
+                                        side: BorderSide(color: borderColor),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                                      ),
+                                    )
+                                  else
+                                    const SizedBox.shrink(),
+
+                                  ElevatedButton(
+                                    onPressed: gd.isLoading ? null : _nextStep,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppTheme.primary,
+                                      foregroundColor: Colors.white,
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                                    ),
+                                    child: gd.isLoading
+                                        ? const SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CircularProgressIndicator(
+                                              color: Colors.white,
+                                              strokeWidth: 2,
+                                            ),
+                                          )
+                                        : Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                currentStep == 4 ? 'Start Session' : 'Continue',
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 6),
+                                              Icon(
+                                                currentStep == 4 ? Icons.rocket_launch_rounded : Icons.arrow_forward_rounded,
+                                                size: 18,
+                                              ),
+                                            ],
+                                          ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _activeTab,
+        backgroundColor: cardBg,
+        selectedItemColor: AppTheme.primary,
+        unselectedItemColor: subtitleColor,
+        selectedLabelStyle: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold),
+        unselectedLabelStyle: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w500),
+        type: BottomNavigationBarType.fixed,
+        onTap: (index) {
+          if (index == 2) {
+            Navigator.pushNamed(context, '/history');
+          } else {
+            setState(() {
+              _activeTab = index;
+            });
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map_rounded),
+            label: '30-Day Path',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.stadium_rounded),
+            label: 'Arena',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history_rounded),
+            label: 'History',
           ),
         ],
       ),
