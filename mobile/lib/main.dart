@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soulfluent_mobile/config/theme.dart';
 import 'package:soulfluent_mobile/providers/auth_provider.dart';
+import 'package:soulfluent_mobile/providers/challenges_provider.dart';
 import 'package:soulfluent_mobile/providers/gd_provider.dart';
 import 'package:soulfluent_mobile/providers/theme_provider.dart';
 import 'package:soulfluent_mobile/screens/auth_screen.dart';
@@ -28,6 +29,7 @@ class SoulFluentApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider(apiService)),
         ChangeNotifierProvider(create: (_) => GDProvider(apiService)),
+        ChangeNotifierProvider(create: (_) => ChallengesProvider()),
       ],
       child: Consumer2<AuthProvider, ThemeProvider>(
         builder: (context, auth, themeProvider, _) {

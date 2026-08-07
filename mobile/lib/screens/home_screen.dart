@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:soulfluent_mobile/config/theme.dart';
 import 'package:soulfluent_mobile/providers/auth_provider.dart';
 import 'package:soulfluent_mobile/providers/gd_provider.dart';
+import 'package:soulfluent_mobile/screens/challenges_screen.dart';
 import 'package:soulfluent_mobile/screens/path_screen.dart';
 import 'package:soulfluent_mobile/widgets/app_header.dart';
 import 'package:soulfluent_mobile/widgets/logo_widgets.dart';
@@ -352,6 +353,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
+          const ChallengesScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -363,13 +365,9 @@ class _HomeScreenState extends State<HomeScreen> {
         unselectedLabelStyle: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w500),
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
-          if (index == 2) {
-            Navigator.pushNamed(context, '/history');
-          } else {
-            setState(() {
-              _activeTab = index;
-            });
-          }
+          setState(() {
+            _activeTab = index;
+          });
         },
         items: const [
           BottomNavigationBarItem(
@@ -381,8 +379,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Arena',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history_rounded),
-            label: 'History',
+            icon: Icon(Icons.crop_square_rounded),
+            label: 'Challenges',
           ),
         ],
       ),
