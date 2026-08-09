@@ -83,10 +83,7 @@ export function clearToken() {
   localStorage.removeItem("fluentsoul_token");
 }
 
-async function request<T>(
-  path: string,
-  options: RequestInit = {}
-): Promise<T> {
+async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {
     ...(options.headers as Record<string, string>),
@@ -152,8 +149,7 @@ export const api = {
     });
   },
 
-  endSession: (id: string) =>
-    request<FeedbackReport>(`/gd/sessions/${id}/end`, { method: "POST" }),
+  endSession: (id: string) => request<FeedbackReport>(`/gd/sessions/${id}/end`, { method: "POST" }),
 
   getReport: (id: string) => request<FeedbackReport>(`/gd/sessions/${id}/report`),
   getUsage: (id: string) => request<UsageLog>(`/gd/sessions/${id}/usage`),

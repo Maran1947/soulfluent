@@ -48,10 +48,17 @@ export default function HistoryPage() {
     <div className="py-6 space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
         <div>
-          <h1 className="font-display text-3xl sm:text-4xl text-slate-900 dark:text-slate-100 font-bold tracking-tight mb-1">Your Session History</h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400">Review past conversations, transcripts, and AI fluency reports.</p>
+          <h1 className="font-display text-3xl sm:text-4xl text-slate-900 dark:text-slate-100 font-bold tracking-tight mb-1">
+            Your Session History
+          </h1>
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            Review past conversations, transcripts, and AI fluency reports.
+          </p>
         </div>
-        <Link href="/" className="btn-primary !py-2.5 !px-5 text-xs sm:text-sm self-start sm:self-auto shrink-0 shadow-md bg-[#F25C40] hover:bg-[#E04B30]">
+        <Link
+          href="/"
+          className="btn-primary !py-2.5 !px-5 text-xs sm:text-sm self-start sm:self-auto shrink-0 shadow-md bg-[#F25C40] hover:bg-[#E04B30]"
+        >
           + Start New Session
         </Link>
       </div>
@@ -59,7 +66,10 @@ export default function HistoryPage() {
       {loadingSessions ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {[0, 1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="card h-40 animate-pulse bg-slate-100/60 dark:bg-[#181d29]/60 border-[#FCE3DC] dark:border-rose-900/30" />
+            <div
+              key={i}
+              className="card h-40 animate-pulse bg-slate-100/60 dark:bg-[#181d29]/60 border-[#FCE3DC] dark:border-rose-900/30"
+            />
           ))}
         </div>
       ) : sessions.length === 0 ? (
@@ -67,7 +77,9 @@ export default function HistoryPage() {
           <div className="w-16 h-16 rounded-full bg-[#FDEEE9] dark:bg-rose-950/60 flex items-center justify-center mb-4">
             <MessagesSquare size={26} className="text-[#F25C40] dark:text-rose-400" />
           </div>
-          <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100 mb-1">No practice sessions yet</h2>
+          <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100 mb-1">
+            No practice sessions yet
+          </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 max-w-xs">
             Start your first AI Group Discussion to build fluency and track your progress over time.
           </p>
@@ -103,10 +115,13 @@ export default function HistoryPage() {
 
               <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                 <div className="flex items-center gap-3">
-                  <span className="capitalize font-medium text-slate-700 dark:text-slate-300">{s.difficulty}</span>
+                  <span className="capitalize font-medium text-slate-700 dark:text-slate-300">
+                    {s.difficulty}
+                  </span>
                   <span aria-hidden>·</span>
                   <span className="inline-flex items-center gap-1 font-medium">
-                    <Clock size={12} className="text-slate-400 dark:text-slate-500" /> {s.duration_minutes}m
+                    <Clock size={12} className="text-slate-400 dark:text-slate-500" />{" "}
+                    {s.duration_minutes}m
                   </span>
                 </div>
                 <span>{timeAgo(s.started_at)}</span>

@@ -9,7 +9,7 @@ const NO_CHROME_PREFIXES = ["/login", "/register"];
 
 export default function AppChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "/";
-  
+
   // Hide header & bottom nav for auth pages and live meeting room
   const isReportPage = pathname.includes("/report");
   const isLiveSessionRoom = pathname.startsWith("/session") && !isReportPage;

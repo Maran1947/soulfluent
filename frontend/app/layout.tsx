@@ -25,12 +25,16 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "FluentSoul: Speak English Fluently & Confidently",
-  description: "Speak English Fluently & Confidently — practice spoken English in GDs and 1:1 Debates.",
+  description:
+    "Speak English Fluently & Confidently — practice spoken English in GDs and 1:1 Debates.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${plusJakartaSans.variable} ${outfit.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang="en"
+      className={`${plusJakartaSans.variable} ${outfit.variable} ${jetbrainsMono.variable}`}
+    >
       <body className="font-sans text-slate-900 dark:text-slate-100 bg-[#faf5f3] dark:bg-[#0f121a] antialiased">
         <ThemeProvider>
           <AuthProvider>

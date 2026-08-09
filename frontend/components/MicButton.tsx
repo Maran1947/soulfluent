@@ -21,9 +21,7 @@ export default function MicButton({ disabled, compact = false, onRecordingComple
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
-      const mimeType = MediaRecorder.isTypeSupported("audio/webm")
-        ? "audio/webm"
-        : "audio/mp4";
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/mp4";
       const recorder = new MediaRecorder(stream, { mimeType });
       chunksRef.current = [];
       recorder.ondataavailable = (e) => {
@@ -105,8 +103,8 @@ export default function MicButton({ disabled, compact = false, onRecordingComple
   const labelText = recording
     ? "Release [Space] or Mic to send"
     : disabled
-    ? "Please wait…"
-    : "Hold [Space] or Mic to speak";
+      ? "Please wait…"
+      : "Hold [Space] or Mic to speak";
 
   if (compact) {
     return (
@@ -206,9 +204,7 @@ export default function MicButton({ disabled, compact = false, onRecordingComple
           <Mic size={26} className="relative z-10 text-white" strokeWidth={2.2} />
         )}
       </button>
-      <p className="text-xs font-medium text-slate-600 dark:text-slate-400">
-        {labelText}
-      </p>
+      <p className="text-xs font-medium text-slate-600 dark:text-slate-400">{labelText}</p>
     </div>
   );
 }

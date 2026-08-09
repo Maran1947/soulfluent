@@ -87,9 +87,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             {
               duration: 450,
               easing: "cubic-bezier(0.4, 0, 0.2, 1)",
-              pseudoElement: isDark
-                ? "::view-transition-new(root)"
-                : "::view-transition-old(root)",
+              pseudoElement: isDark ? "::view-transition-new(root)" : "::view-transition-old(root)",
             }
           );
         });

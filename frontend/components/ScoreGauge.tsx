@@ -24,7 +24,14 @@ export default function ScoreGauge({ score, label }: { score: number; label?: st
             <stop offset="100%" stopColor={t.deep} />
           </linearGradient>
         </defs>
-        <circle cx="70" cy="70" r={radius} fill="none" strokeWidth="12" className="stroke-slate-200 dark:stroke-slate-800" />
+        <circle
+          cx="70"
+          cy="70"
+          r={radius}
+          fill="none"
+          strokeWidth="12"
+          className="stroke-slate-200 dark:stroke-slate-800"
+        />
         <circle
           cx="70"
           cy="70"
@@ -49,7 +56,13 @@ export default function ScoreGauge({ score, label }: { score: number; label?: st
         >
           {Math.round(clamped)}
         </text>
-        <text x="70" y="90" textAnchor="middle" fontSize="11" className="fill-slate-500 dark:fill-slate-400">
+        <text
+          x="70"
+          y="90"
+          textAnchor="middle"
+          fontSize="11"
+          className="fill-slate-500 dark:fill-slate-400"
+        >
           {t.label}
         </text>
       </svg>

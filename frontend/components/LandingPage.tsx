@@ -27,7 +27,8 @@ const DEMO_VOICES = [
     origin: "Indian Accent",
     role: "Empathetic Peacemaker",
     traits: ["Encouraging", "Bridging", "Warm"],
-    sampleText: "That's a great point! However, have we considered the economic impact on smaller businesses?",
+    sampleText:
+      "That's a great point! However, have we considered the economic impact on smaller businesses?",
     color: "from-amber-500 to-[#F25C40]",
   },
   {
@@ -37,7 +38,8 @@ const DEMO_VOICES = [
     origin: "Indian Accent",
     role: "Structured Strategist",
     traits: ["Structured", "Methodical", "Logical"],
-    sampleText: "Let's break this down into three key pillars: scalability, cost efficiency, and long-term sustainability.",
+    sampleText:
+      "Let's break this down into three key pillars: scalability, cost efficiency, and long-term sustainability.",
     color: "from-[#F25C40] to-rose-600",
   },
   {
@@ -47,7 +49,8 @@ const DEMO_VOICES = [
     origin: "US Accent",
     role: "Sharp Orator",
     traits: ["Eloquent", "Persuasive", "Sharp"],
-    sampleText: "I respect your perspective, but statistical evidence strongly points toward a different conclusion.",
+    sampleText:
+      "I respect your perspective, but statistical evidence strongly points toward a different conclusion.",
     color: "from-indigo-500 to-purple-600",
   },
   {
@@ -57,7 +60,8 @@ const DEMO_VOICES = [
     origin: "US Accent",
     role: "Analytical Contrarian",
     traits: ["Analytical", "Contrarian", "Challenging"],
-    sampleText: "What if the fundamental premise itself is flawed? Let's challenge that core assumption.",
+    sampleText:
+      "What if the fundamental premise itself is flawed? Let's challenge that core assumption.",
     color: "from-cyan-500 to-blue-600",
   },
 ];
@@ -79,10 +83,8 @@ export default function LandingPage() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-20 py-8 px-4 sm:px-6">
-      
       {/* 1. HERO SECTION (HIGH VISUAL IMPACT, MINIMAL TEXT) */}
       <div className="relative pt-6 pb-12 flex flex-col items-center text-center space-y-8">
-        
         {/* Floating Background Glow Orbs */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-tr from-[#F25C40]/20 to-purple-500/20 rounded-full blur-3xl -z-10 pointer-events-none" />
 
@@ -91,7 +93,9 @@ export default function LandingPage() {
           <div className="flex items-center gap-2 text-xs font-bold">
             <span className="text-base">🇮🇳</span>
             <span>Riya</span>
-            <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-[10px]">Warm</span>
+            <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-[10px]">
+              Warm
+            </span>
           </div>
         </div>
 
@@ -99,7 +103,9 @@ export default function LandingPage() {
           <div className="flex items-center gap-2 text-xs font-bold">
             <span className="text-base">🇺🇸</span>
             <span>Alex</span>
-            <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-500 text-[10px]">Contrarian</span>
+            <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-500 text-[10px]">
+              Contrarian
+            </span>
           </div>
         </div>
 
@@ -119,7 +125,8 @@ export default function LandingPage() {
 
         {/* Short Subtitle */}
         <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed font-medium">
-          Master Group Discussions & 1:1 Debates with real-time AI voice partners. Get instant WPM, filler word & vocabulary analysis.
+          Master Group Discussions & 1:1 Debates with real-time AI voice partners. Get instant WPM,
+          filler word & vocabulary analysis.
         </p>
 
         {/* Hero Action CTAs */}
@@ -156,18 +163,19 @@ export default function LandingPage() {
 
             {/* Equalizer Sound Wave Simulation */}
             <div className="flex items-center justify-center gap-1.5 h-16 px-4 py-2 bg-slate-50 dark:bg-slate-900/60 rounded-2xl border border-slate-200/60 dark:border-slate-800">
-              {[40, 75, 100, 60, 30, 85, 95, 50, 70, 100, 45, 80, 65, 90, 40, 85, 100, 55, 30, 70, 95, 60, 40].map(
-                (h, i) => (
-                  <span
-                    key={i}
-                    className="w-1.5 bg-gradient-to-t from-[#FA5A3A] to-[#F25C40] rounded-full animate-wave"
-                    style={{
-                      height: `${h}%`,
-                      animationDelay: `${(i % 5) * 0.15}s`,
-                    }}
-                  />
-                )
-              )}
+              {[
+                40, 75, 100, 60, 30, 85, 95, 50, 70, 100, 45, 80, 65, 90, 40, 85, 100, 55, 30, 70,
+                95, 60, 40,
+              ].map((h, i) => (
+                <span
+                  key={i}
+                  className="w-1.5 bg-gradient-to-t from-[#FA5A3A] to-[#F25C40] rounded-full animate-wave"
+                  style={{
+                    height: `${h}%`,
+                    animationDelay: `${(i % 5) * 0.15}s`,
+                  }}
+                />
+              ))}
             </div>
 
             <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-1">
@@ -214,12 +222,16 @@ export default function LandingPage() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${v.color} text-white flex items-center justify-center font-bold text-sm shadow-md`}>
+                      <div
+                        className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${v.color} text-white flex items-center justify-center font-bold text-sm shadow-md`}
+                      >
                         {v.name.charAt(0)}
                       </div>
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-sm font-extrabold text-slate-900 dark:text-white">{v.name}</span>
+                          <span className="text-sm font-extrabold text-slate-900 dark:text-white">
+                            {v.name}
+                          </span>
                           <span className="text-sm">{v.flag}</span>
                         </div>
                         <span className="text-[10px] text-slate-400 font-semibold">{v.origin}</span>
@@ -229,10 +241,16 @@ export default function LandingPage() {
                     <button
                       type="button"
                       className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
-                        active && isPlaying ? "bg-[#F25C40] text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+                        active && isPlaying
+                          ? "bg-[#F25C40] text-white"
+                          : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
                       }`}
                     >
-                      {active && isPlaying ? <Pause size={14} /> : <Play size={14} className="ml-0.5" />}
+                      {active && isPlaying ? (
+                        <Pause size={14} />
+                      ) : (
+                        <Play size={14} className="ml-0.5" />
+                      )}
                     </button>
                   </div>
 
@@ -247,7 +265,10 @@ export default function LandingPage() {
                 {/* Trait Pills */}
                 <div className="flex flex-wrap items-center gap-1.5 pt-2">
                   {v.traits.map((t, idx) => (
-                    <span key={idx} className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-semibold">
+                    <span
+                      key={idx}
+                      className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-semibold"
+                    >
                       {t}
                     </span>
                   ))}
@@ -260,7 +281,6 @@ export default function LandingPage() {
 
       {/* 3. PRACTICE MODES SHOWCASE (GD VS 1:1 DEBATE) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-        
         {/* GD Mode Card */}
         <div className="bg-gradient-to-br from-white via-white to-amber-500/5 dark:from-[#181d29] dark:via-[#181d29] dark:to-amber-500/10 border border-slate-200/80 dark:border-rose-900/40 rounded-3xl p-8 shadow-sm flex flex-col justify-between space-y-6">
           <div className="space-y-4">
@@ -275,7 +295,8 @@ export default function LandingPage() {
                 Group Discussion
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-                Practice group dynamics, natural turn-taking, and active listening with AI peers and a virtual moderator.
+                Practice group dynamics, natural turn-taking, and active listening with AI peers and
+                a virtual moderator.
               </p>
             </div>
           </div>
@@ -310,7 +331,8 @@ export default function LandingPage() {
                 1:1 Debate Mode
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-                Debate 1:1 against a sharp AI opponent. Defend your logic, formulate rebuttals, and overcome high-pressure arguments.
+                Debate 1:1 against a sharp AI opponent. Defend your logic, formulate rebuttals, and
+                overcome high-pressure arguments.
               </p>
             </div>
           </div>
@@ -346,19 +368,27 @@ export default function LandingPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 space-y-1">
             <p className="text-3xl font-extrabold text-[#F25C40]">135 WPM</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Optimal Speech Pace</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
+              Optimal Speech Pace
+            </p>
           </div>
           <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 space-y-1">
             <p className="text-3xl font-extrabold text-emerald-500">0 Filler</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Clean Delivery</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
+              Clean Delivery
+            </p>
           </div>
           <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 space-y-1">
             <p className="text-3xl font-extrabold text-indigo-500">92% Score</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Vocabulary Richness</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
+              Vocabulary Richness
+            </p>
           </div>
           <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 space-y-1">
             <p className="text-3xl font-extrabold text-purple-500">Instant</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">AI Feedback Report</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
+              AI Feedback Report
+            </p>
           </div>
         </div>
       </div>
@@ -370,7 +400,8 @@ export default function LandingPage() {
             Ready to Speak Confidently?
           </h2>
           <p className="text-xs sm:text-sm opacity-90 leading-relaxed font-medium">
-            Join FluentSoul today and practice live conversations with intelligent AI voice partners.
+            Join FluentSoul today and practice live conversations with intelligent AI voice
+            partners.
           </p>
         </div>
 

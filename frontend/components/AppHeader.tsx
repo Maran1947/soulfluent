@@ -15,8 +15,18 @@ function greeting(): string {
 }
 
 const NAV_ITEMS = [
-  { href: "/", label: "Practice", icon: MessagesSquare, match: (p: string) => p === "/" || p.startsWith("/session") },
-  { href: "/history", label: "History", icon: History, match: (p: string) => p.startsWith("/history") },
+  {
+    href: "/",
+    label: "Practice",
+    icon: MessagesSquare,
+    match: (p: string) => p === "/" || p.startsWith("/session"),
+  },
+  {
+    href: "/history",
+    label: "History",
+    icon: History,
+    match: (p: string) => p.startsWith("/history"),
+  },
 ];
 
 export default function AppHeader() {
@@ -138,8 +148,12 @@ export default function AppHeader() {
               role="menu"
             >
               <div className="px-3 py-2 mb-1.5 border-b border-slate-100 dark:border-slate-800">
-                <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 truncate">{user.name}</p>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">{user.email}</p>
+                <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 truncate">
+                  {user.name}
+                </p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                  {user.email}
+                </p>
               </div>
               <Link
                 href="/history"
@@ -151,7 +165,9 @@ export default function AppHeader() {
                 Session History
               </Link>
               <div className="px-3 py-2 my-1 flex items-center justify-between border-t border-b border-slate-100 dark:border-slate-800/80">
-                <span className="text-xs font-medium text-slate-700 dark:text-slate-300">Theme</span>
+                <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
+                  Theme
+                </span>
                 <ThemeToggle />
               </div>
               <button

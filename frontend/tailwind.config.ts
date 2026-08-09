@@ -29,7 +29,8 @@ const config: Config = {
       },
       boxShadow: {
         card: "0 10px 30px -5px rgba(15, 23, 42, 0.05), 0 4px 12px -3px rgba(15, 23, 42, 0.03)",
-        "card-hover": "0 20px 40px -15px rgba(99, 102, 241, 0.15), 0 8px 16px -6px rgba(15, 23, 42, 0.06)",
+        "card-hover":
+          "0 20px 40px -15px rgba(99, 102, 241, 0.15), 0 8px 16px -6px rgba(15, 23, 42, 0.06)",
         "glow-lavender": "0 8px 25px -5px rgba(99, 102, 241, 0.35)",
         "glow-sage": "0 8px 25px -5px rgba(16, 185, 129, 0.35)",
         "glow-apricot": "0 8px 25px -5px rgba(245, 158, 11, 0.35)",
