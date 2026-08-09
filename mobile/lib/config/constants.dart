@@ -12,4 +12,6 @@ class AppConstants {
   }
 
   static const String tokenKey = 'fluentsoul_jwt_token';
+  static const String onboardingKey = 'fluentsoul_onboarding_data';
+  static const String isOnboardedKey = 'fluentsoul_is_onboarded';
 }

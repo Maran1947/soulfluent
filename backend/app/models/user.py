@@ -12,6 +12,7 @@ from app.database import Base
 if TYPE_CHECKING:
     from app.models.account import Account
     from app.models.session import Session
+    from app.models.user_preference import UserPreference
 
 
 class UserRole(str, enum.Enum):
@@ -46,6 +47,9 @@ class User(Base):
     account: Mapped["Account"] = relationship(back_populates="user", lazy="joined")
     sessions: Mapped[list["Session"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
+    )
+    preferences: Mapped["UserPreference"] = relationship(
+        back_populates="user", uselist=False, cascade="all, delete-orphan"
     )
 
     @property

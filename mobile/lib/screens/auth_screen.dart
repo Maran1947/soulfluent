@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
 import 'package:fluentsoul_mobile/providers/auth_provider.dart';
+import 'package:fluentsoul_mobile/providers/onboarding_provider.dart';
 import 'package:fluentsoul_mobile/providers/theme_provider.dart';
 import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 
@@ -50,7 +51,12 @@ class _AuthScreenState extends State<AuthScreen> {
     }
 
     if (success && mounted) {
-      Navigator.pushReplacementNamed(context, '/home');
+      final onboarding = context.read<OnboardingProvider>();
+      if (!onboarding.isOnboarded) {
+        Navigator.pushReplacementNamed(context, '/onboarding');
+      } else {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
     }
   }
 
