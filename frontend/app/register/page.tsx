@@ -102,7 +102,7 @@ export default function RegisterPage() {
                     type="email"
                     required
                     autoComplete="email"
-                    placeholder="Enter your email address"
+                    placeholder="you@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="input pl-10"

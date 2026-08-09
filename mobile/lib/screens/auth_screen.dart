@@ -18,7 +18,7 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _obscurePassword = true;
 
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _emailController = TextEditingController(text: 'you@example.com');
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
 
@@ -261,7 +261,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     style: GoogleFonts.inter(
                                         color: textMainColor, fontSize: 14),
                                     decoration: _buildInputDecoration(
-                                      hintText: 'Enter your email address',
+                                      hintText: 'you@example.com',
                                       prefixIcon: Icons.email_outlined,
                                       inputBgColor: inputBgColor,
                                       borderColor: borderColor,
