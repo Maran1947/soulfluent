@@ -1,4 +1,4 @@
-"""S3-compatible (MinIO) storage for turn audio — both the user's original
+"""S3-compatible (Cloud Storage / MinIO) storage for turn audio — both the user's original
 recording and the AI persona's synthesized reply, so a session can be
 replayed later rather than only leaving behind a text transcript.
 
@@ -19,9 +19,9 @@ settings = get_settings()
 
 _s3 = boto3.client(
     "s3",
-    endpoint_url=settings.minio_endpoint_url,
-    aws_access_key_id=settings.minio_access_key,
-    aws_secret_access_key=settings.minio_secret_key,
+    endpoint_url=settings.cloud_storage_endpoint_url,
+    aws_access_key_id=settings.cloud_storage_access_key,
+    aws_secret_access_key=settings.cloud_storage_secret_key,
     config=Config(signature_version="s3v4"),
     region_name="us-east-1",
 )
@@ -29,9 +29,9 @@ _s3 = boto3.client(
 
 def _ensure_bucket_sync() -> None:
     try:
-        _s3.head_bucket(Bucket=settings.minio_bucket)
+        _s3.head_bucket(Bucket=settings.cloud_storage_bucket)
     except ClientError:
-        _s3.create_bucket(Bucket=settings.minio_bucket)
+        _s3.create_bucket(Bucket=settings.cloud_storage_bucket)
 
 
 async def ensure_bucket() -> None:
@@ -44,7 +44,7 @@ def build_audio_key(session_id: uuid.UUID, turn_index: int, speaker: str, extens
 
 
 def _put_object_sync(key: str, data: bytes, content_type: str) -> None:
-    _s3.put_object(Bucket=settings.minio_bucket, Key=key, Body=data, ContentType=content_type)
+    _s3.put_object(Bucket=settings.cloud_storage_bucket, Key=key, Body=data, ContentType=content_type)
 
 
 async def upload_audio(key: str, data: bytes, content_type: str) -> str:
@@ -56,7 +56,7 @@ async def upload_audio(key: str, data: bytes, content_type: str) -> str:
 def _presigned_url_sync(key: str, expires_seconds: int) -> str:
     return _s3.generate_presigned_url(
         "get_object",
-        Params={"Bucket": settings.minio_bucket, "Key": key},
+        Params={"Bucket": settings.cloud_storage_bucket, "Key": key},
         ExpiresIn=expires_seconds,
     )
 
@@ -68,5 +68,5 @@ async def get_playback_url(key: str | None) -> str | None:
     if not key:
         return None
     return await asyncio.to_thread(
-        _presigned_url_sync, key, settings.minio_presigned_url_expire_seconds
+        _presigned_url_sync, key, settings.cloud_storage_presigned_url_expire_seconds
     )

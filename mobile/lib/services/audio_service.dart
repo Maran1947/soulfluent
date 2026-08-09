@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -54,6 +56,22 @@ class AudioService {
       await _player.play();
     } catch (e) {
       debugPrint('Error playing audio: $e');
+    } finally {
+      _isPlaying = false;
+    }
+  }
+
+  Future<void> playBase64Audio(String base64String) async {
+    try {
+      _isPlaying = true;
+      final bytes = base64Decode(base64String);
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/ai_reply_${DateTime.now().millisecondsSinceEpoch}.wav');
+      await file.writeAsBytes(bytes);
+      await _player.setFilePath(file.path);
+      await _player.play();
+    } catch (e) {
+      debugPrint('Error playing base64 audio: $e');
     } finally {
       _isPlaying = false;
     }

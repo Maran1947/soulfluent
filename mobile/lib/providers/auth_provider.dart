@@ -26,14 +26,25 @@ class AuthProvider extends ChangeNotifier {
   Future<void> _initAuth() async {
     try {
       _token = await _storage.read(key: AppConstants.tokenKey);
-      if (_token != null) {
+      if (_token != null && _token!.isNotEmpty) {
         _apiService.setAuthToken(_token);
-        _currentUser = await _apiService.getMe();
+        try {
+          _currentUser = await _apiService.getMe();
+        } catch (e) {
+          final errStr = e.toString().toLowerCase();
+          // Only purge token if it is explicitly unauthorized/invalid (401)
+          if (errStr.contains('401') || errStr.contains('invalid') || errStr.contains('expired')) {
+            _token = null;
+            _currentUser = null;
+            _apiService.setAuthToken(null);
+            await _storage.delete(key: AppConstants.tokenKey);
+          }
+        }
       }
-    } catch (e) {
+    } catch (_) {
       _token = null;
       _currentUser = null;
-      await _storage.delete(key: AppConstants.tokenKey);
+      _apiService.setAuthToken(null);
     } finally {
       _isLoading = false;
       notifyListeners();

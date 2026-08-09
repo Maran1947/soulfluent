@@ -22,10 +22,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String selectedMode = 'gd'; // 'gd' or 'debate'
   String selectedDebateOpponent = 'alex'; // 'alex', 'emily', 'rohan', 'riya'
+  List<String> selectedGdPartners = ['rohan', 'riya'];
+
+  void _toggleGdPartner(String key) {
+    setState(() {
+      if (selectedGdPartners.contains(key)) {
+        if (selectedGdPartners.length > 1) {
+          selectedGdPartners.remove(key);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Please select at least 1 AI voice partner'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      } else {
+        selectedGdPartners.add(key);
+      }
+    });
+  }
 
   String selectedCategory = 'current_affairs';
   String selectedTopic = 'AI replacement of jobs';
-  String selectedDifficulty = 'medium';
+  String selectedDifficulty = 'intermediate';
 
   final TextEditingController _customTopicController = TextEditingController();
 
@@ -93,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final gd = context.read<GDProvider>();
 
     final personaKeys =
-        selectedMode == 'debate' ? [selectedDebateOpponent] : ['riya', 'rohan'];
+        selectedMode == 'debate' ? [selectedDebateOpponent] : selectedGdPartners;
 
     final success = await gd.startSession(
       topic: topic,
@@ -855,7 +875,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Text(
           selectedMode == 'debate'
               ? 'Choose your AI opponent for 1:1 structured rebuttal'
-              : 'AI peers (Rohan & Riya) are pre-loaded to facilitate natural group dynamics',
+              : 'Tap to select 1 or more AI voice partners for your discussion',
           textAlign: TextAlign.center,
           style: GoogleFonts.inter(
             fontSize: 13,
@@ -919,9 +939,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      if (isSelected)
-                        const Icon(Icons.check_circle_rounded,
-                            color: AppTheme.primary, size: 22),
+                      Icon(
+                        isSelected
+                            ? Icons.check_circle_rounded
+                            : Icons.radio_button_unchecked_rounded,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : subtitleColor.withOpacity(0.4),
+                        size: 22,
+                      ),
                     ],
                   ),
                 ),
@@ -929,47 +955,105 @@ class _HomeScreenState extends State<HomeScreen> {
             }).toList(),
           )
         else ...[
-          // GD Mode Active AI Personas Preview Card
+          Column(
+            children: debateOpponents.map((opp) {
+              final isSelected = selectedGdPartners.contains(opp['key']);
+
+              return GestureDetector(
+                onTap: () => _toggleGdPartner(opp['key']!),
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? AppTheme.primary.withOpacity(0.12)
+                        : (isDark
+                            ? const Color(0xFF0F172A)
+                            : const Color(0xFFFAFAFA)),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: isSelected ? AppTheme.primary : borderColor,
+                      width: isSelected ? 2 : 1,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(opp['flag']!, style: const TextStyle(fontSize: 24)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${opp['name']} · ${opp['title']}',
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: isSelected
+                                    ? AppTheme.primary
+                                    : headingColor,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              opp['desc']!,
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                color: subtitleColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        isSelected
+                            ? Icons.check_circle_rounded
+                            : Icons.add_circle_outline_rounded,
+                        color: isSelected
+                            ? AppTheme.primary
+                            : subtitleColor.withOpacity(0.4),
+                        size: 22,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 8),
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF0F172A) : const Color(0xFFFFF7F5),
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: AppTheme.primary.withOpacity(0.5)),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    const Icon(Icons.group_work_rounded,
-                        color: AppTheme.primary),
-                    const SizedBox(width: 8),
-                    Text(
-                      'AI Group Moderator & Peers',
-                      style: GoogleFonts.outfit(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: headingColor,
+                const Icon(Icons.smart_toy_rounded, color: AppTheme.primary, size: 20),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'AI Group Moderator Included',
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                          color: headingColor,
+                        ),
                       ),
-                    ),
-                  ],
+                      Text(
+                        'Automated turn-taking & performance analytics',
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          color: subtitleColor,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 12),
-                _buildPersonaRow(
-                    '🇮🇳 Rohan',
-                    'Structured Strategist (Business & Real-world frameworks)',
-                    subtitleColor),
-                const SizedBox(height: 8),
-                _buildPersonaRow(
-                    '🇮🇳 Riya',
-                    'Empathetic Peacemaker (Nuanced & bridging views)',
-                    subtitleColor),
-                const SizedBox(height: 8),
-                _buildPersonaRow(
-                    '🤖 AI Moderator',
-                    'Automated turn-taking & performance analytics',
-                    subtitleColor),
               ],
             ),
           ),
@@ -1046,11 +1130,11 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 10),
         Row(
           children: [
-            _buildDifficultyChip('easy', 'Easy', isDark, borderColor),
+            _buildDifficultyChip('beginner', 'Beginner', isDark, borderColor),
             const SizedBox(width: 8),
-            _buildDifficultyChip('medium', 'Medium', isDark, borderColor),
+            _buildDifficultyChip('intermediate', 'Intermediate', isDark, borderColor),
             const SizedBox(width: 8),
-            _buildDifficultyChip('hard', 'Hard', isDark, borderColor),
+            _buildDifficultyChip('advanced', 'Advanced', isDark, borderColor),
           ],
         ),
 

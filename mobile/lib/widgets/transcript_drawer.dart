@@ -32,13 +32,20 @@ class TranscriptDrawer extends StatelessWidget {
       itemBuilder: (context, index) {
         final msg = messages[index];
         final isUser = msg.speakerType == 'user';
-        final speakerName =
-            isUser ? 'You' : (msg.personaKey?.toUpperCase() ?? 'PERSONA');
+        String speakerName = 'You';
+        if (!isUser && msg.personaKey != null) {
+          final pk = msg.personaKey!.toLowerCase();
+          if (pk.contains('riya')) speakerName = 'Riya';
+          else if (pk.contains('rohan')) speakerName = 'Rohan';
+          else if (pk.contains('alex')) speakerName = 'Alex';
+          else if (pk.contains('emily')) speakerName = 'Emily';
+          else speakerName = msg.personaKey!.toUpperCase();
+        }
 
         final Color avatarBg = isUser
-            ? const Color(0xFF6366F1)
+            ? const Color(0xFFFA5A3A)
             : (msg.personaKey == 'riya'
-                ? const Color(0xFFF59E0B)
+                ? const Color(0xFF10B981)
                 : const Color(0xFFF25C40));
 
         return Container(

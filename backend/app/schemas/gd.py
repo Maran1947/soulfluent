@@ -1,7 +1,9 @@
 import uuid
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from typing import Any
+
+from pydantic import BaseModel, Field, field_validator
 
 from app.models.session import Difficulty, SessionStatus
 
@@ -17,6 +19,18 @@ class CreateSessionRequest(BaseModel):
     day_number: int | None = None
     initial_ai_text: str | None = None
     scaffold_phrases: list[str] | None = None
+
+    @field_validator("difficulty", mode="before")
+    @classmethod
+    def normalize_difficulty(cls, v: Any) -> Any:
+        if isinstance(v, str):
+            mapping = {
+                "easy": "beginner",
+                "medium": "intermediate",
+                "hard": "advanced",
+            }
+            return mapping.get(v.lower(), v.lower())
+        return v
 
 
 class PersonaOut(BaseModel):

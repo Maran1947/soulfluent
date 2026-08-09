@@ -39,8 +39,12 @@ settings = get_settings()
 _AUDIO_EXTENSIONS = {
     "audio/webm": "webm",
     "audio/mp4": "m4a",
+    "audio/m4a": "m4a",
+    "audio/x-m4a": "m4a",
+    "audio/aac": "aac",
     "audio/ogg": "ogg",
     "audio/wav": "wav",
+    "audio/mp3": "mp3",
 }
 
 
@@ -232,7 +236,22 @@ async def submit_turn(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Session is not active")
 
     audio_bytes = await audio.read()
-    mime_type = audio.content_type or "audio/webm"
+    filename = (audio.filename or "").lower()
+    mime_type = audio.content_type
+    if not mime_type or mime_type in ("application/octet-stream", "binary/octet-stream"):
+        if filename.endswith(".m4a"):
+            mime_type = "audio/m4a"
+        elif filename.endswith(".mp4"):
+            mime_type = "audio/mp4"
+        elif filename.endswith(".wav"):
+            mime_type = "audio/wav"
+        elif filename.endswith(".aac"):
+            mime_type = "audio/aac"
+        else:
+            mime_type = "audio/webm"
+    if mime_type == "audio/x-m4a":
+        mime_type = "audio/m4a"
+
     user_transcript = await transcribe_audio(audio_bytes, mime_type, db=db, session_id=session.id)
     if not user_transcript:
         raise HTTPException(

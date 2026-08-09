@@ -42,12 +42,12 @@ class Settings(BaseSettings):
     # CORS
     frontend_origin: str = "http://localhost:3000"
 
-    # Object storage (MinIO, S3-compatible) for user + AI turn audio
-    minio_endpoint_url: str = "http://localhost:9010"
-    minio_access_key: str = "soulfluent"
-    minio_secret_key: str = "soulfluent123"
-    minio_bucket: str = "soulfluent-audio"
-    minio_presigned_url_expire_seconds: int = 3600
+    # Object storage (Cloud Storage / MinIO, S3-compatible) for user + AI turn audio
+    cloud_storage_endpoint_url: str = "http://localhost:9010"
+    cloud_storage_access_key: str = "soulfluent"
+    cloud_storage_secret_key: str = "soulfluent123"
+    cloud_storage_bucket: str = "soulfluent-audio"
+    cloud_storage_presigned_url_expire_seconds: int = 3600
 
     # GD session defaults
     max_session_duration_minutes: int = 20

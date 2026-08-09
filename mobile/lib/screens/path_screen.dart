@@ -423,70 +423,102 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
                         // ---------- MORE DAYS COMING SOON BANNER & MOTIVATIONAL MESSAGE ----------
                         Container(
                           margin: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 16),
-                          padding: const EdgeInsets.all(24),
+                              horizontal: 20, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 16),
                           decoration: BoxDecoration(
                             color: cardBg,
-                            borderRadius: BorderRadius.circular(24),
+                            borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                                color: AppTheme.primary.withOpacity(0.5)),
+                                color: AppTheme.primary.withOpacity(0.4)),
                             boxShadow: [
                               BoxShadow(
-                                color: AppTheme.primary.withOpacity(0.12),
-                                blurRadius: 20,
-                                spreadRadius: 2,
+                                color: AppTheme.primary.withOpacity(0.15),
+                                blurRadius: 16,
+                                offset: const Offset(0, 4),
                               ),
                             ],
                           ),
                           child: Column(
                             children: [
+                              Row(
+                                children: [
+                                  // Cute Glowing Rocket Squircle Badge
+                                  Container(
+                                    width: 44,
+                                    height: 44,
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        colors: [Color(0xFFFA5A3A), Color(0xFFF25C40)],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                      borderRadius: BorderRadius.circular(14),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: const Color(0xFFF25C40).withOpacity(0.4),
+                                          blurRadius: 10,
+                                        )
+                                      ],
+                                    ),
+                                    child: const Center(
+                                      child: Text('🚀', style: TextStyle(fontSize: 22)),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 14),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 3),
+                                          decoration: BoxDecoration(
+                                            color: AppTheme.primary.withOpacity(0.15),
+                                            borderRadius: BorderRadius.circular(6),
+                                          ),
+                                          child: Text(
+                                            '✨ MORE TRACKS COMING SOON',
+                                            style: GoogleFonts.inter(
+                                              color: AppTheme.primary,
+                                              fontSize: 9.5,
+                                              fontWeight: FontWeight.w900,
+                                              letterSpacing: 0.5,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          'Your voice is your superpower 🌟',
+                                          style: GoogleFonts.outfit(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: headingColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
                               Container(
-                                padding: const EdgeInsets.all(14),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.primary.withOpacity(0.15),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Text('🚀',
-                                    style: TextStyle(fontSize: 28)),
-                              ),
-                              const SizedBox(height: 14),
-                              Text(
-                                'More Days & Mastery Tracks Coming Soon!',
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.outfit(
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.bold,
-                                  color: headingColor,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'You\'re taking immense strides toward English fluency. Every single day you practice, your neural pathways build confidence, articulation, and spontaneous presence.',
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.inter(
-                                  fontSize: 13.5,
-                                  color: subtitleColor,
-                                  height: 1.5,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              Container(
+                                width: double.infinity,
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 12),
+                                    horizontal: 14, vertical: 10),
                                 decoration: BoxDecoration(
-                                  color: AppTheme.primary.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(16),
+                                  color: AppTheme.primary.withOpacity(0.08),
+                                  borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                      color: AppTheme.primary.withOpacity(0.3)),
+                                      color: AppTheme.primary.withOpacity(0.2)),
                                 ),
                                 child: Text(
-                                  '✨ "Your voice is your unique superpower — own it, speak it, and unlock endless possibilities!"',
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 13.5,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic,
-                                    color: AppTheme.primary,
+                                  'Keep practicing daily — new fluency paths and challenges are unlocking soon!',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12.5,
+                                    fontWeight: FontWeight.w500,
+                                    color: subtitleColor,
+                                    height: 1.35,
                                   ),
                                 ),
                               ),

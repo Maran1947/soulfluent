@@ -41,12 +41,14 @@ class GDMessage {
   });
 
   factory GDMessage.fromJson(Map<String, dynamic> json) {
+    final rawSpeaker = json['speaker'] as String? ?? json['speaker_type'] as String? ?? 'user';
+    final isUser = rawSpeaker == 'user';
     return GDMessage(
-      id: json['id'] as String? ?? '',
-      sessionId: json['session_id'] as String? ?? '',
-      personaKey: json['persona_key'] as String?,
-      speakerType: json['speaker_type'] as String? ?? 'user',
-      transcript: json['transcript'] as String? ?? '',
+      id: json['id']?.toString() ?? '',
+      sessionId: json['session_id']?.toString() ?? '',
+      personaKey: isUser ? null : (json['persona_key'] as String? ?? rawSpeaker),
+      speakerType: isUser ? 'user' : 'persona',
+      transcript: json['text'] as String? ?? json['transcript'] as String? ?? '',
       audioUrl: json['audio_url'] as String?,
       createdAt: json['created_at'] as String? ?? '',
     );
@@ -83,7 +85,7 @@ class GDSession {
       id: json['id'] as String? ?? '',
       topic: json['topic'] as String? ?? '',
       category: json['category'] as String? ?? 'General',
-      difficulty: json['difficulty'] as String? ?? 'medium',
+      difficulty: json['difficulty'] as String? ?? 'intermediate',
       durationMinutes: (json['duration_minutes'] as num?)?.toInt() ?? 10,
       personas: (json['personas'] as List<dynamic>?)
               ?.map((p) => Persona.fromJson(p as Map<String, dynamic>))
@@ -100,22 +102,36 @@ class GDSession {
 }
 
 class TurnResponse {
-  final GDMessage userMessage;
-  final GDMessage aiMessage;
+  final String userTranscript;
+  final String aiSpeaker;
+  final String aiSpeakerName;
+  final String aiText;
+  final String aiAudioBase64;
+  final int turnIndex;
   final int secondsRemaining;
+  final String sessionStatus;
 
   TurnResponse({
-    required this.userMessage,
-    required this.aiMessage,
+    required this.userTranscript,
+    required this.aiSpeaker,
+    required this.aiSpeakerName,
+    required this.aiText,
+    required this.aiAudioBase64,
+    required this.turnIndex,
     required this.secondsRemaining,
+    required this.sessionStatus,
   });
 
   factory TurnResponse.fromJson(Map<String, dynamic> json) {
     return TurnResponse(
-      userMessage:
-          GDMessage.fromJson(json['user_message'] as Map<String, dynamic>),
-      aiMessage: GDMessage.fromJson(json['ai_message'] as Map<String, dynamic>),
+      userTranscript: json['user_transcript'] as String? ?? '',
+      aiSpeaker: json['ai_speaker'] as String? ?? '',
+      aiSpeakerName: json['ai_speaker_name'] as String? ?? '',
+      aiText: json['ai_text'] as String? ?? '',
+      aiAudioBase64: json['ai_audio_base64'] as String? ?? '',
+      turnIndex: (json['turn_index'] as num?)?.toInt() ?? 0,
       secondsRemaining: (json['seconds_remaining'] as num?)?.toInt() ?? 0,
+      sessionStatus: json['session_status'] as String? ?? 'active',
     );
   }
 }

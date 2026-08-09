@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/providers/auth_provider.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
 import 'package:fluentsoul_mobile/providers/theme_provider.dart';
+import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -298,11 +300,30 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
+  String _getGreetingMessage(String? userName) {
+    final hour = DateTime.now().hour;
+    final firstName = (userName != null && userName.trim().isNotEmpty)
+        ? userName.trim().split(' ')[0]
+        : '';
+    final timeGreeting = hour < 12
+        ? 'Good Morning'
+        : (hour < 17 ? 'Good Afternoon' : 'Good Evening');
+
+    if (firstName.isNotEmpty) {
+      return '$timeGreeting, $firstName 👋';
+    }
+    return '$timeGreeting 👋';
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final auth = context.watch<AuthProvider>();
     final user = auth.currentUser;
+
+    final displayTitle = (title.isEmpty || title == 'FluentSoul')
+        ? _getGreetingMessage(user?.name)
+        : title;
 
     return AppBar(
       automaticallyImplyLeading: false,
@@ -316,44 +337,27 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
             ),
             const SizedBox(width: 4),
           ],
-          // FluentSoul Brand Icon
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFFFA5A3A), Color(0xFFF25C40)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(width: 2, height: 10, color: Colors.white),
-                const SizedBox(width: 2),
-                Container(width: 2, height: 16, color: Colors.white),
-                const SizedBox(width: 2),
-                Container(width: 2, height: 12, color: Colors.white),
-              ],
-            ),
-          ),
+          const FluentSoulLogo(size: 32),
           const SizedBox(width: 10),
-          RichText(
-            text: TextSpan(
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              children: [
-                TextSpan(
-                  text: 'Fluent',
-                  style: TextStyle(
-                      color: isDark ? Colors.white : const Color(0xFF0F172A)),
+          Expanded(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: ShaderMask(
+                shaderCallback: (bounds) => const LinearGradient(
+                  colors: [Color(0xFFFA5A3A), Color(0xFFF25C40)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds),
+                child: Text(
+                  displayTitle,
+                  style: GoogleFonts.outfit(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
-                TextSpan(
-                  text: 'Soul',
-                  style: TextStyle(color: Theme.of(context).primaryColor),
-                ),
-              ],
+              ),
             ),
           ),
           const Spacer(),

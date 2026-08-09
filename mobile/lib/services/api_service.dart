@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluentsoul_mobile/config/constants.dart';
 import 'package:fluentsoul_mobile/models/user.dart';
@@ -61,7 +62,12 @@ class ApiService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to get user profile');
+      try {
+        final error = jsonDecode(response.body);
+        throw Exception(error['detail'] ?? 'Failed to get user profile (${response.statusCode})');
+      } catch (_) {
+        throw Exception('Failed to get user profile (${response.statusCode})');
+      }
     }
 
     return User.fromJson(jsonDecode(response.body));
@@ -91,6 +97,10 @@ class ApiService {
     String? initialAiText,
     List<String>? scaffoldPhrases,
   }) async {
+    if (_authToken == null || _authToken!.isEmpty) {
+      throw Exception('Not authenticated. Please log in again.');
+    }
+
     final response = await http.post(
       Uri.parse('$baseUrl/gd/sessions'),
       headers: _headers,
@@ -204,10 +214,12 @@ class ApiService {
 
     request.fields['duration_seconds'] = durationSeconds.toString();
 
+    final isM4a = filename.toLowerCase().endsWith('.m4a');
     request.files.add(await http.MultipartFile.fromPath(
       'audio',
       filePath,
       filename: filename,
+      contentType: isM4a ? MediaType('audio', 'm4a') : MediaType('audio', 'webm'),
     ));
 
     final streamedResponse = await request.send();

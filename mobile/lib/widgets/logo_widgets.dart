@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
 
 /// FluentSoul Audio Wave Logo Widget matching the design reference screenshot
@@ -11,7 +12,7 @@ class FluentSoulLogo extends StatelessWidget {
 
   const FluentSoulLogo({
     super.key,
-    this.size = 58.0,
+    this.size = 36.0,
     this.primaryColor = AppTheme.primary,
     this.backgroundColor = const Color(0xFFFFEBE5),
     this.useAssetImage = true,
@@ -21,9 +22,9 @@ class FluentSoulLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     if (useAssetImage) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(size * 0.32),
+        borderRadius: BorderRadius.circular(size * 0.28),
         child: Image.asset(
-          'assets/images/logo.png',
+          'assets/icon/logo.png',
           width: size,
           height: size,
           fit: BoxFit.cover,
@@ -39,23 +40,30 @@ class FluentSoulLogo extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(size * 0.32),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFA5A3A), Color(0xFFF25C40)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(size * 0.30),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFF25C40).withOpacity(0.35),
+            blurRadius: size * 0.25,
+            offset: Offset(0, size * 0.08),
+          )
+        ],
       ),
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _buildBar(size * 0.22),
-            SizedBox(width: size * 0.06),
-            _buildBar(size * 0.42),
-            SizedBox(width: size * 0.06),
-            _buildBar(size * 0.54),
-            SizedBox(width: size * 0.06),
+            _buildBar(size * 0.28),
+            SizedBox(width: size * 0.08),
+            _buildBar(size * 0.52),
+            SizedBox(width: size * 0.08),
             _buildBar(size * 0.38),
-            SizedBox(width: size * 0.06),
-            _buildBar(size * 0.24),
           ],
         ),
       ),
@@ -64,11 +72,11 @@ class FluentSoulLogo extends StatelessWidget {
 
   Widget _buildBar(double height) {
     return Container(
-      width: size * 0.07,
+      width: size * 0.08,
       height: height,
       decoration: BoxDecoration(
-        color: primaryColor,
-        borderRadius: BorderRadius.circular(size * 0.035),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(size * 0.04),
       ),
     );
   }
@@ -160,23 +168,23 @@ class _GoogleLogoPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// Brand Header Title Widget: "FluentSoul" with split color styling matching the design
+/// Brand Header Title Widget: "FluentSoul" with full linear gradient text shader
 class FluentSoulBrandText extends StatelessWidget {
   final double fontSize;
   final bool isDark;
+  final bool showLogo;
   final bool showTagline;
 
   const FluentSoulBrandText({
     super.key,
-    this.fontSize = 26.0,
+    this.fontSize = 24.0,
     this.isDark = false,
+    this.showLogo = true,
     this.showTagline = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final textColor = isDark ? Colors.white : const Color(0xFF0F172A);
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,35 +192,33 @@ class FluentSoulBrandText extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const FluentSoulLogo(size: 36),
-            const SizedBox(width: 10),
-            RichText(
-              text: TextSpan(
-                style: TextStyle(
-                  fontFamily: 'Outfit',
+            if (showLogo) ...[
+              FluentSoulLogo(size: fontSize * 1.2),
+              const SizedBox(width: 10),
+            ],
+            ShaderMask(
+              shaderCallback: (bounds) => const LinearGradient(
+                colors: [Color(0xFFFA5A3A), Color(0xFFF25C40)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ).createShader(bounds),
+              child: Text(
+                'FluentSoul',
+                style: GoogleFonts.outfit(
                   fontSize: fontSize,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: -0.5,
+                  letterSpacing: -0.4,
+                  color: Colors.white,
                 ),
-                children: [
-                  TextSpan(
-                    text: 'Fluent',
-                    style: TextStyle(color: textColor),
-                  ),
-                  const TextSpan(
-                    text: 'Soul',
-                    style: TextStyle(color: AppTheme.primary),
-                  ),
-                ],
               ),
             ),
           ],
         ),
         if (showTagline) ...[
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Text(
             'Speak English Fluently & Confidently',
-            style: TextStyle(
+            style: GoogleFonts.inter(
               fontSize: 13,
               color: isDark ? AppTheme.textMuted : AppTheme.textMutedLight,
               height: 1.35,

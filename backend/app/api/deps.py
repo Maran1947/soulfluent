@@ -8,13 +8,18 @@ from app.core.security import decode_access_token
 from app.database import get_db
 from app.models.user import User
 
-bearer_scheme = HTTPBearer()
+bearer_scheme = HTTPBearer(auto_error=False)
 
 
 async def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
     db: AsyncSession = Depends(get_db),
 ) -> User:
+    if credentials is None or not credentials.credentials:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing authorization token. Please log in.",
+        )
     user_id = decode_access_token(credentials.credentials)
     if user_id is None:
         raise HTTPException(

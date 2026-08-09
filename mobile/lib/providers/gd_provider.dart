@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluentsoul_mobile/models/session.dart';
 import 'package:fluentsoul_mobile/models/report.dart';
@@ -55,6 +56,11 @@ class GDProvider extends ChangeNotifier {
   AudioService get audioService => _audioService;
 
   GDProvider(this._apiService);
+
+  void clearError() {
+    _errorMessage = null;
+    notifyListeners();
+  }
 
   Future<void> resetToDay1() async {
     _streakDays = 0;
@@ -158,7 +164,12 @@ class GDProvider extends ChangeNotifier {
         personaKeys: personaKeys,
       );
 
-      _messages = [];
+      try {
+        _messages = await _apiService.getMessages(_currentSession!.id);
+      } catch (_) {
+        _messages = [];
+      }
+
       _secondsRemaining = durationMinutes * 60;
       _startTimer();
       _isLoading = false;
@@ -208,19 +219,45 @@ class GDProvider extends ChangeNotifier {
       final filePath = await _audioService.stopRecording();
       if (filePath == null) throw Exception('No audio recorded');
 
+      final file = File(filePath);
+      if (!await file.exists() || await file.length() < 2000) {
+        _errorMessage = 'Please hold the mic button to speak';
+        _isProcessingTurn = false;
+        notifyListeners();
+        return;
+      }
+
       final turnRes =
           await _apiService.submitTurn(_currentSession!.id, filePath);
 
-      _messages.add(turnRes.userMessage);
-      _messages.add(turnRes.aiMessage);
+      _messages.add(GDMessage(
+        id: 'user_${turnRes.turnIndex - 1}',
+        sessionId: _currentSession!.id,
+        speakerType: 'user',
+        personaKey: null,
+        transcript: turnRes.userTranscript,
+        createdAt: DateTime.now().toIso8601String(),
+      ));
+
+      _messages.add(GDMessage(
+        id: 'ai_${turnRes.turnIndex}',
+        sessionId: _currentSession!.id,
+        speakerType: 'persona',
+        personaKey: turnRes.aiSpeaker,
+        transcript: turnRes.aiText,
+        createdAt: DateTime.now().toIso8601String(),
+      ));
+
       _secondsRemaining = turnRes.secondsRemaining;
 
-      // Set active AI speaker and play audio
-      _activeSpeaker = turnRes.aiMessage.personaKey;
+      // Processing done! Stop mic spinner immediately
+      _isProcessingTurn = false;
+      _activeSpeaker = turnRes.aiSpeaker;
       notifyListeners();
 
-      if (turnRes.aiMessage.audioUrl != null) {
-        await _audioService.playAudioUrl(turnRes.aiMessage.audioUrl!);
+      // Play synthesized AI speech audio
+      if (turnRes.aiAudioBase64.isNotEmpty) {
+        await _audioService.playBase64Audio(turnRes.aiAudioBase64);
       }
     } catch (e) {
       _errorMessage = e.toString().replaceAll('Exception: ', '');
