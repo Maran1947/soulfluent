@@ -60,9 +60,8 @@ class _WaveVisualizerState extends State<WaveVisualizer>
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(12, (index) {
-            final double height = 8 +
-                24 *
-                    sin(_controller.value * 2 * pi + (index * 0.5)).abs();
+            final double height =
+                8 + 24 * sin(_controller.value * 2 * pi + (index * 0.5)).abs();
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 2),
               width: 3,

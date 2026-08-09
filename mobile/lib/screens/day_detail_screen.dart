@@ -62,9 +62,11 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
 
     final bgColor = isDark ? const Color(0xFF090D16) : const Color(0xFFF8FAFC);
     final cardBg = isDark ? const Color(0xFF131C2E) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final borderColor =
+        isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
     final headingColor = isDark ? Colors.white : const Color(0xFF0F172A);
-    final subtitleColor = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+    final subtitleColor =
+        isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
 
     final day = widget.day;
     final currentTrack = gd.activeTrack;
@@ -94,7 +96,8 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
         backgroundColor: bgColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: headingColor, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: headingColor, size: 20),
           onPressed: () => Navigator.pop(context),
         ),
         title: Row(
@@ -131,7 +134,8 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -225,7 +229,9 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                         Expanded(
                           child: _buildIconStatCard(
                             icon: Icons.support_rounded,
-                            value: day.rescuePhrases.isNotEmpty ? 'rescue on' : 'standard',
+                            value: day.rescuePhrases.isNotEmpty
+                                ? 'rescue on'
+                                : 'standard',
                             cardBg: cardBg,
                             borderColor: borderColor,
                             headingColor: headingColor,
@@ -245,9 +251,12 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                         children: [
                           ...displayPhrases.map((ph) {
                             return Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
                               decoration: BoxDecoration(
-                                color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                                color: isDark
+                                    ? const Color(0xFF1E293B)
+                                    : const Color(0xFFF1F5F9),
                                 borderRadius: BorderRadius.circular(100),
                                 border: Border.all(color: borderColor),
                               ),
@@ -268,7 +277,8 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                               },
                               borderRadius: BorderRadius.circular(100),
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 10),
                                 decoration: BoxDecoration(
                                   color: Colors.transparent,
                                   borderRadius: BorderRadius.circular(100),
@@ -291,7 +301,8 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                               },
                               borderRadius: BorderRadius.circular(100),
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 10),
                                 decoration: BoxDecoration(
                                   color: Colors.transparent,
                                   borderRadius: BorderRadius.circular(100),
@@ -326,12 +337,15 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                       },
                       content: day.shadowLine != null
                           ? Padding(
-                              padding: const EdgeInsets.only(top: 8, bottom: 12),
+                              padding:
+                                  const EdgeInsets.only(top: 8, bottom: 12),
                               child: Row(
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.play_circle_fill_rounded,
-                                        color: AppTheme.primary, size: 36),
+                                    icon: const Icon(
+                                        Icons.play_circle_fill_rounded,
+                                        color: AppTheme.primary,
+                                        size: 36),
                                     onPressed: () {},
                                   ),
                                   Expanded(
@@ -348,10 +362,12 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                               ),
                             )
                           : Padding(
-                              padding: const EdgeInsets.only(top: 8, bottom: 12),
+                              padding:
+                                  const EdgeInsets.only(top: 8, bottom: 12),
                               child: Text(
                                 day.aiLine,
-                                style: GoogleFonts.inter(fontSize: 13.5, color: headingColor),
+                                style: GoogleFonts.inter(
+                                    fontSize: 13.5, color: headingColor),
                               ),
                             ),
                     ),
@@ -366,25 +382,34 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                       borderColor: borderColor,
                       headingColor: headingColor,
                       onTap: () {
-                        setState(() => _showSampleExchange = !_showSampleExchange);
+                        setState(
+                            () => _showSampleExchange = !_showSampleExchange);
                       },
                       content: day.script.isNotEmpty
                           ? Padding(
-                              padding: const EdgeInsets.only(top: 8, bottom: 12),
+                              padding:
+                                  const EdgeInsets.only(top: 8, bottom: 12),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: day.script.map((line) {
                                   final isYou = line.startsWith('You:');
                                   final text = line.replaceFirst(
-                                      RegExp(r'^(You|Riya|Rohan|Emily|Alex):\s*'), '');
+                                      RegExp(
+                                          r'^(You|Riya|Rohan|Emily|Alex):\s*'),
+                                      '');
                                   return Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 4),
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     child: Text(
                                       '${isYou ? "You" : p.name}: $text',
                                       style: GoogleFonts.inter(
                                         fontSize: 13.5,
-                                        color: isYou ? AppTheme.primary : headingColor,
-                                        fontWeight: isYou ? FontWeight.bold : FontWeight.normal,
+                                        color: isYou
+                                            ? AppTheme.primary
+                                            : headingColor,
+                                        fontWeight: isYou
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
                                       ),
                                     ),
                                   );
@@ -392,10 +417,12 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                               ),
                             )
                           : Padding(
-                              padding: const EdgeInsets.only(top: 8, bottom: 12),
+                              padding:
+                                  const EdgeInsets.only(top: 8, bottom: 12),
                               child: Text(
                                 'No sample exchange available for this module.',
-                                style: GoogleFonts.inter(fontSize: 13, color: subtitleColor),
+                                style: GoogleFonts.inter(
+                                    fontSize: 13, color: subtitleColor),
                               ),
                             ),
                     ),
@@ -442,7 +469,8 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
               decoration: BoxDecoration(
                 color: bgColor,
-                border: Border(top: BorderSide(color: borderColor.withOpacity(0.5))),
+                border: Border(
+                    top: BorderSide(color: borderColor.withOpacity(0.5))),
               ),
               child: SizedBox(
                 width: double.infinity,
@@ -468,7 +496,8 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.mic_rounded, color: Colors.white, size: 22),
+                      const Icon(Icons.mic_rounded,
+                          color: Colors.white, size: 22),
                       const SizedBox(width: 8),
                       Text(
                         'Enter voice room',
@@ -576,7 +605,9 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
       child: Container(
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primary.withOpacity(0.2) : Colors.transparent,
+          color: isSelected
+              ? AppTheme.primary.withOpacity(0.2)
+              : Colors.transparent,
           shape: BoxShape.circle,
           border: isSelected
               ? Border.all(color: AppTheme.primary, width: 1.5)

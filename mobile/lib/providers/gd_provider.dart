@@ -15,7 +15,7 @@ class GDProvider extends ChangeNotifier {
   FeedbackReport? _currentReport;
   List<GDMessage> _messages = [];
   Map<String, dynamic> _topics = {};
-  
+
   // Curriculum state
   int _currentPathDay = 1;
   int _streakDays = 0;
@@ -45,7 +45,7 @@ class GDProvider extends ChangeNotifier {
   List<int> get completedPathDays => _completedPathDays;
   CurriculumDay? get activePathDay => _activePathDay;
   List<String> get activeScaffoldPhrases => _activeScaffoldPhrases;
-  
+
   bool get isLoading => _isLoading;
   bool get isRecording => _isRecording;
   bool get isProcessingTurn => _isProcessingTurn;
@@ -198,7 +198,7 @@ class GDProvider extends ChangeNotifier {
 
   Future<void> stopRecordingAndSubmit() async {
     if (!_isRecording || _currentSession == null) return;
-    
+
     _isRecording = false;
     _isProcessingTurn = true;
     _activeSpeaker = null;
@@ -208,8 +208,9 @@ class GDProvider extends ChangeNotifier {
       final filePath = await _audioService.stopRecording();
       if (filePath == null) throw Exception('No audio recorded');
 
-      final turnRes = await _apiService.submitTurn(_currentSession!.id, filePath);
-      
+      final turnRes =
+          await _apiService.submitTurn(_currentSession!.id, filePath);
+
       _messages.add(turnRes.userMessage);
       _messages.add(turnRes.aiMessage);
       _secondsRemaining = turnRes.secondsRemaining;
@@ -289,7 +290,7 @@ class GDProvider extends ChangeNotifier {
     try {
       _currentSession = await _apiService.getSession(sessionId);
       _messages = await _apiService.getMessages(sessionId);
-      
+
       try {
         _currentReport = await _apiService.getReport(sessionId);
       } catch (_) {
@@ -305,7 +306,6 @@ class GDProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   @override
   void dispose() {

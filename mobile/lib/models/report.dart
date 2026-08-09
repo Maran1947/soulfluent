@@ -121,8 +121,7 @@ class ArgumentMetrics {
   factory ArgumentMetrics.fromJson(Map<String, dynamic> json) {
     return ArgumentMetrics(
       relevanceScore: (json['relevance_score'] as num?)?.toDouble() ?? 0.0,
-      distinctPointsMade:
-          (json['distinct_points_made'] as num?)?.toInt() ?? 0,
+      distinctPointsMade: (json['distinct_points_made'] as num?)?.toInt() ?? 0,
       talkTimePercentage:
           (json['talk_time_percentage'] as num?)?.toDouble() ?? 0.0,
       pointsChallengedByAi:
@@ -195,7 +194,8 @@ class FeedbackReport {
 
   factory FeedbackReport.fromJson(Map<String, dynamic> json) {
     final subScoresRaw = json['sub_scores'] as Map<String, dynamic>? ?? {};
-    final parsedSubScores = subScoresRaw.map((k, v) => MapEntry(k, (v as num).toDouble()));
+    final parsedSubScores =
+        subScoresRaw.map((k, v) => MapEntry(k, (v as num).toDouble()));
 
     final strengthsList = (json['strengths'] as List<dynamic>?)
             ?.map((e) => e.toString())
@@ -207,15 +207,18 @@ class FeedbackReport {
             .toList() ??
         [];
 
-    final highlight = HighlightReel.fromJson(json['highlight_reel'] as Map<String, dynamic>? ?? {});
+    final highlight = HighlightReel.fromJson(
+        json['highlight_reel'] as Map<String, dynamic>? ?? {});
 
     return FeedbackReport(
       id: json['id'] as String? ?? '',
       sessionId: json['session_id'] as String? ?? '',
       overallScore: (json['overall_score'] as num?)?.toInt() ?? 0,
       summary: json['summary'] as String? ?? '',
-      strengths: strengthsList.isNotEmpty ? strengthsList : highlight.bestMoments,
-      growthAreas: growthList.isNotEmpty ? growthList : highlight.improvementAreas,
+      strengths:
+          strengthsList.isNotEmpty ? strengthsList : highlight.bestMoments,
+      growthAreas:
+          growthList.isNotEmpty ? growthList : highlight.improvementAreas,
       metrics: SessionMetrics.fromJson(
           json['metrics'] as Map<String, dynamic>? ?? {}),
       fluencyMetrics: FluencyMetrics.fromJson(

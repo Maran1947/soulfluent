@@ -146,8 +146,10 @@ class _GoogleLogoPainter extends CustomPainter {
 
     // Blue horizontal bar
     paint.color = const Color(0xFF4285F4);
-    final Rect blueBarRect = Rect.fromLTRB(cx - radius * 0.1, cy - radius * 0.28, w, cy + radius * 0.28);
-    canvas.drawRRect(RRect.fromRectAndRadius(blueBarRect, const Radius.circular(1)), paint);
+    final Rect blueBarRect = Rect.fromLTRB(
+        cx - radius * 0.1, cy - radius * 0.28, w, cy + radius * 0.28);
+    canvas.drawRRect(
+        RRect.fromRectAndRadius(blueBarRect, const Radius.circular(1)), paint);
   }
 
   @override
@@ -235,12 +237,13 @@ class BackgroundWavesPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    final int lineCount = 18;
+    const int lineCount = 18;
     for (int i = 0; i < lineCount; i++) {
       final double t = i / (lineCount - 1); // 0.0 to 1.0
 
       // Opacity gradient: subtle fade towards outer edges
-      final double alpha = (0.08 + 0.18 * math.sin(t * math.pi)) * opacityMultiplier;
+      final double alpha =
+          (0.08 + 0.18 * math.sin(t * math.pi)) * opacityMultiplier;
       paint.color = color.withOpacity(alpha.clamp(0.03, 0.40));
       paint.strokeWidth = 1.0 + (i % 2) * 0.5;
 

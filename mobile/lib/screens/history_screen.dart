@@ -93,7 +93,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
               color: AppTheme.primary,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -127,7 +128,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     // Skeleton Loading State
                     if (_isLoading)
                       Column(
-                        children: List.generate(4, (_) => const HistorySkeletonCard()),
+                        children: List.generate(
+                            4, (_) => const HistorySkeletonCard()),
                       )
 
                     // Error State
@@ -141,11 +143,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         ),
                         child: Column(
                           children: [
-                            const Icon(Icons.error_outline, size: 40, color: Colors.redAccent),
+                            const Icon(Icons.error_outline,
+                                size: 40, color: Colors.redAccent),
                             const SizedBox(height: 12),
                             Text(
                               _error!,
-                              style: GoogleFonts.plusJakartaSans(color: headingColor, fontSize: 14),
+                              style: GoogleFonts.plusJakartaSans(
+                                  color: headingColor, fontSize: 14),
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 16),
@@ -168,7 +172,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           border: Border.all(color: borderColor),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+                              color:
+                                  Colors.black.withOpacity(isDark ? 0.2 : 0.04),
                               blurRadius: 16,
                             ),
                           ],
@@ -207,10 +212,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             ),
                             const SizedBox(height: 24),
                             ElevatedButton(
-                              onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
+                              onPressed: () => Navigator.pushReplacementNamed(
+                                  context, '/home'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppTheme.primary,
-                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 12),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(14),
                                 ),
@@ -229,14 +236,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         itemCount: _sessions.length,
                         itemBuilder: (context, index) {
                           final s = _sessions[index];
-                          final isCompleted = s.status.toLowerCase() == 'completed';
+                          final isCompleted =
+                              s.status.toLowerCase() == 'completed';
 
                           final statusBg = isCompleted
-                              ? (isDark ? const Color(0xFF064E3B).withOpacity(0.5) : const Color(0xFFE6F4EA))
-                              : (isDark ? AppTheme.primary.withOpacity(0.2) : const Color(0xFFFFEBE5));
+                              ? (isDark
+                                  ? const Color(0xFF064E3B).withOpacity(0.5)
+                                  : const Color(0xFFE6F4EA))
+                              : (isDark
+                                  ? AppTheme.primary.withOpacity(0.2)
+                                  : const Color(0xFFFFEBE5));
 
                           final statusTextColor = isCompleted
-                              ? (isDark ? const Color(0xFF6EE7B7) : const Color(0xFF137333))
+                              ? (isDark
+                                  ? const Color(0xFF6EE7B7)
+                                  : const Color(0xFF137333))
                               : AppTheme.primary;
 
                           return Container(
@@ -247,7 +261,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               border: Border.all(color: borderColor),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(isDark ? 0.25 : 0.05),
+                                  color: Colors.black
+                                      .withOpacity(isDark ? 0.25 : 0.05),
                                   blurRadius: 14,
                                   offset: const Offset(0, 4),
                                 ),
@@ -261,7 +276,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   final gd = context.read<GDProvider>();
                                   if (s.status == 'active') {
                                     gd.loadPastSession(s.id).then((_) {
-                                      if (mounted) Navigator.pushNamed(context, '/arena');
+                                      if (mounted)
+                                        Navigator.pushNamed(context, '/arena');
                                     });
                                   } else {
                                     gd.loadPastSession(s.id);
@@ -271,14 +287,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(20),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       // Top Badges Row: CATEGORY & STATUS
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            s.category.replaceAll('_', ' ').toUpperCase(),
+                                            s.category
+                                                .replaceAll('_', ' ')
+                                                .toUpperCase(),
                                             style: GoogleFonts.plusJakartaSans(
                                               fontSize: 11,
                                               fontWeight: FontWeight.w800,
@@ -287,15 +307,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             ),
                                           ),
                                           Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 4),
                                             decoration: BoxDecoration(
                                               color: statusBg,
-                                              borderRadius: BorderRadius.circular(16),
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
                                             ),
                                             child: Text(
-                                              s.status.substring(0, 1).toUpperCase() +
-                                                  s.status.substring(1).toLowerCase(),
-                                              style: GoogleFonts.plusJakartaSans(
+                                              s.status
+                                                      .substring(0, 1)
+                                                      .toUpperCase() +
+                                                  s.status
+                                                      .substring(1)
+                                                      .toLowerCase(),
+                                              style:
+                                                  GoogleFonts.plusJakartaSans(
                                                 fontSize: 11,
                                                 fontWeight: FontWeight.bold,
                                                 color: statusTextColor,
@@ -326,22 +353,32 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
                                       // Footer info: Difficulty · Duration | Date
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Row(
                                             children: [
                                               Text(
-                                                s.difficulty.substring(0, 1).toUpperCase() +
-                                                    s.difficulty.substring(1).toLowerCase(),
-                                                style: GoogleFonts.plusJakartaSans(
+                                                s.difficulty
+                                                        .substring(0, 1)
+                                                        .toUpperCase() +
+                                                    s.difficulty
+                                                        .substring(1)
+                                                        .toLowerCase(),
+                                                style:
+                                                    GoogleFonts.plusJakartaSans(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w600,
                                                   color: headingColor,
                                                 ),
                                               ),
                                               Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 6),
-                                                child: Text('·', style: TextStyle(color: subtitleColor)),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 6),
+                                                child: Text('·',
+                                                    style: TextStyle(
+                                                        color: subtitleColor)),
                                               ),
                                               Icon(
                                                 Icons.schedule_rounded,
@@ -351,7 +388,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               const SizedBox(width: 4),
                                               Text(
                                                 '${s.durationMinutes}m',
-                                                style: GoogleFonts.plusJakartaSans(
+                                                style:
+                                                    GoogleFonts.plusJakartaSans(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w600,
                                                   color: headingColor,

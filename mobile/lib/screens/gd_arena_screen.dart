@@ -68,7 +68,8 @@ class GDArenaScreen extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
                           color: const Color(0xFFF25C40).withOpacity(0.2),
                           borderRadius: BorderRadius.circular(8),
@@ -133,15 +134,19 @@ class GDArenaScreen extends StatelessWidget {
                         children: gd.activeScaffoldPhrases.map((phrase) {
                           return Container(
                             margin: const EdgeInsets.only(right: 8),
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
                               color: const Color(0xFF1E293B),
                               borderRadius: BorderRadius.circular(100),
-                              border: Border.all(color: const Color(0xFFF25C40).withOpacity(0.5)),
+                              border: Border.all(
+                                  color:
+                                      const Color(0xFFF25C40).withOpacity(0.5)),
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.tips_and_updates, size: 12, color: Color(0xFFF25C40)),
+                                const Icon(Icons.tips_and_updates,
+                                    size: 12, color: Color(0xFFF25C40)),
                                 const SizedBox(width: 6),
                                 Text(
                                   phrase,
@@ -166,7 +171,9 @@ class GDArenaScreen extends StatelessWidget {
 
             // Live Waveform Visualizer
             WaveVisualizer(
-              isActive: gd.isRecording || gd.activeSpeaker != null || gd.isProcessingTurn,
+              isActive: gd.isRecording ||
+                  gd.activeSpeaker != null ||
+                  gd.isProcessingTurn,
             ),
 
             const SizedBox(height: 12),
@@ -201,8 +208,14 @@ class GDArenaScreen extends StatelessWidget {
                           shape: BoxShape.circle,
                           gradient: LinearGradient(
                             colors: gd.isRecording
-                                ? [const Color(0xFFEF4444), const Color(0xFFDC2626)]
-                                : [const Color(0xFFFA5A3A), const Color(0xFFF25C40)],
+                                ? [
+                                    const Color(0xFFEF4444),
+                                    const Color(0xFFDC2626)
+                                  ]
+                                : [
+                                    const Color(0xFFFA5A3A),
+                                    const Color(0xFFF25C40)
+                                  ],
                           ),
                           boxShadow: [
                             BoxShadow(
@@ -324,7 +337,8 @@ class GDArenaScreen extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: const Color(0xFF1E293B),
-        title: const Text('Exit Session?', style: TextStyle(color: Colors.white)),
+        title:
+            const Text('Exit Session?', style: TextStyle(color: Colors.white)),
         content: const Text(
           'Are you sure you want to exit? Your GD feedback report will be generated for recorded turns.',
           style: TextStyle(color: Color(0xFF94A3B8)),

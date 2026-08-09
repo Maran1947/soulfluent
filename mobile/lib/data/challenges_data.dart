@@ -54,7 +54,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: true,
     timerSeconds: 60,
     timerType: 'countdown',
-    description: 'Pick a topic that makes you nervous. Talk anyway. Journal how it felt after.',
+    description:
+        'Pick a topic that makes you nervous. Talk anyway. Journal how it felt after.',
     xp: 40,
     difficulty: 'silver',
     icon: 'ti-mood-empty',
@@ -68,7 +69,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: true,
     timerSeconds: null,
     timerType: 'none',
-    description: 'Pause for a full 3 seconds mid-sentence on purpose. No filling it. No panic.',
+    description:
+        'Pause for a full 3 seconds mid-sentence on purpose. No filling it. No panic.',
     xp: 25,
     difficulty: 'bronze',
     icon: 'ti-player-pause',
@@ -82,7 +84,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: true,
     timerSeconds: 90,
     timerType: 'countdown',
-    description: 'You\'re only allowed to survive using rescue phrases when stuck. No perfect answers expected.',
+    description:
+        'You\'re only allowed to survive using rescue phrases when stuck. No perfect answers expected.',
     xp: 30,
     difficulty: 'silver',
     icon: 'ti-lifebuoy',
@@ -98,7 +101,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: true,
     timerSeconds: 45,
     timerType: 'countdown',
-    description: 'An image appears. Describe everything you see before the timer runs out.',
+    description:
+        'An image appears. Describe everything you see before the timer runs out.',
     xp: 20,
     difficulty: 'bronze',
     icon: 'ti-photo',
@@ -112,7 +116,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: true,
     timerSeconds: null,
     timerType: 'count_up',
-    description: 'Pick a topic. Talk nonstop until you run out of breath. Beat yesterday\'s word count.',
+    description:
+        'Pick a topic. Talk nonstop until you run out of breath. Beat yesterday\'s word count.',
     xp: 20,
     difficulty: 'bronze',
     icon: 'ti-wind',
@@ -126,7 +131,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: true,
     timerSeconds: 120,
     timerType: 'countdown',
-    description: 'AI gives a sentence, you continue the story, AI continues again. Keep it going.',
+    description:
+        'AI gives a sentence, you continue the story, AI continues again. Keep it going.',
     xp: 25,
     difficulty: 'bronze',
     icon: 'ti-books',
@@ -140,7 +146,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: true,
     timerSeconds: 60,
     timerType: 'countdown',
-    description: 'Talk for 60 seconds with zero um/uh. Every filler resets your combo.',
+    description:
+        'Talk for 60 seconds with zero um/uh. Every filler resets your combo.',
     xp: 30,
     difficulty: 'silver',
     icon: 'ti-target-arrow',
@@ -156,7 +163,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: true,
     timerSeconds: null,
     timerType: 'none',
-    description: 'Join a group of 3-5 learners. Everyone must speak today or the squad streak breaks.',
+    description:
+        'Join a group of 3-5 learners. Everyone must speak today or the squad streak breaks.',
     xp: 15,
     difficulty: 'bronze',
     icon: 'ti-users-group',
@@ -170,7 +178,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: true,
     timerSeconds: 60,
     timerType: 'countdown',
-    description: 'You and a friend answer the same prompt separately. Compare recordings after.',
+    description:
+        'You and a friend answer the same prompt separately. Compare recordings after.',
     xp: 20,
     difficulty: 'bronze',
     icon: 'ti-swords',
@@ -201,7 +210,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: true,
     timerSeconds: 240,
     timerType: 'countdown',
-    description: '4 unscripted questions, one from each AI persona, back to back.',
+    description:
+        '4 unscripted questions, one from each AI persona, back to back.',
     xp: 100,
     difficulty: 'gold',
     icon: 'ti-crown',
@@ -218,7 +228,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: false,
     timerSeconds: 30,
     timerType: 'countdown',
-    description: 'A category appears. Type as many matching words as you can before time runs out.',
+    description:
+        'A category appears. Type as many matching words as you can before time runs out.',
     xp: 10,
     difficulty: 'bronze',
     icon: 'ti-keyboard',
@@ -232,7 +243,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: false,
     timerSeconds: null,
     timerType: 'none',
-    description: 'Hear 3 short clips out of order. Drag them into the correct sequence.',
+    description:
+        'Hear 3 short clips out of order. Drag them into the correct sequence.',
     xp: 10,
     difficulty: 'bronze',
     icon: 'ti-arrows-sort',
@@ -274,7 +286,8 @@ const List<Challenge> ALL_CHALLENGES = [
     requiresVoice: false,
     timerSeconds: null,
     timerType: 'none',
-    description: 'A paragraph has 3 hidden grammar errors. Tap to find and fix them.',
+    description:
+        'A paragraph has 3 hidden grammar errors. Tap to find and fix them.',
     xp: 10,
     difficulty: 'bronze',
     icon: 'ti-search',

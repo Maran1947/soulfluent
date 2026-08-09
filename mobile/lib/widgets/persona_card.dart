@@ -25,7 +25,8 @@ class PersonaCard extends StatelessWidget {
   }
 
   String get flag {
-    if (personaKey.contains('riya') || personaKey.contains('meera')) return '🇮🇳';
+    if (personaKey.contains('riya') || personaKey.contains('meera'))
+      return '🇮🇳';
     return '🇺🇸';
   }
 
@@ -112,14 +113,16 @@ class PersonaCard extends StatelessWidget {
                     const Spacer(),
                     if (isSpeaking)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xFFF25C40).withOpacity(0.2),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Row(
                           children: [
-                            Icon(Icons.volume_up, size: 14, color: Color(0xFFF25C40)),
+                            Icon(Icons.volume_up,
+                                size: 14, color: Color(0xFFF25C40)),
                             SizedBox(width: 4),
                             Text(
                               'Speaking',

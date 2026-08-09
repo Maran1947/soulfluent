@@ -36,7 +36,9 @@ class AppTheme {
         background: background,
         error: Colors.redAccent,
       ),
-      textTheme: GoogleFonts.plusJakartaSansTextTheme(ThemeData.dark().textTheme).copyWith(
+      textTheme:
+          GoogleFonts.plusJakartaSansTextTheme(ThemeData.dark().textTheme)
+              .copyWith(
         displayLarge: GoogleFonts.outfit(
           color: textMain,
           fontWeight: FontWeight.bold,
@@ -117,7 +119,9 @@ class AppTheme {
         background: lightBackground,
         error: Colors.redAccent,
       ),
-      textTheme: GoogleFonts.plusJakartaSansTextTheme(ThemeData.light().textTheme).copyWith(
+      textTheme:
+          GoogleFonts.plusJakartaSansTextTheme(ThemeData.light().textTheme)
+              .copyWith(
         displayLarge: GoogleFonts.outfit(
           color: textMainLight,
           fontWeight: FontWeight.bold,

@@ -189,9 +189,9 @@ class ApiService {
     return jsonList.map((item) => GDSession.fromJson(item)).toList();
   }
 
-
   // Submit Turn (Multipart Voice Audio Upload)
-  Future<TurnResponse> submitTurn(String sessionId, String filePath, {double durationSeconds = 5.0}) async {
+  Future<TurnResponse> submitTurn(String sessionId, String filePath,
+      {double durationSeconds = 5.0}) async {
     final uri = Uri.parse('$baseUrl/gd/sessions/$sessionId/turn');
     final request = http.MultipartRequest('POST', uri);
 

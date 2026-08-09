@@ -1,0 +1,10 @@
+analyzer:
+  errors:
+    deprecated_member_use: ignore
+    include_file_not_found: ignore
+
+linter:
+  rules:
+    prefer_const_constructors: false
+    prefer_const_declarations: true
+    avoid_print: true

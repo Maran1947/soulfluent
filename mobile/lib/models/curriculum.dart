@@ -38,7 +38,8 @@ class CurriculumDay {
   final int d;
   final String theme;
   final String persona;
-  final String mode; // 'foundation', 'debate', 'group', 'milestone', 'echo', etc.
+  final String
+      mode; // 'foundation', 'debate', 'group', 'milestone', 'echo', etc.
   final String aiLine;
   final String instruction;
   final List<String> phrasesA;
@@ -101,7 +102,7 @@ class CurriculumDay {
   List<String> getStatChips(String activeTrack) {
     final wpmStr = wpm > 0 ? '⏱️ $wpm WPM' : '⏱️ Free Pace';
     final fillerStr = '🎯 $filler';
-    final rescueStr = (rescuePhrases != null && rescuePhrases.isNotEmpty) ? '🛟 Rescue on' : '🛟 Standard';
+    final rescueStr = rescuePhrases.isNotEmpty ? '🛟 Rescue on' : '🛟 Standard';
     return [wpmStr, fillerStr, rescueStr];
   }
 
@@ -109,7 +110,10 @@ class CurriculumDay {
     List<String> parseList(dynamic val) {
       if (val == null) return [];
       if (val is List) {
-        return val.map((e) => e?.toString() ?? '').where((s) => s.isNotEmpty).toList();
+        return val
+            .map((e) => e?.toString() ?? '')
+            .where((s) => s.isNotEmpty)
+            .toList();
       }
       return [];
     }
@@ -216,11 +220,21 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Introduce Yourself",
         "persona": "riya",
         "mode": "foundation",
-        "aiLine": "Hey! I'm Riya. Before we jump in — just tell me who you are. Don't rehearse it, just talk.",
-        "instruction": "Tap the mic and introduce yourself for 30 seconds. Say your name, where you're from, and one thing you like. No perfect grammar needed.",
+        "aiLine":
+            "Hey! I'm Riya. Before we jump in — just tell me who you are. Don't rehearse it, just talk.",
+        "instruction":
+            "Tap the mic and introduce yourself for 30 seconds. Say your name, where you're from, and one thing you like. No perfect grammar needed.",
         "phrasesA": ["I'm from...", "One thing about me is...", "I enjoy..."],
-        "phrasesB": ["I am...", "My name is...", "I am from...", "Nice to meet you"],
-        "script": ["Riya: What should I call you?", "You: I'm Aditya, I'm from Pune."],
+        "phrasesB": [
+          "I am...",
+          "My name is...",
+          "I am from...",
+          "Nice to meet you"
+        ],
+        "script": [
+          "Riya: What should I call you?",
+          "You: I'm Aditya, I'm from Pune."
+        ],
         "wpm": 80,
         "filler": "≤6/min",
       },
@@ -229,11 +243,21 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Daily Routine",
         "persona": "riya",
         "mode": "foundation",
-        "aiLine": "Walk me through your morning — start from the moment you wake up.",
-        "instruction": "Describe your daily routine out loud. Use present tense. Try for 5 sentences without stopping.",
+        "aiLine":
+            "Walk me through your morning — start from the moment you wake up.",
+        "instruction":
+            "Describe your daily routine out loud. Use present tense. Try for 5 sentences without stopping.",
         "phrasesA": ["Right after I wake up...", "Before I leave for work..."],
-        "phrasesB": ["I wake up at...", "I eat breakfast", "I go to...", "I sleep at..."],
-        "script": ["Riya: What's the first thing you do after waking up?", "You: I check my phone, then I make tea."],
+        "phrasesB": [
+          "I wake up at...",
+          "I eat breakfast",
+          "I go to...",
+          "I sleep at..."
+        ],
+        "script": [
+          "Riya: What's the first thing you do after waking up?",
+          "You: I check my phone, then I make tea."
+        ],
         "wpm": 82,
         "filler": "≤6/min",
       },
@@ -243,10 +267,22 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "riya",
         "mode": "foundation",
         "aiLine": "Tell me about someone important in your life.",
-        "instruction": "Pick 3 people close to you. Describe each one in 2–3 sentences — who they are and one thing about them.",
-        "phrasesA": ["What stands out about them is...", "We're close because..."],
-        "phrasesB": ["This is my...", "He is...", "She is...", "We live together"],
-        "script": ["Riya: Who's someone you talk to every day?", "You: My sister — she is funny and very supportive."],
+        "instruction":
+            "Pick 3 people close to you. Describe each one in 2–3 sentences — who they are and one thing about them.",
+        "phrasesA": [
+          "What stands out about them is...",
+          "We're close because..."
+        ],
+        "phrasesB": [
+          "This is my...",
+          "He is...",
+          "She is...",
+          "We live together"
+        ],
+        "script": [
+          "Riya: Who's someone you talk to every day?",
+          "You: My sister — she is funny and very supportive."
+        ],
         "wpm": 84,
         "filler": "≤5/min",
       },
@@ -256,10 +292,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "riya",
         "mode": "foundation",
         "aiLine": "What do you love? And what can you totally skip?",
-        "instruction": "Share 3 things you like and 3 you don't — and give a quick reason for each.",
+        "instruction":
+            "Share 3 things you like and 3 you don't — and give a quick reason for each.",
         "phrasesA": ["What I really enjoy is...", "I could do without..."],
         "phrasesB": ["I like...", "I don't like...", "...because"],
-        "script": ["Riya: Coffee or tea?", "You: Tea — I don't like coffee, it's too strong for me."],
+        "script": [
+          "Riya: Coffee or tea?",
+          "You: Tea — I don't like coffee, it's too strong for me."
+        ],
         "wpm": 86,
         "filler": "≤5/min",
       },
@@ -268,11 +308,16 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Numbers & Time",
         "persona": "riya",
         "mode": "foundation",
-        "aiLine": "Quick fire round — tell me your phone number, no pausing between digits.",
-        "instruction": "Say your age, phone number, and today's date out loud without hesitating.",
+        "aiLine":
+            "Quick fire round — tell me your phone number, no pausing between digits.",
+        "instruction":
+            "Say your age, phone number, and today's date out loud without hesitating.",
         "phrasesA": ["It's currently...", "My number is..."],
         "phrasesB": ["Numbers 1–100", "It's... o'clock", "Today is..."],
-        "script": ["Riya: What time do you usually start work?", "You: Around nine thirty in the morning."],
+        "script": [
+          "Riya: What time do you usually start work?",
+          "You: Around nine thirty in the morning."
+        ],
         "wpm": 88,
         "filler": "≤5/min",
       },
@@ -282,10 +327,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "riya",
         "mode": "foundation",
         "aiLine": "Your turn — ask me three questions about myself.",
-        "instruction": "Ask Riya 3 questions using What, Where, or How. Listen to her answer before asking the next.",
+        "instruction":
+            "Ask Riya 3 questions using What, Where, or How. Listen to her answer before asking the next.",
         "phrasesA": ["Can I ask you something?", "What made you..."],
         "phrasesB": ["What...", "Where...", "When...", "Who...", "How..."],
-        "script": ["You: Where are you from, Riya?", "Riya: I'm based in Bengaluru! Your turn to ask another."],
+        "script": [
+          "You: Where are you from, Riya?",
+          "Riya: I'm based in Bengaluru! Your turn to ask another."
+        ],
         "wpm": 90,
         "filler": "≤4/min",
       },
@@ -294,11 +343,16 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Milestone: The 60-Second Intro",
         "persona": "riya",
         "mode": "milestone",
-        "aiLine": "Give me your best 60 seconds. I'm recording this one for your report.",
-        "instruction": "Introduce yourself for a full 60 seconds — no script, no notes. This recording becomes your Week 1 baseline.",
+        "aiLine":
+            "Give me your best 60 seconds. I'm recording this one for your report.",
+        "instruction":
+            "Introduce yourself for a full 60 seconds — no script, no notes. This recording becomes your Week 1 baseline.",
         "phrasesA": ["(no scaffold — speak freely)"],
         "phrasesB": ["Use any phrases from Day 1–6"],
-        "script": ["Riya: Ready when you are — just press and talk.", "You: (60-second free response)"],
+        "script": [
+          "Riya: Ready when you are — just press and talk.",
+          "You: (60-second free response)"
+        ],
         "wpm": 92,
         "filler": "≤4/min",
         "milestoneReport": true,
@@ -314,11 +368,20 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Food & Ordering",
         "persona": "rohan",
         "mode": "foundation",
-        "aiLine": "Let's structure this: greeting, order, one follow-up question. Ready to order?",
-        "instruction": "Roleplay ordering food at a restaurant. Greet, place your order, then answer Rohan's follow-up.",
-        "phrasesA": ["I'll have the...", "Could I also get...", "Actually, can you make that..."],
+        "aiLine":
+            "Let's structure this: greeting, order, one follow-up question. Ready to order?",
+        "instruction":
+            "Roleplay ordering food at a restaurant. Greet, place your order, then answer Rohan's follow-up.",
+        "phrasesA": [
+          "I'll have the...",
+          "Could I also get...",
+          "Actually, can you make that..."
+        ],
         "phrasesB": ["I would like...", "Can I get...", "For here or to go"],
-        "script": ["Rohan: What can I get you today?", "You: I'd like a coffee and a sandwich, please."],
+        "script": [
+          "Rohan: What can I get you today?",
+          "You: I'd like a coffee and a sandwich, please."
+        ],
         "wpm": 94,
         "filler": "≤4/min",
       },
@@ -327,11 +390,25 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Directions",
         "persona": "rohan",
         "mode": "foundation",
-        "aiLine": "Break it into three steps — where you are, where you're going, how to get there.",
-        "instruction": "Give Rohan directions to a place near you. Then ask him for directions somewhere.",
-        "phrasesA": ["Head towards...", "You can't miss it", "It's just past the..."],
-        "phrasesB": ["Turn left", "Turn right", "Go straight", "It's next to..."],
-        "script": ["Rohan: How do I get to the station from here?", "You: Go straight, then turn left at the signal."],
+        "aiLine":
+            "Break it into three steps — where you are, where you're going, how to get there.",
+        "instruction":
+            "Give Rohan directions to a place near you. Then ask him for directions somewhere.",
+        "phrasesA": [
+          "Head towards...",
+          "You can't miss it",
+          "It's just past the..."
+        ],
+        "phrasesB": [
+          "Turn left",
+          "Turn right",
+          "Go straight",
+          "It's next to..."
+        ],
+        "script": [
+          "Rohan: How do I get to the station from here?",
+          "You: Go straight, then turn left at the signal."
+        ],
         "wpm": 96,
         "filler": "≤4/min",
       },
@@ -340,11 +417,20 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Shopping",
         "persona": "rohan",
         "mode": "foundation",
-        "aiLine": "Let's map the negotiation — ask the price, counter it, then confirm.",
-        "instruction": "Roleplay buying something. Ask the price, try negotiating once, then agree on a final price.",
+        "aiLine":
+            "Let's map the negotiation — ask the price, counter it, then confirm.",
+        "instruction":
+            "Roleplay buying something. Ask the price, try negotiating once, then agree on a final price.",
         "phrasesA": ["Is that the best you can do?", "I'll take it for..."],
-        "phrasesB": ["How much is this?", "Can I get a discount?", "I'll take it"],
-        "script": ["Rohan: That'll be 500 rupees.", "You: Can you do 400? I'll take two."],
+        "phrasesB": [
+          "How much is this?",
+          "Can I get a discount?",
+          "I'll take it"
+        ],
+        "script": [
+          "Rohan: That'll be 500 rupees.",
+          "You: Can you do 400? I'll take two."
+        ],
         "wpm": 98,
         "filler": "≤3/min",
       },
@@ -353,11 +439,19 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Weather & Small Talk",
         "persona": "rohan",
         "mode": "foundation",
-        "aiLine": "Structured small talk still needs a plan — opener, comment, question back.",
-        "instruction": "Make small talk with Rohan for 1 minute. Comment on the weather, then ask him a question back.",
-        "phrasesA": ["Can you believe this weather?", "How's your day going so far?"],
+        "aiLine":
+            "Structured small talk still needs a plan — opener, comment, question back.",
+        "instruction":
+            "Make small talk with Rohan for 1 minute. Comment on the weather, then ask him a question back.",
+        "phrasesA": [
+          "Can you believe this weather?",
+          "How's your day going so far?"
+        ],
         "phrasesB": ["It is hot/cold/sunny", "Nice weather today"],
-        "script": ["Rohan: It's really humid today, isn't it?", "You: Yes, definitely. Do you like this season?"],
+        "script": [
+          "Rohan: It's really humid today, isn't it?",
+          "You: Yes, definitely. Do you like this season?"
+        ],
         "wpm": 100,
         "filler": "≤3/min",
       },
@@ -367,10 +461,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "rohan",
         "mode": "foundation",
         "aiLine": "Sequence it for me — what happened first, next, and last?",
-        "instruction": "Tell Rohan 3 things you did yesterday, in order, using past tense.",
+        "instruction":
+            "Tell Rohan 3 things you did yesterday, in order, using past tense.",
         "phrasesA": ["Right after that, I...", "By the end of the day..."],
         "phrasesB": ["I worked", "I watched", "I called", "I walked"],
-        "script": ["Rohan: What did you do yesterday evening?", "You: I finished work, then I called my friend."],
+        "script": [
+          "Rohan: What did you do yesterday evening?",
+          "You: I finished work, then I called my friend."
+        ],
         "wpm": 102,
         "filler": "≤3/min",
       },
@@ -380,10 +478,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "rohan",
         "mode": "foundation",
         "aiLine": "Structure your plan — goal, steps, timeline.",
-        "instruction": "Tell Rohan your plan for this weekend. Include at least 2 things you'll do.",
+        "instruction":
+            "Tell Rohan your plan for this weekend. Include at least 2 things you'll do.",
         "phrasesA": ["My plan is to...", "I'm hoping to..."],
         "phrasesB": ["I will...", "I am going to..."],
-        "script": ["Rohan: Any plans this weekend?", "You: I'm going to visit my parents on Saturday."],
+        "script": [
+          "Rohan: Any plans this weekend?",
+          "You: I'm going to visit my parents on Saturday."
+        ],
         "wpm": 104,
         "filler": "≤3/min",
       },
@@ -392,11 +494,16 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Milestone: First Group Discussion",
         "persona": "panel",
         "mode": "milestone",
-        "aiLine": "Three pillars today — your ideas, your evidence, your turn-taking. Riya and I are both in the room.",
-        "instruction": "Join a 2-minute group discussion with Riya and Rohan on a simple topic. Take at least 2 turns.",
+        "aiLine":
+            "Three pillars today — your ideas, your evidence, your turn-taking. Riya and I are both in the room.",
+        "instruction":
+            "Join a 2-minute group discussion with Riya and Rohan on a simple topic. Take at least 2 turns.",
         "phrasesA": ["(no scaffold — speak freely)"],
         "phrasesB": ["Use any phrases from Week 1–2"],
-        "script": ["Rohan: Let's discuss — is remote work better than office work?", "Riya: I'd love to hear your take first!"],
+        "script": [
+          "Rohan: Let's discuss — is remote work better than office work?",
+          "Riya: I'd love to hear your take first!"
+        ],
         "wpm": 106,
         "filler": "≤3/min",
         "milestoneReport": true,
@@ -412,11 +519,19 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Phone Calls",
         "persona": "emily",
         "mode": "foundation",
-        "aiLine": "Confidence starts with your opening line. Let's hear it — the phone's ringing.",
-        "instruction": "Roleplay answering and making a phone call with Emily. Open, respond, and close politely.",
-        "phrasesA": ["Speaking, how can I help?", "Could you repeat that, please?"],
+        "aiLine":
+            "Confidence starts with your opening line. Let's hear it — the phone's ringing.",
+        "instruction":
+            "Roleplay answering and making a phone call with Emily. Open, respond, and close politely.",
+        "phrasesA": [
+          "Speaking, how can I help?",
+          "Could you repeat that, please?"
+        ],
         "phrasesB": ["Hello, this is...", "Can I take a message?"],
-        "script": ["Emily: Hi, is this Aditya?", "You: Yes, speaking. How can I help you?"],
+        "script": [
+          "Emily: Hi, is this Aditya?",
+          "You: Yes, speaking. How can I help you?"
+        ],
         "wpm": 108,
         "filler": "≤3/min",
       },
@@ -426,10 +541,17 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "emily",
         "mode": "foundation",
         "aiLine": "Tell me about yourself — and make me remember it.",
-        "instruction": "Answer 2 common interview questions from Emily in under 60 seconds each.",
-        "phrasesA": ["What sets me apart is...", "I'm particularly proud of..."],
+        "instruction":
+            "Answer 2 common interview questions from Emily in under 60 seconds each.",
+        "phrasesA": [
+          "What sets me apart is...",
+          "I'm particularly proud of..."
+        ],
         "phrasesB": ["I have experience in...", "My strengths are..."],
-        "script": ["Emily: Why should we hire you?", "You: I bring strong problem-solving skills and I learn fast."],
+        "script": [
+          "Emily: Why should we hire you?",
+          "You: I bring strong problem-solving skills and I learn fast."
+        ],
         "wpm": 110,
         "filler": "≤2/min",
       },
@@ -439,10 +561,17 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "emily",
         "mode": "foundation",
         "aiLine": "I disagree — convince me otherwise.",
-        "instruction": "Pick a simple topic. State your opinion, then respond when Emily pushes back.",
-        "phrasesA": ["I see it differently because...", "That's fair, but consider..."],
+        "instruction":
+            "Pick a simple topic. State your opinion, then respond when Emily pushes back.",
+        "phrasesA": [
+          "I see it differently because...",
+          "That's fair, but consider..."
+        ],
         "phrasesB": ["I think...", "In my opinion..."],
-        "script": ["Emily: I think remote work hurts collaboration.", "You: I see your point, but it also removes commute stress."],
+        "script": [
+          "Emily: I think remote work hurts collaboration.",
+          "You: I see your point, but it also removes commute stress."
+        ],
         "wpm": 112,
         "filler": "≤2/min",
       },
@@ -452,10 +581,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "emily",
         "mode": "foundation",
         "aiLine": "Stay calm — state the problem, then propose the fix.",
-        "instruction": "Roleplay a complaint call. Explain the issue clearly and ask for a solution.",
+        "instruction":
+            "Roleplay a complaint call. Explain the issue clearly and ask for a solution.",
         "phrasesA": ["Here's exactly what happened...", "What I'd like is..."],
         "phrasesB": ["There is a problem with...", "Can you help me fix..."],
-        "script": ["Emily: What seems to be the issue?", "You: There's a problem with my order — it arrived damaged."],
+        "script": [
+          "Emily: What seems to be the issue?",
+          "You: There's a problem with my order — it arrived damaged."
+        ],
         "wpm": 114,
         "filler": "≤2/min",
       },
@@ -465,10 +598,17 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "emily",
         "mode": "foundation",
         "aiLine": "Good and bad are boring words — give me something sharper.",
-        "instruction": "Describe how you feel today using 3 different feeling words, and explain why for each.",
-        "phrasesA": ["I'm a bit overwhelmed because...", "Honestly, I feel relieved that..."],
+        "instruction":
+            "Describe how you feel today using 3 different feeling words, and explain why for each.",
+        "phrasesA": [
+          "I'm a bit overwhelmed because...",
+          "Honestly, I feel relieved that..."
+        ],
         "phrasesB": ["I feel happy", "I feel tired", "I feel worried"],
-        "script": ["Emily: How are you feeling about this week?", "You: A little tired, but hopeful about the weekend."],
+        "script": [
+          "Emily: How are you feeling about this week?",
+          "You: A little tired, but hopeful about the weekend."
+        ],
         "wpm": 116,
         "filler": "≤2/min",
       },
@@ -478,10 +618,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "emily",
         "mode": "foundation",
         "aiLine": "Handle the whole check-in. Don't let me throw you off.",
-        "instruction": "Roleplay a hotel check-in from greeting to getting your room key.",
+        "instruction":
+            "Roleplay a hotel check-in from greeting to getting your room key.",
         "phrasesA": ["I have a reservation under...", "Is breakfast included?"],
         "phrasesB": ["I'd like to check in", "Here is my ID"],
-        "script": ["Emily: Welcome! Do you have a reservation?", "You: Yes, it's under Aditya Sharma."],
+        "script": [
+          "Emily: Welcome! Do you have a reservation?",
+          "You: Yes, it's under Aditya Sharma."
+        ],
         "wpm": 118,
         "filler": "≤2/min",
       },
@@ -491,10 +635,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "emily",
         "mode": "milestone",
         "aiLine": "Surprise topic, no prep. Go.",
-        "instruction": "Have a free 3-minute conversation with Emily on a topic she picks. No scaffolding this time.",
+        "instruction":
+            "Have a free 3-minute conversation with Emily on a topic she picks. No scaffolding this time.",
         "phrasesA": ["(no scaffold — speak freely)"],
         "phrasesB": ["Use any phrases from Week 3"],
-        "script": ["Emily: Let's talk about something unexpected — favorite childhood memory?", "You: (free response)"],
+        "script": [
+          "Emily: Let's talk about something unexpected — favorite childhood memory?",
+          "You: (free response)"
+        ],
         "wpm": 120,
         "filler": "≤2/min",
         "milestoneReport": true,
@@ -510,11 +658,16 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Random Topic Speaking",
         "persona": "alex",
         "mode": "debate",
-        "aiLine": "What if I hand you a topic you've never thought about? Talk anyway.",
-        "instruction": "Alex will give you a random topic. Speak for 60 seconds with zero prep time.",
+        "aiLine":
+            "What if I hand you a topic you've never thought about? Talk anyway.",
+        "instruction":
+            "Alex will give you a random topic. Speak for 60 seconds with zero prep time.",
         "phrasesA": ["My initial reaction is...", "Thinking about it more..."],
         "phrasesB": ["I think... because...", "One example is..."],
-        "script": ["Alex: Should schools teach coding from age 5?", "You: (60-second impromptu response)"],
+        "script": [
+          "Alex: Should schools teach coding from age 5?",
+          "You: (60-second impromptu response)"
+        ],
         "wpm": 122,
         "filler": "≤2/min",
       },
@@ -524,10 +677,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "alex",
         "mode": "debate",
         "aiLine": "Challenge the core assumption — why must it be true?",
-        "instruction": "Take a side in a mini-debate with Alex. Defend it for 2 exchanges.",
+        "instruction":
+            "Take a side in a mini-debate with Alex. Defend it for 2 exchanges.",
         "phrasesA": ["That assumes... but what if...", "I'd push back on..."],
         "phrasesB": ["I see your point, but...", "I disagree because..."],
-        "script": ["Alex: Social media does more harm than good — agree?", "You: I see your point, but it also connects people globally."],
+        "script": [
+          "Alex: Social media does more harm than good — agree?",
+          "You: I see your point, but it also connects people globally."
+        ],
         "wpm": 124,
         "filler": "≤1/min",
       },
@@ -537,10 +694,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "alex",
         "mode": "debate",
         "aiLine": "Give me structure — setup, tension, resolution.",
-        "instruction": "Tell Alex a 1-minute personal story with a clear beginning, middle, and end.",
+        "instruction":
+            "Tell Alex a 1-minute personal story with a clear beginning, middle, and end.",
         "phrasesA": ["It all started when...", "In the end..."],
         "phrasesB": ["First...", "Then...", "Finally..."],
-        "script": ["Alex: Tell me about a time something went wrong.", "You: It all started when I missed my train..."],
+        "script": [
+          "Alex: Tell me about a time something went wrong.",
+          "You: It all started when I missed my train..."
+        ],
         "wpm": 126,
         "filler": "≤1/min",
       },
@@ -550,10 +711,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "alex",
         "mode": "debate",
         "aiLine": "Pitch it in 90 seconds. I'm timing you.",
-        "instruction": "Pitch one idea to Alex in under 90 seconds. State the idea, why it matters, and one next step.",
+        "instruction":
+            "Pitch one idea to Alex in under 90 seconds. State the idea, why it matters, and one next step.",
         "phrasesA": ["The core idea is...", "Here's why this matters..."],
         "phrasesB": ["I want to talk about...", "My idea is..."],
-        "script": ["Alex: What's your idea?", "You: I want to talk about a way to reduce commute time for teams."],
+        "script": [
+          "Alex: What's your idea?",
+          "You: I want to talk about a way to reduce commute time for teams."
+        ],
         "wpm": 128,
         "filler": "≤1/min",
       },
@@ -563,10 +728,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "alex",
         "mode": "debate",
         "aiLine": "I'm going to cut you off mid-sentence. Recover.",
-        "instruction": "Answer Alex's question. He'll interrupt you once — pick your sentence back up smoothly.",
+        "instruction":
+            "Answer Alex's question. He'll interrupt you once — pick your sentence back up smoothly.",
         "phrasesA": ["As I was saying...", "Let me just finish this point..."],
         "phrasesB": ["Sorry, let me finish", "Can I continue?"],
-        "script": ["Alex: Wait, that can't be — (interrupts)", "You: Sorry, let me finish — what I meant was..."],
+        "script": [
+          "Alex: Wait, that can't be — (interrupts)",
+          "You: Sorry, let me finish — what I meant was..."
+        ],
         "wpm": 130,
         "filler": "≤1/min",
       },
@@ -575,11 +744,16 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Natural Fillers & Flow",
         "persona": "alex",
         "mode": "debate",
-        "aiLine": "Even I say 'well, actually' sometimes — use it on purpose, not by accident.",
-        "instruction": "Free-talk for 1 minute, deliberately using 2 natural connectors instead of silence.",
+        "aiLine":
+            "Even I say 'well, actually' sometimes — use it on purpose, not by accident.",
+        "instruction":
+            "Free-talk for 1 minute, deliberately using 2 natural connectors instead of silence.",
         "phrasesA": ["Well, actually...", "You know, ...", "That said..."],
         "phrasesB": ["So...", "Basically..."],
-        "script": ["Alex: What do you think about AI in classrooms?", "You: Well, actually, I think it depends on the age group."],
+        "script": [
+          "Alex: What do you think about AI in classrooms?",
+          "You: Well, actually, I think it depends on the age group."
+        ],
         "wpm": 132,
         "filler": "Controlled use",
       },
@@ -589,10 +763,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "panel",
         "mode": "milestone",
         "aiLine": "Four perspectives, one topic. Hold your ground.",
-        "instruction": "Join a 3-minute unscripted group discussion with all 4 AI partners. Speak at least 3 times.",
+        "instruction":
+            "Join a 3-minute unscripted group discussion with all 4 AI partners. Speak at least 3 times.",
         "phrasesA": ["(no scaffold — speak freely)"],
         "phrasesB": ["Use any phrases from Week 4"],
-        "script": ["Rohan: Let's structure the debate first.", "Alex: Or let's just dive in — what do you think?"],
+        "script": [
+          "Rohan: Let's structure the debate first.",
+          "Alex: Or let's just dive in — what do you think?"
+        ],
         "wpm": 134,
         "filler": "Minimal",
         "milestoneReport": true,
@@ -608,11 +786,16 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "theme": "Mixed Review: Surprise Panel",
         "persona": "panel",
         "mode": "group",
-        "aiLine": "Three scenarios, zero warning. Let's see everything you've built.",
-        "instruction": "Complete 3 surprise scenarios pulled from Weeks 1–4, back to back, no prep between them.",
+        "aiLine":
+            "Three scenarios, zero warning. Let's see everything you've built.",
+        "instruction":
+            "Complete 3 surprise scenarios pulled from Weeks 1–4, back to back, no prep between them.",
         "phrasesA": ["(no scaffold — speak freely)"],
         "phrasesB": ["Use any phrase from the whole program"],
-        "script": ["Riya: Scenario 1 — introduce yourself to a new colleague.", "You: (free response, then Alex jumps in with Scenario 2)"],
+        "script": [
+          "Riya: Scenario 1 — introduce yourself to a new colleague.",
+          "You: (free response, then Alex jumps in with Scenario 2)"
+        ],
         "wpm": 135,
         "filler": "0–1/min",
       },
@@ -622,10 +805,14 @@ final List<Map<String, dynamic>> WEEKS_DATA = [
         "persona": "alex",
         "mode": "milestone",
         "aiLine": "Last round. Convince me you've changed my mind.",
-        "instruction": "Debate Alex for 3 minutes on a topic of his choice. This session generates your final certificate.",
+        "instruction":
+            "Debate Alex for 3 minutes on a topic of his choice. This session generates your final certificate.",
         "phrasesA": ["(no scaffold — speak freely)"],
         "phrasesB": ["Use any phrase from the whole program"],
-        "script": ["Alex: Final round — is remote learning as effective as in-person?", "You: (free 3-minute debate)"],
+        "script": [
+          "Alex: Final round — is remote learning as effective as in-person?",
+          "You: (free 3-minute debate)"
+        ],
         "wpm": 135,
         "filler": "0 Filler",
         "milestoneReport": true,

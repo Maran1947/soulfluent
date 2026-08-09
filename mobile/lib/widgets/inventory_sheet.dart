@@ -12,9 +12,12 @@ class InventorySheet extends StatelessWidget {
     final provider = Provider.of<ChallengesProvider>(context);
 
     final cardBg = isDark ? const Color(0xFF1B2138) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF2A3150) : const Color(0xFFE2E8F0);
-    final headingColor = isDark ? const Color(0xFFEDEFF7) : const Color(0xFF0F172A);
-    final subtitleColor = isDark ? const Color(0xFF8A8FA3) : const Color(0xFF64748B);
+    final borderColor =
+        isDark ? const Color(0xFF2A3150) : const Color(0xFFE2E8F0);
+    final headingColor =
+        isDark ? const Color(0xFFEDEFF7) : const Color(0xFF0F172A);
+    final subtitleColor =
+        isDark ? const Color(0xFF8A8FA3) : const Color(0xFF64748B);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),

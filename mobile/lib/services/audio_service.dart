@@ -26,7 +26,8 @@ class AudioService {
     }
 
     final tempDir = await getTemporaryDirectory();
-    final path = '${tempDir.path}/gd_turn_${DateTime.now().millisecondsSinceEpoch}.m4a';
+    final path =
+        '${tempDir.path}/gd_turn_${DateTime.now().millisecondsSinceEpoch}.m4a';
 
     const config = RecordConfig(
       encoder: AudioEncoder.aacLc,

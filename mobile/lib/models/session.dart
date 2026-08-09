@@ -112,7 +112,8 @@ class TurnResponse {
 
   factory TurnResponse.fromJson(Map<String, dynamic> json) {
     return TurnResponse(
-      userMessage: GDMessage.fromJson(json['user_message'] as Map<String, dynamic>),
+      userMessage:
+          GDMessage.fromJson(json['user_message'] as Map<String, dynamic>),
       aiMessage: GDMessage.fromJson(json['ai_message'] as Map<String, dynamic>),
       secondsRemaining: (json['seconds_remaining'] as num?)?.toInt() ?? 0,
     );

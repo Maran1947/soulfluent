@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/data/challenges_data.dart';
-import 'package:fluentsoul_mobile/models/challenge.dart';
 import 'package:fluentsoul_mobile/providers/challenges_provider.dart';
 import 'package:fluentsoul_mobile/screens/challenge_play_screen.dart';
 import 'package:fluentsoul_mobile/screens/zone_detail_screen.dart';
@@ -25,9 +24,12 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
 
     final bgColor = isDark ? const Color(0xFF131829) : const Color(0xFFF8FAFC);
     final cardBg = isDark ? const Color(0xFF1B2138) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF2A3150) : const Color(0xFFE2E8F0);
-    final headingColor = isDark ? const Color(0xFFEDEFF7) : const Color(0xFF0F172A);
-    final subtitleColor = isDark ? const Color(0xFF8A8FA3) : const Color(0xFF64748B);
+    final borderColor =
+        isDark ? const Color(0xFF2A3150) : const Color(0xFFE2E8F0);
+    final headingColor =
+        isDark ? const Color(0xFFEDEFF7) : const Color(0xFF0F172A);
+    final subtitleColor =
+        isDark ? const Color(0xFF8A8FA3) : const Color(0xFF64748B);
     const coralPrimary = Color(0xFFFF8B5E);
     const coralTextDark = Color(0xFF3A1D0E);
 
@@ -78,7 +80,9 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
               Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1B2138) : const Color(0xFFE2E8F0),
+                  color: isDark
+                      ? const Color(0xFF1B2138)
+                      : const Color(0xFFE2E8F0),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: borderColor),
                 ),
@@ -91,7 +95,9 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                           duration: const Duration(milliseconds: 150),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           decoration: BoxDecoration(
-                            color: _isVoiceMode ? coralPrimary : Colors.transparent,
+                            color: _isVoiceMode
+                                ? coralPrimary
+                                : Colors.transparent,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Row(
@@ -100,7 +106,9 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                               Icon(
                                 Icons.crop_square_rounded,
                                 size: 16,
-                                color: _isVoiceMode ? coralTextDark : subtitleColor,
+                                color: _isVoiceMode
+                                    ? coralTextDark
+                                    : subtitleColor,
                               ),
                               const SizedBox(width: 8),
                               Text(
@@ -108,7 +116,9 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                                 style: GoogleFonts.inter(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  color: _isVoiceMode ? coralTextDark : subtitleColor,
+                                  color: _isVoiceMode
+                                      ? coralTextDark
+                                      : subtitleColor,
                                 ),
                               ),
                             ],
@@ -123,7 +133,9 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                           duration: const Duration(milliseconds: 150),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           decoration: BoxDecoration(
-                            color: !_isVoiceMode ? coralPrimary : Colors.transparent,
+                            color: !_isVoiceMode
+                                ? coralPrimary
+                                : Colors.transparent,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Row(
@@ -132,7 +144,9 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                               Icon(
                                 Icons.crop_square_rounded,
                                 size: 16,
-                                color: !_isVoiceMode ? coralTextDark : subtitleColor,
+                                color: !_isVoiceMode
+                                    ? coralTextDark
+                                    : subtitleColor,
                               ),
                               const SizedBox(width: 8),
                               Text(
@@ -140,7 +154,9 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                                 style: GoogleFonts.inter(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  color: !_isVoiceMode ? coralTextDark : subtitleColor,
+                                  color: !_isVoiceMode
+                                      ? coralTextDark
+                                      : subtitleColor,
                                 ),
                               ),
                             ],
@@ -169,10 +185,10 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                       children: [
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.crop_square_rounded,
                               size: 18,
-                              color: coralPrimary,
+                              color: Color(0xFFF25C40),
                             ),
                             const SizedBox(width: 8),
                             Text(
@@ -204,7 +220,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                         value: rankProgress.progress,
                         minHeight: 6,
                         backgroundColor: borderColor,
-                        valueColor: const AlwaysStoppedAnimation<Color>(coralPrimary),
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(coralPrimary),
                       ),
                     ),
                   ],
@@ -270,7 +287,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                           backgroundColor: coralPrimary,
                           foregroundColor: coralTextDark,
                           elevation: 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 18, vertical: 10),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -279,7 +297,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => ChallengePlayScreen(challenge: dailyChallenge),
+                              builder: (_) => ChallengePlayScreen(
+                                  challenge: dailyChallenge),
                             ),
                           );
                         },
@@ -310,7 +329,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                 // Zone 1: Confidence
                 _buildZoneCard(
                   title: ZONES_DATA['confidence']!.name,
-                  statusText: '${getChallengesByZone("confidence").length} challenges',
+                  statusText:
+                      '${getChallengesByZone("confidence").length} challenges',
                   iconBg: const Color(0xFF4B1528),
                   iconColor: const Color(0xFFED93B1),
                   borderColor: borderColor,
@@ -321,7 +341,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ZoneDetailScreen(zone: ZONES_DATA['confidence']!),
+                        builder: (_) =>
+                            ZoneDetailScreen(zone: ZONES_DATA['confidence']!),
                       ),
                     );
                   },
@@ -331,7 +352,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                 // Zone 2: Social
                 _buildZoneCard(
                   title: ZONES_DATA['social']!.name,
-                  statusText: '${getChallengesByZone("social").length} challenges',
+                  statusText:
+                      '${getChallengesByZone("social").length} challenges',
                   iconBg: const Color(0xFF26215C),
                   iconColor: const Color(0xFFAFA9EC),
                   borderColor: borderColor,
@@ -342,7 +364,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ZoneDetailScreen(zone: ZONES_DATA['social']!),
+                        builder: (_) =>
+                            ZoneDetailScreen(zone: ZONES_DATA['social']!),
                       ),
                     );
                   },
@@ -355,7 +378,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ZoneDetailScreen(zone: ZONES_DATA['boss']!),
+                        builder: (_) =>
+                            ZoneDetailScreen(zone: ZONES_DATA['boss']!),
                       ),
                     );
                   },
@@ -368,7 +392,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                         end: Alignment.bottomCenter,
                       ),
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: const Color(0xFFF0997B), width: 1),
+                      border:
+                          Border.all(color: const Color(0xFFF0997B), width: 1),
                     ),
                     child: Row(
                       children: [
@@ -401,7 +426,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                             ],
                           ),
                         ),
-                        Icon(Icons.crop_square_rounded, color: subtitleColor, size: 18),
+                        Icon(Icons.crop_square_rounded,
+                            color: subtitleColor, size: 18),
                       ],
                     ),
                   ),
@@ -419,7 +445,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.crop_square_rounded, color: subtitleColor, size: 20),
+                      Icon(Icons.crop_square_rounded,
+                          color: subtitleColor, size: 20),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
@@ -486,13 +513,15 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18, vertical: 8),
                             ),
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => ChallengePlayScreen(challenge: qc),
+                                  builder: (_) =>
+                                      ChallengePlayScreen(challenge: qc),
                                 ),
                               );
                             },
@@ -518,11 +547,13 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                     decoration: BoxDecoration(
                       color: cardBg,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: const Color(0xFFF0997B), width: 1),
+                      border:
+                          Border.all(color: const Color(0xFFF0997B), width: 1),
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.crop_square_rounded, color: const Color(0xFFF0997B), size: 20),
+                        const Icon(Icons.crop_square_rounded,
+                            color: Color(0xFFF0997B), size: 20),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
@@ -585,7 +616,10 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
         ),
         child: Row(
           children: [
-            _buildIconChip(bg: iconBg, iconColor: iconColor, icon: Icons.crop_square_rounded),
+            _buildIconChip(
+                bg: iconBg,
+                iconColor: iconColor,
+                icon: Icons.crop_square_rounded),
             const SizedBox(width: 14),
             Expanded(
               child: Column(

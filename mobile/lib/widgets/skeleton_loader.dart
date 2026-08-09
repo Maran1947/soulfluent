@@ -48,7 +48,8 @@ class _SkeletonItemState extends State<SkeletonItem>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final baseColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final baseColor =
+        isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
 
     return AnimatedBuilder(
       animation: _animation,
@@ -74,7 +75,8 @@ class HistorySkeletonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardBg = isDark ? const Color(0xFF1E293B) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9);
+    final borderColor =
+        isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -95,7 +97,8 @@ class HistorySkeletonCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          const SkeletonItem(width: double.infinity, height: 20, borderRadius: 8),
+          const SkeletonItem(
+              width: double.infinity, height: 20, borderRadius: 8),
           const SizedBox(height: 8),
           const SkeletonItem(width: 220, height: 20, borderRadius: 8),
           const SizedBox(height: 18),
@@ -122,7 +125,8 @@ class ReportSkeletonView extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardBg = isDark ? const Color(0xFF1E293B) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9);
+    final borderColor =
+        isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -155,11 +159,14 @@ class ReportSkeletonView extends StatelessWidget {
                 const SizedBox(height: 20),
                 Divider(color: borderColor, height: 1),
                 const SizedBox(height: 18),
-                const SkeletonItem(width: double.infinity, height: 16, borderRadius: 8),
+                const SkeletonItem(
+                    width: double.infinity, height: 16, borderRadius: 8),
                 const SizedBox(height: 12),
-                const SkeletonItem(width: double.infinity, height: 16, borderRadius: 8),
+                const SkeletonItem(
+                    width: double.infinity, height: 16, borderRadius: 8),
                 const SizedBox(height: 12),
-                const SkeletonItem(width: double.infinity, height: 16, borderRadius: 8),
+                const SkeletonItem(
+                    width: double.infinity, height: 16, borderRadius: 8),
               ],
             ),
           ),
@@ -179,9 +186,11 @@ class ReportSkeletonView extends StatelessWidget {
               children: [
                 SkeletonItem(width: 180, height: 20, borderRadius: 8),
                 SizedBox(height: 14),
-                SkeletonItem(width: double.infinity, height: 14, borderRadius: 6),
+                SkeletonItem(
+                    width: double.infinity, height: 14, borderRadius: 6),
                 SizedBox(height: 10),
-                SkeletonItem(width: double.infinity, height: 14, borderRadius: 6),
+                SkeletonItem(
+                    width: double.infinity, height: 14, borderRadius: 6),
               ],
             ),
           ),

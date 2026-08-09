@@ -81,9 +81,11 @@ class _AuthScreenState extends State<AuthScreen> {
 
     final cardBgColor = isDark ? AppTheme.cardDark : AppTheme.cardLight;
     final textMainColor = isDark ? AppTheme.textMain : AppTheme.textMainLight;
-    final textMutedColor = isDark ? AppTheme.textMuted : AppTheme.textMutedLight;
+    final textMutedColor =
+        isDark ? AppTheme.textMuted : AppTheme.textMutedLight;
     final borderColor = isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final inputBgColor = isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA);
+    final inputBgColor =
+        isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA);
 
     return Scaffold(
       body: Stack(
@@ -104,7 +106,8 @@ class _AuthScreenState extends State<AuthScreen> {
               children: [
                 // Top Header Row with Theme Toggle Button
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -123,7 +126,8 @@ class _AuthScreenState extends State<AuthScreen> {
                           border: Border.all(color: borderColor),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+                              color:
+                                  Colors.black.withOpacity(isDark ? 0.2 : 0.04),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -132,7 +136,9 @@ class _AuthScreenState extends State<AuthScreen> {
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           icon: Icon(
-                            isDark ? Icons.wb_sunny_outlined : Icons.nightlight_round_outlined,
+                            isDark
+                                ? Icons.wb_sunny_outlined
+                                : Icons.nightlight_round_outlined,
                             size: 20,
                             color: textMainColor,
                           ),
@@ -148,18 +154,22 @@ class _AuthScreenState extends State<AuthScreen> {
                 Expanded(
                   child: Center(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                       child: Container(
                         constraints: const BoxConstraints(maxWidth: 440),
                         decoration: BoxDecoration(
                           color: cardBgColor,
                           borderRadius: BorderRadius.circular(28),
                           border: Border.all(
-                            color: isDark ? AppTheme.borderDark : const Color(0xFFF1F5F9),
+                            color: isDark
+                                ? AppTheme.borderDark
+                                : const Color(0xFFF1F5F9),
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(isDark ? 0.35 : 0.08),
+                              color: Colors.black
+                                  .withOpacity(isDark ? 0.35 : 0.08),
                               blurRadius: 30,
                               spreadRadius: 0,
                               offset: const Offset(0, 10),
@@ -218,14 +228,17 @@ class _AuthScreenState extends State<AuthScreen> {
                                 children: [
                                   // Register Full Name Field
                                   if (!isLogin) ...[
-                                    _buildInputLabel('Full Name', textMainColor),
+                                    _buildInputLabel(
+                                        'Full Name', textMainColor),
                                     const SizedBox(height: 6),
                                     TextFormField(
                                       controller: _nameController,
-                                      style: GoogleFonts.inter(color: textMainColor, fontSize: 14),
+                                      style: GoogleFonts.inter(
+                                          color: textMainColor, fontSize: 14),
                                       decoration: _buildInputDecoration(
                                         hintText: 'John Doe',
-                                        prefixIcon: Icons.person_outline_rounded,
+                                        prefixIcon:
+                                            Icons.person_outline_rounded,
                                         inputBgColor: inputBgColor,
                                         borderColor: borderColor,
                                         textMutedColor: textMutedColor,
@@ -239,12 +252,14 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ],
 
                                   // Email Field
-                                  _buildInputLabel('Email address', textMainColor),
+                                  _buildInputLabel(
+                                      'Email address', textMainColor),
                                   const SizedBox(height: 6),
                                   TextFormField(
                                     controller: _emailController,
                                     keyboardType: TextInputType.emailAddress,
-                                    style: GoogleFonts.inter(color: textMainColor, fontSize: 14),
+                                    style: GoogleFonts.inter(
+                                        color: textMainColor, fontSize: 14),
                                     decoration: _buildInputDecoration(
                                       hintText: 'you@example.com',
                                       prefixIcon: Icons.email_outlined,
@@ -252,7 +267,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                       borderColor: borderColor,
                                       textMutedColor: textMutedColor,
                                     ),
-                                    validator: (val) => val == null || !val.contains('@')
+                                    validator: (val) => val == null ||
+                                            !val.contains('@')
                                         ? 'Please enter a valid email address'
                                         : null,
                                   ),
@@ -265,7 +281,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                   TextFormField(
                                     controller: _passwordController,
                                     obscureText: _obscurePassword,
-                                    style: GoogleFonts.inter(color: textMainColor, fontSize: 14),
+                                    style: GoogleFonts.inter(
+                                        color: textMainColor, fontSize: 14),
                                     decoration: _buildInputDecoration(
                                       hintText: 'Enter your password',
                                       prefixIcon: Icons.lock_outline_rounded,
@@ -282,12 +299,14 @@ class _AuthScreenState extends State<AuthScreen> {
                                         ),
                                         onPressed: () {
                                           setState(() {
-                                            _obscurePassword = !_obscurePassword;
+                                            _obscurePassword =
+                                                !_obscurePassword;
                                           });
                                         },
                                       ),
                                     ),
-                                    validator: (val) => val == null || val.length < 6
+                                    validator: (val) => val == null ||
+                                            val.length < 6
                                         ? 'Password must be at least 6 characters'
                                         : null,
                                   ),
@@ -317,15 +336,18 @@ class _AuthScreenState extends State<AuthScreen> {
                             if (auth.errorMessage != null) ...[
                               const SizedBox(height: 16),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 10),
                                 decoration: BoxDecoration(
                                   color: Colors.redAccent.withOpacity(0.12),
                                   borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.redAccent.withOpacity(0.3)),
+                                  border: Border.all(
+                                      color: Colors.redAccent.withOpacity(0.3)),
                                 ),
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.error_outline, size: 18, color: Colors.redAccent),
+                                    const Icon(Icons.error_outline,
+                                        size: 18, color: Colors.redAccent),
                                     const SizedBox(width: 10),
                                     Expanded(
                                       child: Text(
@@ -366,10 +388,13 @@ class _AuthScreenState extends State<AuthScreen> {
                                         ),
                                       )
                                     : Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            isLogin ? 'Log in to FluentSoul' : 'Create account',
+                                            isLogin
+                                                ? 'Log in to FluentSoul'
+                                                : 'Create account',
                                             style: GoogleFonts.inter(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600,
@@ -397,7 +422,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14),
                                   child: Text(
                                     'or continue with',
                                     style: GoogleFonts.inter(
@@ -424,7 +450,9 @@ class _AuthScreenState extends State<AuthScreen> {
                               child: OutlinedButton(
                                 onPressed: _handleGoogleLogin,
                                 style: OutlinedButton.styleFrom(
-                                  backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                                  backgroundColor: isDark
+                                      ? const Color(0xFF1E293B)
+                                      : Colors.white,
                                   foregroundColor: textMainColor,
                                   side: BorderSide(color: borderColor),
                                   shape: RoundedRectangleBorder(

@@ -92,9 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final gd = context.read<GDProvider>();
 
-    final personaKeys = selectedMode == 'debate'
-        ? [selectedDebateOpponent]
-        : ['riya', 'rohan'];
+    final personaKeys =
+        selectedMode == 'debate' ? [selectedDebateOpponent] : ['riya', 'rohan'];
 
     final success = await gd.startSession(
       topic: topic,
@@ -124,7 +123,8 @@ class _HomeScreenState extends State<HomeScreen> {
         final itemWidth = itemBox.size.width;
         final containerWidth = containerBox.size.width;
 
-        final itemRelativeX = itemPos.dx - containerPos.dx + _stepperScrollController.offset;
+        final itemRelativeX =
+            itemPos.dx - containerPos.dx + _stepperScrollController.offset;
         final itemCenterX = itemRelativeX + (itemWidth / 2);
         final targetOffset = itemCenterX - (containerWidth / 2);
 
@@ -220,7 +220,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 10),
 
                           // Stepper Navigation Header Card (1 Practice Mode | 2 Topic / Prompt | 3 AI Voice Partners | 4 Setup & Launch)
-                          _buildStepperHeader(isDark, cardBg, borderColor, headingColor, subtitleColor),
+                          _buildStepperHeader(isDark, cardBg, borderColor,
+                              headingColor, subtitleColor),
                         ],
                       ),
                     ),
@@ -237,7 +238,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             border: Border.all(color: borderColor),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(isDark ? 0.3 : 0.06),
+                                color: Colors.black
+                                    .withOpacity(isDark ? 0.3 : 0.06),
                                 blurRadius: 20,
                                 offset: const Offset(0, 8),
                               ),
@@ -250,7 +252,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               // Step Indicator Badge ("✨ Step X of 4")
                               Center(
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14, vertical: 6),
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFFFEBE5),
                                     borderRadius: BorderRadius.circular(20),
@@ -269,40 +272,48 @@ class _HomeScreenState extends State<HomeScreen> {
 
                               // Dynamic Step Body
                               if (currentStep == 1)
-                                _buildStep1PracticeMode(isDark, headingColor, subtitleColor, borderColor)
+                                _buildStep1PracticeMode(isDark, headingColor,
+                                    subtitleColor, borderColor)
                               else if (currentStep == 2)
-                                _buildStep2Topic(isDark, headingColor, subtitleColor, borderColor, cardBg, gd)
+                                _buildStep2Topic(isDark, headingColor,
+                                    subtitleColor, borderColor, cardBg, gd)
                               else if (currentStep == 3)
-                                _buildStep3VoicePartners(isDark, headingColor, subtitleColor, borderColor, cardBg)
+                                _buildStep3VoicePartners(isDark, headingColor,
+                                    subtitleColor, borderColor, cardBg)
                               else
-                                _buildStep4Launch(isDark, headingColor, subtitleColor, borderColor, cardBg),
+                                _buildStep4Launch(isDark, headingColor,
+                                    subtitleColor, borderColor, cardBg),
 
                               const SizedBox(height: 24),
 
                               // Navigation Buttons Footer (Back / Continue)
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   if (currentStep > 1)
                                     OutlinedButton.icon(
                                       onPressed: _prevStep,
-                                      icon: const Icon(Icons.arrow_back_rounded, size: 16),
+                                      icon: const Icon(Icons.arrow_back_rounded,
+                                          size: 16),
                                       label: Text(
                                         'Back',
-                                        style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                                        style: GoogleFonts.inter(
+                                            fontWeight: FontWeight.w600),
                                       ),
                                       style: OutlinedButton.styleFrom(
                                         foregroundColor: headingColor,
                                         side: BorderSide(color: borderColor),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
-                                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 18, vertical: 12),
                                       ),
                                     )
                                   else
                                     const SizedBox.shrink(),
-
                                   ElevatedButton(
                                     onPressed: gd.isLoading ? null : _nextStep,
                                     style: ElevatedButton.styleFrom(
@@ -312,7 +323,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(14),
                                       ),
-                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 24, vertical: 14),
                                     ),
                                     child: gd.isLoading
                                         ? const SizedBox(
@@ -327,7 +339,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Text(
-                                                currentStep == 4 ? 'Start Session' : 'Continue',
+                                                currentStep == 4
+                                                    ? 'Start Session'
+                                                    : 'Continue',
                                                 style: GoogleFonts.inter(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold,
@@ -335,7 +349,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                               const SizedBox(width: 6),
                                               Icon(
-                                                currentStep == 4 ? Icons.rocket_launch_rounded : Icons.arrow_forward_rounded,
+                                                currentStep == 4
+                                                    ? Icons
+                                                        .rocket_launch_rounded
+                                                    : Icons
+                                                        .arrow_forward_rounded,
                                                 size: 18,
                                               ),
                                             ],
@@ -361,8 +379,10 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: cardBg,
         selectedItemColor: AppTheme.primary,
         unselectedItemColor: subtitleColor,
-        selectedLabelStyle: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold),
-        unselectedLabelStyle: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w500),
+        selectedLabelStyle:
+            GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold),
+        unselectedLabelStyle:
+            GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w500),
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
           setState(() {
@@ -432,11 +452,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 key: _stepKeys[stepNum - 1],
                 duration: const Duration(milliseconds: 200),
                 margin: const EdgeInsets.only(right: 6),
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: isActive
                       ? AppTheme.primary
-                      : (isCompleted ? AppTheme.primary.withOpacity(0.12) : Colors.transparent),
+                      : (isCompleted
+                          ? AppTheme.primary.withOpacity(0.12)
+                          : Colors.transparent),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Row(
@@ -448,17 +471,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         shape: BoxShape.circle,
                         color: isActive
                             ? Colors.white
-                            : (isCompleted ? AppTheme.primary : subtitleColor.withOpacity(0.2)),
+                            : (isCompleted
+                                ? AppTheme.primary
+                                : subtitleColor.withOpacity(0.2)),
                       ),
                       child: Center(
                         child: isCompleted
-                            ? const Icon(Icons.check, size: 14, color: Colors.white)
+                            ? const Icon(Icons.check,
+                                size: 14, color: Colors.white)
                             : Text(
                                 '$stepNum',
                                 style: GoogleFonts.inter(
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,
-                                  color: isActive ? AppTheme.primary : subtitleColor,
+                                  color: isActive
+                                      ? AppTheme.primary
+                                      : subtitleColor,
                                 ),
                               ),
                       ),
@@ -468,7 +496,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       s['title'] as String,
                       style: GoogleFonts.inter(
                         fontSize: 13,
-                        fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                        fontWeight:
+                            isActive ? FontWeight.bold : FontWeight.w500,
                         color: isActive
                             ? Colors.white
                             : (isCompleted ? AppTheme.primary : subtitleColor),
@@ -482,30 +511,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
-  /// Step Body Router
-  Widget _buildStepContent(
-    int step,
-    bool isDark,
-    Color headingColor,
-    Color subtitleColor,
-    Color borderColor,
-    Color cardBg,
-    GDProvider gd,
-  ) {
-    switch (step) {
-      case 1:
-        return _buildStep1PracticeMode(isDark, headingColor, subtitleColor, borderColor);
-      case 2:
-        return _buildStep2Topic(isDark, headingColor, subtitleColor, borderColor, cardBg, gd);
-      case 3:
-        return _buildStep3VoicePartners(isDark, headingColor, subtitleColor, borderColor, cardBg);
-      case 4:
-        return _buildStep4Launch(isDark, headingColor, subtitleColor, borderColor, cardBg);
-      default:
-        return const SizedBox.shrink();
-    }
   }
 
   /// STEP 1: Select Your Practice Mode (Group Discussion vs 1:1 Debate)
@@ -595,7 +600,9 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: isSelected
-              ? (isDark ? AppTheme.primary.withOpacity(0.15) : const Color(0xFFFFF7F5))
+              ? (isDark
+                  ? AppTheme.primary.withOpacity(0.15)
+                  : const Color(0xFFFFF7F5))
               : (isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA)),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
@@ -632,7 +639,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Selected Pill Badge
                 if (isSelected)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppTheme.primary,
                       borderRadius: BorderRadius.circular(12),
@@ -721,10 +729,12 @@ class _HomeScreenState extends State<HomeScreen> {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              _buildCategoryChip('current_affairs', 'Current Affairs', Icons.public, isDark),
+              _buildCategoryChip(
+                  'current_affairs', 'Current Affairs', Icons.public, isDark),
               _buildCategoryChip('tech', 'Technology', Icons.memory, isDark),
               _buildCategoryChip('business', 'Business', Icons.work, isDark),
-              _buildCategoryChip('education', 'Education', Icons.school, isDark),
+              _buildCategoryChip(
+                  'education', 'Education', Icons.school, isDark),
             ],
           ),
         ),
@@ -736,7 +746,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Column(
             children: categoryList.map((t) {
               final topicStr = t.toString();
-              final isSelected = selectedTopic == topicStr && _customTopicController.text.isEmpty;
+              final isSelected = selectedTopic == topicStr &&
+                  _customTopicController.text.isEmpty;
 
               return GestureDetector(
                 onTap: () {
@@ -751,7 +762,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppTheme.primary.withOpacity(0.12)
-                        : (isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA)),
+                        : (isDark
+                            ? const Color(0xFF0F172A)
+                            : const Color(0xFFFAFAFA)),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: isSelected ? AppTheme.primary : borderColor,
@@ -765,13 +778,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           topicStr,
                           style: GoogleFonts.inter(
                             color: isSelected ? AppTheme.primary : headingColor,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                            fontWeight:
+                                isSelected ? FontWeight.bold : FontWeight.w500,
                             fontSize: 14,
                           ),
                         ),
                       ),
                       if (isSelected)
-                        const Icon(Icons.check_circle_rounded, color: AppTheme.primary, size: 20),
+                        const Icon(Icons.check_circle_rounded,
+                            color: AppTheme.primary, size: 20),
                     ],
                   ),
                 ),
@@ -791,8 +806,10 @@ class _HomeScreenState extends State<HomeScreen> {
             hintStyle: GoogleFonts.inter(color: subtitleColor, fontSize: 13),
             prefixIcon: Icon(Icons.edit_note_rounded, color: subtitleColor),
             filled: true,
-            fillColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            fillColor:
+                isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
               borderSide: BorderSide(color: borderColor),
@@ -824,7 +841,9 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          selectedMode == 'debate' ? 'Select AI Debate Opponent' : 'Select AI Voice Partners',
+          selectedMode == 'debate'
+              ? 'Select AI Debate Opponent'
+              : 'Select AI Voice Partners',
           textAlign: TextAlign.center,
           style: GoogleFonts.outfit(
             fontSize: 22,
@@ -845,7 +864,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const SizedBox(height: 20),
-
         if (selectedMode == 'debate')
           Column(
             children: debateOpponents.map((opp) {
@@ -863,7 +881,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppTheme.primary.withOpacity(0.12)
-                        : (isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA)),
+                        : (isDark
+                            ? const Color(0xFF0F172A)
+                            : const Color(0xFFFAFAFA)),
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
                       color: isSelected ? AppTheme.primary : borderColor,
@@ -883,7 +903,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: isSelected ? AppTheme.primary : headingColor,
+                                color: isSelected
+                                    ? AppTheme.primary
+                                    : headingColor,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -898,7 +920,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       if (isSelected)
-                        const Icon(Icons.check_circle_rounded, color: AppTheme.primary, size: 22),
+                        const Icon(Icons.check_circle_rounded,
+                            color: AppTheme.primary, size: 22),
                     ],
                   ),
                 ),
@@ -919,7 +942,8 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.group_work_rounded, color: AppTheme.primary),
+                    const Icon(Icons.group_work_rounded,
+                        color: AppTheme.primary),
                     const SizedBox(width: 8),
                     Text(
                       'AI Group Moderator & Peers',
@@ -932,11 +956,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                _buildPersonaRow('🇮🇳 Rohan', 'Structured Strategist (Business & Real-world frameworks)', subtitleColor),
+                _buildPersonaRow(
+                    '🇮🇳 Rohan',
+                    'Structured Strategist (Business & Real-world frameworks)',
+                    subtitleColor),
                 const SizedBox(height: 8),
-                _buildPersonaRow('🇮🇳 Riya', 'Empathetic Peacemaker (Nuanced & bridging views)', subtitleColor),
+                _buildPersonaRow(
+                    '🇮🇳 Riya',
+                    'Empathetic Peacemaker (Nuanced & bridging views)',
+                    subtitleColor),
                 const SizedBox(height: 8),
-                _buildPersonaRow('🤖 AI Moderator', 'Automated turn-taking & performance analytics', subtitleColor),
+                _buildPersonaRow(
+                    '🤖 AI Moderator',
+                    'Automated turn-taking & performance analytics',
+                    subtitleColor),
               ],
             ),
           ),
@@ -955,7 +988,9 @@ class _HomeScreenState extends State<HomeScreen> {
             text: TextSpan(
               style: GoogleFonts.inter(fontSize: 13, color: textColor),
               children: [
-                TextSpan(text: '$name: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(
+                    text: '$name: ',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(text: desc),
               ],
             ),
@@ -1005,7 +1040,8 @@ class _HomeScreenState extends State<HomeScreen> {
         // Difficulty Option Selector
         Text(
           'Difficulty Level',
-          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14, color: headingColor),
+          style: GoogleFonts.inter(
+              fontWeight: FontWeight.bold, fontSize: 14, color: headingColor),
         ),
         const SizedBox(height: 10),
         Row(
@@ -1040,18 +1076,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const Divider(height: 18),
-              _buildSummaryLine('Mode', selectedMode == 'debate' ? '1:1 Debate' : 'Group Discussion', headingColor, subtitleColor),
+              _buildSummaryLine(
+                  'Mode',
+                  selectedMode == 'debate' ? '1:1 Debate' : 'Group Discussion',
+                  headingColor,
+                  subtitleColor),
               const SizedBox(height: 6),
-              _buildSummaryLine('Topic', finalTopic, headingColor, subtitleColor),
+              _buildSummaryLine(
+                  'Topic', finalTopic, headingColor, subtitleColor),
               const SizedBox(height: 6),
               _buildSummaryLine(
                 'AI Partner(s)',
-                selectedMode == 'debate' ? selectedDebateOpponent.toUpperCase() : 'Rohan & Riya',
+                selectedMode == 'debate'
+                    ? selectedDebateOpponent.toUpperCase()
+                    : 'Rohan & Riya',
                 headingColor,
                 subtitleColor,
               ),
               const SizedBox(height: 6),
-              _buildSummaryLine('Difficulty', selectedDifficulty.toUpperCase(), headingColor, subtitleColor),
+              _buildSummaryLine('Difficulty', selectedDifficulty.toUpperCase(),
+                  headingColor, subtitleColor),
             ],
           ),
         ),
@@ -1059,7 +1103,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSummaryLine(String label, String value, Color mainColor, Color mutedColor) {
+  Widget _buildSummaryLine(
+      String label, String value, Color mainColor, Color mutedColor) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1067,26 +1112,30 @@ class _HomeScreenState extends State<HomeScreen> {
           width: 90,
           child: Text(
             label,
-            style: GoogleFonts.inter(fontSize: 13, color: mutedColor, fontWeight: FontWeight.w500),
+            style: GoogleFonts.inter(
+                fontSize: 13, color: mutedColor, fontWeight: FontWeight.w500),
           ),
         ),
         Expanded(
           child: Text(
             value,
-            style: GoogleFonts.inter(fontSize: 13, color: mainColor, fontWeight: FontWeight.bold),
+            style: GoogleFonts.inter(
+                fontSize: 13, color: mainColor, fontWeight: FontWeight.bold),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildCategoryChip(String key, String label, IconData icon, bool isDark) {
+  Widget _buildCategoryChip(
+      String key, String label, IconData icon, bool isDark) {
     final isSelected = selectedCategory == key;
     return GestureDetector(
       onTap: () {
         setState(() {
           selectedCategory = key;
-          final catList = context.read<GDProvider>().topics[key] as List<dynamic>?;
+          final catList =
+              context.read<GDProvider>().topics[key] as List<dynamic>?;
           if (catList != null && catList.isNotEmpty) {
             selectedTopic = catList.first.toString();
           }
@@ -1096,20 +1145,30 @@ class _HomeScreenState extends State<HomeScreen> {
         margin: const EdgeInsets.only(right: 8),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primary : (isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA)),
+          color: isSelected
+              ? AppTheme.primary
+              : (isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA)),
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: isSelected ? AppTheme.primary : (isDark ? AppTheme.borderDark : AppTheme.borderLight),
+            color: isSelected
+                ? AppTheme.primary
+                : (isDark ? AppTheme.borderDark : AppTheme.borderLight),
           ),
         ),
         child: Row(
           children: [
-            Icon(icon, size: 15, color: isSelected ? Colors.white : (isDark ? Colors.white70 : const Color(0xFF475569))),
+            Icon(icon,
+                size: 15,
+                color: isSelected
+                    ? Colors.white
+                    : (isDark ? Colors.white70 : const Color(0xFF475569))),
             const SizedBox(width: 6),
             Text(
               label,
               style: GoogleFonts.inter(
-                color: isSelected ? Colors.white : (isDark ? Colors.white : const Color(0xFF0F172A)),
+                color: isSelected
+                    ? Colors.white
+                    : (isDark ? Colors.white : const Color(0xFF0F172A)),
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
               ),
@@ -1120,7 +1179,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildDifficultyChip(String key, String label, bool isDark, Color borderColor) {
+  Widget _buildDifficultyChip(
+      String key, String label, bool isDark, Color borderColor) {
     final isSelected = selectedDifficulty == key;
     return Expanded(
       child: GestureDetector(
@@ -1128,7 +1188,9 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? AppTheme.primary.withOpacity(0.15) : (isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA)),
+            color: isSelected
+                ? AppTheme.primary.withOpacity(0.15)
+                : (isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA)),
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: isSelected ? AppTheme.primary : borderColor,
@@ -1139,7 +1201,9 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Text(
               label,
               style: GoogleFonts.inter(
-                color: isSelected ? AppTheme.primary : (isDark ? AppTheme.textMuted : AppTheme.textMutedLight),
+                color: isSelected
+                    ? AppTheme.primary
+                    : (isDark ? AppTheme.textMuted : AppTheme.textMutedLight),
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
               ),

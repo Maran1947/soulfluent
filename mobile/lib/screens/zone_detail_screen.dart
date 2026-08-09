@@ -18,9 +18,12 @@ class ZoneDetailScreen extends StatelessWidget {
 
     final bgColor = isDark ? const Color(0xFF131829) : const Color(0xFFF8FAFC);
     final cardBg = isDark ? const Color(0xFF1B2138) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF2A3150) : const Color(0xFFE2E8F0);
-    final headingColor = isDark ? const Color(0xFFEDEFF7) : const Color(0xFF0F172A);
-    final subtitleColor = isDark ? const Color(0xFF8A8FA3) : const Color(0xFF64748B);
+    final borderColor =
+        isDark ? const Color(0xFF2A3150) : const Color(0xFFE2E8F0);
+    final headingColor =
+        isDark ? const Color(0xFFEDEFF7) : const Color(0xFF0F172A);
+    final subtitleColor =
+        isDark ? const Color(0xFF8A8FA3) : const Color(0xFF64748B);
 
     final zoneChallenges = getChallengesByZone(zone.id);
 
@@ -30,7 +33,8 @@ class ZoneDetailScreen extends StatelessWidget {
         backgroundColor: bgColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: headingColor, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: headingColor, size: 20),
           onPressed: () => Navigator.pop(context),
         ),
         title: Column(
@@ -83,7 +87,9 @@ class ZoneDetailScreen extends StatelessWidget {
                         _buildDifficultyBadge(c.difficulty, isDark),
                         const SizedBox(width: 8),
                         Text(
-                          c.timerSeconds != null ? '${c.timerSeconds}s' : 'No timer',
+                          c.timerSeconds != null
+                              ? '${c.timerSeconds}s'
+                              : 'No timer',
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             color: subtitleColor,
@@ -105,7 +111,9 @@ class ZoneDetailScreen extends StatelessWidget {
                     Row(
                       children: [
                         Icon(
-                          isLocked ? Icons.lock_outline_rounded : Icons.crop_square_rounded,
+                          isLocked
+                              ? Icons.lock_outline_rounded
+                              : Icons.crop_square_rounded,
                           size: 20,
                           color: headingColor,
                         ),
@@ -137,9 +145,8 @@ class ZoneDetailScreen extends StatelessWidget {
                       height: 44,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: isLocked
-                              ? borderColor
-                              : const Color(0xFFFF8B5E),
+                          backgroundColor:
+                              isLocked ? borderColor : const Color(0xFFFF8B5E),
                           foregroundColor: isLocked
                               ? subtitleColor
                               : const Color(0xFF3A1D0E),
@@ -154,7 +161,8 @@ class ZoneDetailScreen extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => ChallengePlayScreen(challenge: c),
+                                    builder: (_) =>
+                                        ChallengePlayScreen(challenge: c),
                                   ),
                                 );
                               },

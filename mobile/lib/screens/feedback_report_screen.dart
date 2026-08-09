@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
-import 'package:fluentsoul_mobile/models/report.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
 import 'package:fluentsoul_mobile/widgets/app_header.dart';
 import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
@@ -21,7 +20,9 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final gd = context.read<GDProvider>();
-      if (gd.currentReport == null && gd.currentSession != null && !gd.isLoading) {
+      if (gd.currentReport == null &&
+          gd.currentSession != null &&
+          !gd.isLoading) {
         gd.loadPastSession(gd.currentSession!.id);
       }
     });
@@ -64,11 +65,13 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.error_outline, size: 48, color: Colors.redAccent),
+                const Icon(Icons.error_outline,
+                    size: 48, color: Colors.redAccent),
                 const SizedBox(height: 12),
                 Text(
                   gd.errorMessage!,
-                  style: GoogleFonts.plusJakartaSans(color: headingColor, fontSize: 14),
+                  style: GoogleFonts.plusJakartaSans(
+                      color: headingColor, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
@@ -107,7 +110,8 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () => Navigator.pushReplacementNamed(context, '/history'),
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, '/history'),
                 child: const Text('Back to History'),
               ),
             ],
@@ -122,10 +126,22 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
     final subScores = report.subScores;
 
     final scoreTier = report.overallScore >= 80
-        ? {'title': 'Outstanding Fluency', 'color': const Color(0xFF10B981), 'bg': const Color(0xFFECFDF5)}
+        ? {
+            'title': 'Outstanding Fluency',
+            'color': const Color(0xFF10B981),
+            'bg': const Color(0xFFECFDF5)
+          }
         : report.overallScore >= 60
-            ? {'title': 'Solid Speaking Performance', 'color': AppTheme.primary, 'bg': const Color(0xFFFFF0ED)}
-            : {'title': 'Building Confidence', 'color': const Color(0xFFF59E0B), 'bg': const Color(0xFFFEF3C7)};
+            ? {
+                'title': 'Solid Speaking Performance',
+                'color': AppTheme.primary,
+                'bg': const Color(0xFFFFF0ED)
+              }
+            : {
+                'title': 'Building Confidence',
+                'color': const Color(0xFFF59E0B),
+                'bg': const Color(0xFFFEF3C7)
+              };
 
     final session = gd.currentSession;
 
@@ -145,7 +161,6 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
               ),
             ),
           ),
-
           SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -162,7 +177,8 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                         border: Border.all(color: borderColor),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+                            color:
+                                Colors.black.withOpacity(isDark ? 0.2 : 0.04),
                             blurRadius: 16,
                             offset: const Offset(0, 4),
                           ),
@@ -174,13 +190,16 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                           Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 4),
                                 decoration: BoxDecoration(
                                   color: AppTheme.primary.withOpacity(0.12),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
-                                  session.category.replaceAll('_', ' ').toUpperCase(),
+                                  session.category
+                                      .replaceAll('_', ' ')
+                                      .toUpperCase(),
                                   style: GoogleFonts.plusJakartaSans(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w800,
@@ -204,11 +223,16 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                           const SizedBox(height: 12),
                           Row(
                             children: [
-                              Icon(Icons.speed_rounded, size: 14, color: subtitleColor),
+                              Icon(Icons.speed_rounded,
+                                  size: 14, color: subtitleColor),
                               const SizedBox(width: 4),
                               Text(
-                                session.difficulty.substring(0, 1).toUpperCase() +
-                                    session.difficulty.substring(1).toLowerCase(),
+                                session.difficulty
+                                        .substring(0, 1)
+                                        .toUpperCase() +
+                                    session.difficulty
+                                        .substring(1)
+                                        .toLowerCase(),
                                 style: GoogleFonts.plusJakartaSans(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -216,10 +240,13 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                child: Text('·', style: TextStyle(color: subtitleColor)),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: Text('·',
+                                    style: TextStyle(color: subtitleColor)),
                               ),
-                              Icon(Icons.timer_outlined, size: 14, color: subtitleColor),
+                              Icon(Icons.timer_outlined,
+                                  size: 14, color: subtitleColor),
                               const SizedBox(width: 4),
                               Text(
                                 '${session.durationMinutes}m',
@@ -260,7 +287,9 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                           height: 100,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA),
+                            color: isDark
+                                ? const Color(0xFF0F172A)
+                                : const Color(0xFFFAFAFA),
                             border: Border.all(
                               color: scoreTier['color'] as Color,
                               width: 6,
@@ -296,7 +325,8 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
 
                         // Score Tier Badge
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 5),
                           decoration: BoxDecoration(
                             color: scoreTier['bg'] as Color,
                             borderRadius: BorderRadius.circular(16),
@@ -390,10 +420,26 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                     headingColor: headingColor,
                     subtitleColor: subtitleColor,
                     rows: [
-                      _buildMetricRow('Words / Minute', '${fm.wordsPerMinute.round()} (Target: 120-150)', headingColor, subtitleColor),
-                      _buildMetricRow('Filler Words', '${fm.fillerWordCount} used', headingColor, subtitleColor),
-                      _buildMetricRow('Sentence Completion', '${(fm.sentenceCompletionRate * 100).round()}%', headingColor, subtitleColor),
-                      _buildMetricRow('Avg Sentence Length', '${fm.averageSentenceLength.round()} words', headingColor, subtitleColor),
+                      _buildMetricRow(
+                          'Words / Minute',
+                          '${fm.wordsPerMinute.round()} (Target: 120-150)',
+                          headingColor,
+                          subtitleColor),
+                      _buildMetricRow(
+                          'Filler Words',
+                          '${fm.fillerWordCount} used',
+                          headingColor,
+                          subtitleColor),
+                      _buildMetricRow(
+                          'Sentence Completion',
+                          '${(fm.sentenceCompletionRate * 100).round()}%',
+                          headingColor,
+                          subtitleColor),
+                      _buildMetricRow(
+                          'Avg Sentence Length',
+                          '${fm.averageSentenceLength.round()} words',
+                          headingColor,
+                          subtitleColor),
                     ],
                   ),
 
@@ -402,7 +448,8 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                   // Card 2: Vocabulary & Syntax
                   _buildMetricCardContainer(
                     title: 'Vocabulary & Syntax',
-                    badge: '${(vm.vocabularyRichnessScore * 100).round()}% Richness',
+                    badge:
+                        '${(vm.vocabularyRichnessScore * 100).round()}% Richness',
                     badgeColor: const Color(0xFF6366F1),
                     icon: Icons.menu_book_rounded,
                     isDark: isDark,
@@ -411,9 +458,21 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                     headingColor: headingColor,
                     subtitleColor: subtitleColor,
                     rows: [
-                      _buildMetricRow('Richness Score', '${(vm.vocabularyRichnessScore * 100).round()}%', headingColor, subtitleColor),
-                      _buildMetricRow('Grammar Issues', '${vm.grammarErrors.length} flagged', headingColor, subtitleColor),
-                      _buildMetricRow('Repeated Phrases', '${vm.repeatedPhrases.length} detected', headingColor, subtitleColor),
+                      _buildMetricRow(
+                          'Richness Score',
+                          '${(vm.vocabularyRichnessScore * 100).round()}%',
+                          headingColor,
+                          subtitleColor),
+                      _buildMetricRow(
+                          'Grammar Issues',
+                          '${vm.grammarErrors.length} flagged',
+                          headingColor,
+                          subtitleColor),
+                      _buildMetricRow(
+                          'Repeated Phrases',
+                          '${vm.repeatedPhrases.length} detected',
+                          headingColor,
+                          subtitleColor),
                     ],
                   ),
 
@@ -431,9 +490,21 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                     headingColor: headingColor,
                     subtitleColor: subtitleColor,
                     rows: [
-                      _buildMetricRow('Points Made', '${am.distinctPointsMade} argument(s)', headingColor, subtitleColor),
-                      _buildMetricRow('Points Defended', '${am.pointsSuccessfullyDefended} defended', headingColor, subtitleColor),
-                      _buildMetricRow('Talk Time Share', '${am.talkTimePercentage.toStringAsFixed(1)}% of session', headingColor, subtitleColor),
+                      _buildMetricRow(
+                          'Points Made',
+                          '${am.distinctPointsMade} argument(s)',
+                          headingColor,
+                          subtitleColor),
+                      _buildMetricRow(
+                          'Points Defended',
+                          '${am.pointsSuccessfullyDefended} defended',
+                          headingColor,
+                          subtitleColor),
+                      _buildMetricRow(
+                          'Talk Time Share',
+                          '${am.talkTimePercentage.toStringAsFixed(1)}% of session',
+                          headingColor,
+                          subtitleColor),
                     ],
                   ),
 
@@ -452,7 +523,8 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.auto_awesome, size: 18, color: AppTheme.primary),
+                              const Icon(Icons.auto_awesome,
+                                  size: 18, color: AppTheme.primary),
                               const SizedBox(width: 8),
                               Text(
                                 'Vocabulary Upgrades & Swaps',
@@ -475,7 +547,9 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                               margin: const EdgeInsets.only(bottom: 10),
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA),
+                                color: isDark
+                                    ? const Color(0xFF0F172A)
+                                    : const Color(0xFFFAFAFA),
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(color: borderColor),
                               ),
@@ -483,9 +557,11 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                                 children: [
                                   Expanded(
                                     child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(
-                                        color: Colors.redAccent.withOpacity(0.12),
+                                        color:
+                                            Colors.redAccent.withOpacity(0.12),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Text(
@@ -494,20 +570,25 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                                           fontSize: 12,
                                           color: Colors.redAccent,
                                           fontWeight: FontWeight.w600,
-                                          decoration: TextDecoration.lineThrough,
+                                          decoration:
+                                              TextDecoration.lineThrough,
                                         ),
                                       ),
                                     ),
                                   ),
                                   const Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 8),
-                                    child: Icon(Icons.arrow_forward_rounded, size: 14, color: AppTheme.primary),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 8),
+                                    child: Icon(Icons.arrow_forward_rounded,
+                                        size: 14, color: AppTheme.primary),
                                   ),
                                   Expanded(
                                     child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFF10B981).withOpacity(0.12),
+                                        color: const Color(0xFF10B981)
+                                            .withOpacity(0.12),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Text(
@@ -544,7 +625,8 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.g_mobiledata_rounded, size: 24, color: Colors.amber),
+                              const Icon(Icons.g_mobiledata_rounded,
+                                  size: 24, color: Colors.amber),
                               const SizedBox(width: 6),
                               Text(
                                 'Grammar & Syntax Feedback',
@@ -563,7 +645,8 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Icon(Icons.warning_amber_rounded, size: 16, color: Colors.amber),
+                                  const Icon(Icons.warning_amber_rounded,
+                                      size: 16, color: Colors.amber),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
@@ -595,16 +678,21 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                         child: Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: isDark ? const Color(0xFF064E3B).withOpacity(0.2) : const Color(0xFFECFDF5),
+                            color: isDark
+                                ? const Color(0xFF064E3B).withOpacity(0.2)
+                                : const Color(0xFFECFDF5),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: const Color(0xFF6EE7B7).withOpacity(0.4)),
+                            border: Border.all(
+                                color:
+                                    const Color(0xFF6EE7B7).withOpacity(0.4)),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  const Icon(Icons.emoji_events_rounded, size: 18, color: Color(0xFF10B981)),
+                                  const Icon(Icons.emoji_events_rounded,
+                                      size: 18, color: Color(0xFF10B981)),
                                   const SizedBox(width: 6),
                                   Text(
                                     'Highlights',
@@ -620,9 +708,11 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                               ...report.strengths.map((s) => Padding(
                                     padding: const EdgeInsets.only(bottom: 8),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        const Icon(Icons.check_circle_outline, size: 14, color: Color(0xFF10B981)),
+                                        const Icon(Icons.check_circle_outline,
+                                            size: 14, color: Color(0xFF10B981)),
                                         const SizedBox(width: 6),
                                         Expanded(
                                           child: Text(
@@ -649,16 +739,21 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                         child: Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: isDark ? const Color(0xFF78350F).withOpacity(0.2) : const Color(0xFFFEF3C7),
+                            color: isDark
+                                ? const Color(0xFF78350F).withOpacity(0.2)
+                                : const Color(0xFFFEF3C7),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: const Color(0xFFF59E0B).withOpacity(0.4)),
+                            border: Border.all(
+                                color:
+                                    const Color(0xFFF59E0B).withOpacity(0.4)),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  const Icon(Icons.track_changes_rounded, size: 18, color: Color(0xFFF59E0B)),
+                                  const Icon(Icons.track_changes_rounded,
+                                      size: 18, color: Color(0xFFF59E0B)),
                                   const SizedBox(width: 6),
                                   Text(
                                     'Focus Areas',
@@ -674,9 +769,11 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                               ...report.growthAreas.map((g) => Padding(
                                     padding: const EdgeInsets.only(bottom: 8),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        const Icon(Icons.error_outline_rounded, size: 14, color: Color(0xFFF59E0B)),
+                                        const Icon(Icons.error_outline_rounded,
+                                            size: 14, color: Color(0xFFF59E0B)),
                                         const SizedBox(width: 6),
                                         Expanded(
                                           child: Text(
@@ -713,14 +810,16 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                           end: Alignment.bottomRight,
                         ),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
+                        border: Border.all(
+                            color: AppTheme.primary.withOpacity(0.3)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.auto_awesome, size: 18, color: AppTheme.primary),
+                              const Icon(Icons.auto_awesome,
+                                  size: 18, color: AppTheme.primary),
                               const SizedBox(width: 8),
                               Text(
                                 'AI Recommendation for Next Session',
@@ -862,7 +961,8 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: badgeColor.withOpacity(0.12),
                   borderRadius: BorderRadius.circular(12),
@@ -887,7 +987,8 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
     );
   }
 
-  Widget _buildMetricRow(String label, String value, Color headingColor, Color subtitleColor) {
+  Widget _buildMetricRow(
+      String label, String value, Color headingColor, Color subtitleColor) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(

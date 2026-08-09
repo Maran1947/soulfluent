@@ -28,7 +28,6 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
   final TextEditingController _textController = TextEditingController();
   final List<String> _typedWords = [];
   String? _selectedGapWord;
-  final Set<int> _foundMistakes = {};
 
   @override
   void initState() {
@@ -79,9 +78,12 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
 
     final bgColor = isDark ? const Color(0xFF131829) : const Color(0xFFF8FAFC);
     final cardBg = isDark ? const Color(0xFF1B2138) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF2A3150) : const Color(0xFFE2E8F0);
-    final headingColor = isDark ? const Color(0xFFEDEFF7) : const Color(0xFF0F172A);
-    final subtitleColor = isDark ? const Color(0xFF8A8FA3) : const Color(0xFF64748B);
+    final borderColor =
+        isDark ? const Color(0xFF2A3150) : const Color(0xFFE2E8F0);
+    final headingColor =
+        isDark ? const Color(0xFFEDEFF7) : const Color(0xFF0F172A);
+    final subtitleColor =
+        isDark ? const Color(0xFF8A8FA3) : const Color(0xFF64748B);
     const coralPrimary = Color(0xFFFF8B5E);
     const coralTextDark = Color(0xFF3A1D0E);
 
@@ -148,7 +150,9 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
               const SizedBox(height: 24),
 
               // Mood Check-in Step (if challenge has_mood_checkin and not started yet)
-              if (challenge.hasMoodCheckin && !_hasStarted && !_isCompleted) ...[
+              if (challenge.hasMoodCheckin &&
+                  !_hasStarted &&
+                  !_isCompleted) ...[
                 Text(
                   'How are you feeling right now?',
                   style: GoogleFonts.inter(
@@ -174,10 +178,12 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
               // Challenge Active Area
               Expanded(
                 child: _isCompleted
-                    ? _buildCompletionSummary(cardBg, borderColor, headingColor, subtitleColor, coralPrimary)
+                    ? _buildCompletionSummary(cardBg, borderColor, headingColor,
+                        subtitleColor, coralPrimary)
                     : (!_hasStarted
                         ? _buildPreStartScreen(coralPrimary, coralTextDark)
-                        : _buildInteractiveArea(cardBg, borderColor, headingColor, subtitleColor, coralPrimary)),
+                        : _buildInteractiveArea(cardBg, borderColor,
+                            headingColor, subtitleColor, coralPrimary)),
               ),
             ],
           ),
@@ -276,8 +282,10 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
         Expanded(
           child: SingleChildScrollView(
             child: widget.challenge.requiresVoice
-                ? _buildVoiceRecordingArea(coralPrimary, headingColor, subtitleColor)
-                : _buildQuietMinigameArea(cardBg, borderColor, headingColor, subtitleColor, coralPrimary),
+                ? _buildVoiceRecordingArea(
+                    coralPrimary, headingColor, subtitleColor)
+                : _buildQuietMinigameArea(cardBg, borderColor, headingColor,
+                    subtitleColor, coralPrimary),
           ),
         ),
 
@@ -309,7 +317,8 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
     );
   }
 
-  Widget _buildVoiceRecordingArea(Color coralPrimary, Color headingColor, Color subtitleColor) {
+  Widget _buildVoiceRecordingArea(
+      Color coralPrimary, Color headingColor, Color subtitleColor) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -351,7 +360,10 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
         children: [
           Text(
             'Category: Technology & AI',
-            style: GoogleFonts.inter(fontSize: 14, color: subtitleColor, fontWeight: FontWeight.w500),
+            style: GoogleFonts.inter(
+                fontSize: 14,
+                color: subtitleColor,
+                fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 12),
           TextField(
@@ -387,7 +399,9 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
               return Chip(
                 backgroundColor: cardBg,
                 side: BorderSide(color: borderColor),
-                label: Text(w, style: GoogleFonts.inter(color: headingColor, fontSize: 13)),
+                label: Text(w,
+                    style:
+                        GoogleFonts.inter(color: headingColor, fontSize: 13)),
               );
             }).toList(),
           ),
@@ -404,7 +418,8 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
           const SizedBox(height: 8),
           Text(
             'The speaker delivered a very ${_selectedGapWord ?? "____"} performance today.',
-            style: GoogleFonts.inter(fontSize: 16, color: headingColor, fontWeight: FontWeight.w500),
+            style: GoogleFonts.inter(
+                fontSize: 16, color: headingColor, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 20),
           Wrap(
@@ -510,7 +525,8 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
                     _secondsElapsed = 0;
                   });
                 },
-                child: Text('Try again', style: GoogleFonts.inter(fontWeight: FontWeight.w500)),
+                child: Text('Try again',
+                    style: GoogleFonts.inter(fontWeight: FontWeight.w500)),
               ),
             ),
             const SizedBox(width: 12),
@@ -525,7 +541,8 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 onPressed: () => Navigator.pop(context),
-                child: Text('Back to challenges', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+                child: Text('Back to challenges',
+                    style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
               ),
             ),
           ],
@@ -545,7 +562,9 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFFF8B5E).withOpacity(0.2) : Colors.transparent,
+          color: isSelected
+              ? const Color(0xFFFF8B5E).withOpacity(0.2)
+              : Colors.transparent,
           shape: BoxShape.circle,
           border: isSelected
               ? Border.all(color: const Color(0xFFFF8B5E), width: 1.5)
