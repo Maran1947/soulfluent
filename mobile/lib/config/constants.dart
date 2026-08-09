@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 class AppConstants {
-  static const String appName = 'SoulFluent';
+  static const String appName = 'FluentSoul';
   
   // Default API URL: 10.0.2.2 for Android Emulator, localhost for iOS Simulator / Web / Mac
   static String get baseUrl {
@@ -11,5 +11,5 @@ class AppConstants {
     return 'http://localhost:8000/api/v1';
   }
 
-  static const String tokenKey = 'soulfluent_jwt_token';
+  static const String tokenKey = 'fluentsoul_jwt_token';
 }

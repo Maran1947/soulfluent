@@ -52,8 +52,8 @@ export default function AppHeader() {
             <span className="w-[2px] h-3 bg-white rounded-full"></span>
           </div>
           <span className="text-xl font-bold tracking-tight">
-            <span className="text-slate-900 dark:text-white">Soul</span>
-            <span className="text-[#F25C40]">Fluent</span>
+            <span className="text-slate-900 dark:text-white">Fluent</span>
+            <span className="text-[#F25C40]">Soul</span>
           </span>
         </Link>
 
@@ -90,8 +90,8 @@ export default function AppHeader() {
             <span className="w-[2px] h-3 bg-white rounded-full"></span>
           </div>
           <span className="text-xl font-bold tracking-tight">
-            <span className="text-slate-900 dark:text-white">Soul</span>
-            <span className="text-[#F25C40]">Fluent</span>
+            <span className="text-slate-900 dark:text-white">Fluent</span>
+            <span className="text-[#F25C40]">Soul</span>
           </span>
         </Link>
       </div>

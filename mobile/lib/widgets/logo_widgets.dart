@@ -1,14 +1,14 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:soulfluent_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/config/theme.dart';
 
-/// SoulFluent Audio Wave Logo Widget matching the design reference screenshot
-class SoulFluentLogo extends StatelessWidget {
+/// FluentSoul Audio Wave Logo Widget matching the design reference screenshot
+class FluentSoulLogo extends StatelessWidget {
   final double size;
   final Color primaryColor;
   final Color backgroundColor;
 
-  const SoulFluentLogo({
+  const FluentSoulLogo({
     super.key,
     this.size = 58.0,
     this.primaryColor = AppTheme.primary,
@@ -154,13 +154,13 @@ class _GoogleLogoPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// Brand Header Title Widget: "SoulFluent" with split color styling matching the design
-class SoulFluentBrandText extends StatelessWidget {
+/// Brand Header Title Widget: "FluentSoul" with split color styling matching the design
+class FluentSoulBrandText extends StatelessWidget {
   final double fontSize;
   final bool isDark;
   final bool showTagline;
 
-  const SoulFluentBrandText({
+  const FluentSoulBrandText({
     super.key,
     this.fontSize = 26.0,
     this.isDark = false,
@@ -178,7 +178,7 @@ class SoulFluentBrandText extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SoulFluentLogo(size: 36),
+            const FluentSoulLogo(size: 36),
             const SizedBox(width: 10),
             RichText(
               text: TextSpan(
@@ -190,11 +190,11 @@ class SoulFluentBrandText extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: 'Soul',
+                    text: 'Fluent',
                     style: TextStyle(color: textColor),
                   ),
                   const TextSpan(
-                    text: 'Fluent',
+                    text: 'Soul',
                     style: TextStyle(color: AppTheme.primary),
                   ),
                 ],
@@ -205,7 +205,7 @@ class SoulFluentBrandText extends StatelessWidget {
         if (showTagline) ...[
           const SizedBox(height: 8),
           Text(
-            'Speak English with Confidence. Every day, a little better.',
+            'Speak English Fluently & Confidently',
             style: TextStyle(
               fontSize: 13,
               color: isDark ? AppTheme.textMuted : AppTheme.textMutedLight,

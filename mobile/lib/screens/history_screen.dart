@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:soulfluent_mobile/config/theme.dart';
-import 'package:soulfluent_mobile/models/session.dart';
-import 'package:soulfluent_mobile/providers/auth_provider.dart';
-import 'package:soulfluent_mobile/providers/gd_provider.dart';
-import 'package:soulfluent_mobile/services/api_service.dart';
-import 'package:soulfluent_mobile/widgets/app_header.dart';
-import 'package:soulfluent_mobile/widgets/logo_widgets.dart';
-import 'package:soulfluent_mobile/widgets/skeleton_loader.dart';
+import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/models/session.dart';
+import 'package:fluentsoul_mobile/providers/auth_provider.dart';
+import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/services/api_service.dart';
+import 'package:fluentsoul_mobile/widgets/app_header.dart';
+import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
+import 'package:fluentsoul_mobile/widgets/skeleton_loader.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});

@@ -72,15 +72,15 @@ export type UsageLog = {
 
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem("soulfluent_token");
+  return localStorage.getItem("fluentsoul_token");
 }
 
 export function setToken(token: string) {
-  localStorage.setItem("soulfluent_token", token);
+  localStorage.setItem("fluentsoul_token", token);
 }
 
 export function clearToken() {
-  localStorage.removeItem("soulfluent_token");
+  localStorage.removeItem("fluentsoul_token");
 }
 
 async function request<T>(

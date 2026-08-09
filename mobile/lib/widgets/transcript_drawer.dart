@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:soulfluent_mobile/models/session.dart';
+import 'package:fluentsoul_mobile/models/session.dart';
 
 class TranscriptDrawer extends StatelessWidget {
   final List<GDMessage> messages;

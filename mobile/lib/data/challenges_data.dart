@@ -1,4 +1,4 @@
-import 'package:soulfluent_mobile/models/challenge.dart';
+import 'package:fluentsoul_mobile/models/challenge.dart';
 
 const Map<String, Zone> ZONES_DATA = {
   'confidence': Zone(

@@ -2,7 +2,7 @@
         db db-down run migrate-local makemigration-local migrate-down-local
 
 help:
-	@echo "SoulFluent backend — commands"
+	@echo "FluentSoul backend — commands"
 	@echo ""
 	@echo "Native mode (recommended for dev — just Postgres in Docker):"
 	@echo "  make db                    Start only Postgres via docker compose"

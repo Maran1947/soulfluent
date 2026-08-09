@@ -1,7 +1,7 @@
 .PHONY: help up down build logs shell install dev
 
 help:
-	@echo "SoulFluent frontend — commands"
+	@echo "FluentSoul frontend — commands"
 	@echo "  make up        Start frontend via docker compose"
 	@echo "  make down      Stop the frontend container"
 	@echo "  make build     Rebuild the frontend image"

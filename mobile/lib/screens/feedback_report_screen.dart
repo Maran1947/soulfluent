@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:soulfluent_mobile/config/theme.dart';
-import 'package:soulfluent_mobile/models/report.dart';
-import 'package:soulfluent_mobile/providers/gd_provider.dart';
-import 'package:soulfluent_mobile/widgets/app_header.dart';
-import 'package:soulfluent_mobile/widgets/logo_widgets.dart';
-import 'package:soulfluent_mobile/widgets/skeleton_loader.dart';
+import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/models/report.dart';
+import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/widgets/app_header.dart';
+import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
+import 'package:fluentsoul_mobile/widgets/skeleton_loader.dart';
 
 class FeedbackReportScreen extends StatefulWidget {
   const FeedbackReportScreen({super.key});

@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:soulfluent_mobile/models/session.dart';
-import 'package:soulfluent_mobile/models/report.dart';
-import 'package:soulfluent_mobile/services/api_service.dart';
-import 'package:soulfluent_mobile/services/audio_service.dart';
+import 'package:fluentsoul_mobile/models/session.dart';
+import 'package:fluentsoul_mobile/models/report.dart';
+import 'package:fluentsoul_mobile/services/api_service.dart';
+import 'package:fluentsoul_mobile/services/audio_service.dart';
 
-import 'package:soulfluent_mobile/models/curriculum.dart';
+import 'package:fluentsoul_mobile/models/curriculum.dart';
 
 class GDProvider extends ChangeNotifier {
   final ApiService _apiService;

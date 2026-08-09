@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:soulfluent_mobile/data/challenges_data.dart';
-import 'package:soulfluent_mobile/models/challenge.dart';
+import 'package:fluentsoul_mobile/data/challenges_data.dart';
+import 'package:fluentsoul_mobile/models/challenge.dart';
 
 class ChallengesProvider with ChangeNotifier {
   int _xp = 640; // Initial mock state matching UI mockup

@@ -11,8 +11,8 @@ export default function Wordmark({ tagline }: { tagline?: string }) {
           <span className="w-[3px] h-2.5 bg-white rounded-full"></span>
         </div>
         <span className="text-2xl font-bold tracking-tight">
-          <span className="text-slate-900 dark:text-slate-100">Soul</span>
-          <span className="text-[#F25C40]">Fluent</span>
+          <span className="text-slate-900 dark:text-slate-100">Fluent</span>
+          <span className="text-[#F25C40]">Soul</span>
         </span>
       </div>
       {tagline && (

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:soulfluent_mobile/data/challenges_data.dart';
-import 'package:soulfluent_mobile/models/challenge.dart';
-import 'package:soulfluent_mobile/providers/challenges_provider.dart';
-import 'package:soulfluent_mobile/screens/challenge_play_screen.dart';
-import 'package:soulfluent_mobile/screens/zone_detail_screen.dart';
-import 'package:soulfluent_mobile/widgets/inventory_sheet.dart';
+import 'package:fluentsoul_mobile/data/challenges_data.dart';
+import 'package:fluentsoul_mobile/models/challenge.dart';
+import 'package:fluentsoul_mobile/providers/challenges_provider.dart';
+import 'package:fluentsoul_mobile/screens/challenge_play_screen.dart';
+import 'package:fluentsoul_mobile/screens/zone_detail_screen.dart';
+import 'package:fluentsoul_mobile/widgets/inventory_sheet.dart';
 
 class ChallengesScreen extends StatefulWidget {
   const ChallengesScreen({super.key});

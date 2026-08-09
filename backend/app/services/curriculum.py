@@ -1,4 +1,4 @@
-"""Curriculum definition for SoulFluent.
+"""Curriculum definition for FluentSoul.
 
 Two tracks:
   TRACK A - "Unfreeze"     -> for users who understand English but blank when speaking

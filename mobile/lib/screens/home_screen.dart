@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:soulfluent_mobile/config/theme.dart';
-import 'package:soulfluent_mobile/providers/auth_provider.dart';
-import 'package:soulfluent_mobile/providers/gd_provider.dart';
-import 'package:soulfluent_mobile/screens/challenges_screen.dart';
-import 'package:soulfluent_mobile/screens/path_screen.dart';
-import 'package:soulfluent_mobile/widgets/app_header.dart';
-import 'package:soulfluent_mobile/widgets/logo_widgets.dart';
+import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/providers/auth_provider.dart';
+import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/screens/challenges_screen.dart';
+import 'package:fluentsoul_mobile/screens/path_screen.dart';
+import 'package:fluentsoul_mobile/widgets/app_header.dart';
+import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -178,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final subtitleColor = isDark ? AppTheme.textMuted : AppTheme.textMutedLight;
 
     return Scaffold(
-      appBar: _activeTab == 1 ? const AppHeader(title: 'SoulFluent') : null,
+      appBar: _activeTab == 1 ? const AppHeader(title: 'FluentSoul') : null,
       backgroundColor: isDark ? AppTheme.background : AppTheme.lightBackground,
       body: IndexedStack(
         index: _activeTab,

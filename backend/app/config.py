@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     # App
-    app_name: str = "SoulFluent"
+    app_name: str = "FluentSoul"
     environment: str = "development"
     api_prefix: str = "/api/v1"
 

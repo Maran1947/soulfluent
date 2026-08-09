@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:soulfluent_mobile/providers/challenges_provider.dart';
+import 'package:fluentsoul_mobile/providers/challenges_provider.dart';
 
 class InventorySheet extends StatelessWidget {
   const InventorySheet({super.key});

@@ -166,7 +166,7 @@ export default function SessionPage() {
             isLight ? "bg-white border-slate-200 text-slate-700 shadow-sm" : "bg-slate-900 border-slate-800 text-slate-300"
           }`}>
             <ShieldCheck size={14} className="text-emerald-500" />
-            <span>SoulFluent Room</span>
+            <span>FluentSoul Room</span>
           </div>
           <h1 className={`font-semibold text-sm sm:text-base truncate tracking-tight ${isLight ? "text-slate-900" : "text-slate-100"}`}>
             {session.topic}

@@ -1,4 +1,4 @@
-"""Challenges module for SoulFluent.
+"""Challenges module for FluentSoul.
 
 Separate from the 30-Day Path (curriculum.py) — these are game-style side
 quests, not linear curriculum days. Two modes:

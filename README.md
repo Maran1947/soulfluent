@@ -1,6 +1,6 @@
-# SoulFluent
+# FluentSoul: Speak English Fluently & Confidently
 
-Voice-first Group Discussion (GD) practice, MVP scope: two AI personas
+Voice-first Group Discussion (GD) practice app.
 (Riya — empathetic peacemaker, Meera — confident contrarian), voice in/out,
 and a full post-session feedback report.
 

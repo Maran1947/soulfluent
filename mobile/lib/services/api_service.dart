@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:soulfluent_mobile/config/constants.dart';
-import 'package:soulfluent_mobile/models/user.dart';
-import 'package:soulfluent_mobile/models/session.dart';
-import 'package:soulfluent_mobile/models/report.dart';
+import 'package:fluentsoul_mobile/config/constants.dart';
+import 'package:fluentsoul_mobile/models/user.dart';
+import 'package:fluentsoul_mobile/models/session.dart';
+import 'package:fluentsoul_mobile/models/report.dart';
 
 class ApiService {
   final String baseUrl;

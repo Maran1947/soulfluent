@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soulfluent_mobile/config/theme.dart';
-import 'package:soulfluent_mobile/providers/auth_provider.dart';
-import 'package:soulfluent_mobile/providers/challenges_provider.dart';
-import 'package:soulfluent_mobile/providers/gd_provider.dart';
-import 'package:soulfluent_mobile/providers/theme_provider.dart';
-import 'package:soulfluent_mobile/screens/auth_screen.dart';
-import 'package:soulfluent_mobile/screens/feedback_report_screen.dart';
-import 'package:soulfluent_mobile/screens/gd_arena_screen.dart';
-import 'package:soulfluent_mobile/screens/history_screen.dart';
-import 'package:soulfluent_mobile/screens/home_screen.dart';
-import 'package:soulfluent_mobile/services/api_service.dart';
+import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/providers/auth_provider.dart';
+import 'package:fluentsoul_mobile/providers/challenges_provider.dart';
+import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/providers/theme_provider.dart';
+import 'package:fluentsoul_mobile/screens/auth_screen.dart';
+import 'package:fluentsoul_mobile/screens/feedback_report_screen.dart';
+import 'package:fluentsoul_mobile/screens/gd_arena_screen.dart';
+import 'package:fluentsoul_mobile/screens/history_screen.dart';
+import 'package:fluentsoul_mobile/screens/home_screen.dart';
+import 'package:fluentsoul_mobile/services/api_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const SoulFluentApp());
+  runApp(const FluentSoulApp());
 }
 
-class SoulFluentApp extends StatelessWidget {
-  const SoulFluentApp({super.key});
+class FluentSoulApp extends StatelessWidget {
+  const FluentSoulApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class SoulFluentApp extends StatelessWidget {
       child: Consumer2<AuthProvider, ThemeProvider>(
         builder: (context, auth, themeProvider, _) {
           return MaterialApp(
-            title: 'SoulFluent Voice GD',
+            title: 'FluentSoul: Speak English Fluently & Confidently',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,

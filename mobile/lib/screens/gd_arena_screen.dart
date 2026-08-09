@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soulfluent_mobile/providers/gd_provider.dart';
-import 'package:soulfluent_mobile/widgets/app_header.dart';
-import 'package:soulfluent_mobile/widgets/persona_card.dart';
-import 'package:soulfluent_mobile/widgets/wave_visualizer.dart';
-import 'package:soulfluent_mobile/widgets/transcript_drawer.dart';
+import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/widgets/app_header.dart';
+import 'package:fluentsoul_mobile/widgets/persona_card.dart';
+import 'package:fluentsoul_mobile/widgets/wave_visualizer.dart';
+import 'package:fluentsoul_mobile/widgets/transcript_drawer.dart';
 
 class GDArenaScreen extends StatelessWidget {
   const GDArenaScreen({super.key});

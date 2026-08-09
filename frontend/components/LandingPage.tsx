@@ -370,7 +370,7 @@ export default function LandingPage() {
             Ready to Speak Confidently?
           </h2>
           <p className="text-xs sm:text-sm opacity-90 leading-relaxed font-medium">
-            Join SoulFluent today and practice live conversations with intelligent AI voice partners.
+            Join FluentSoul today and practice live conversations with intelligent AI voice partners.
           </p>
         </div>
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:soulfluent_mobile/config/theme.dart';
-import 'package:soulfluent_mobile/providers/auth_provider.dart';
-import 'package:soulfluent_mobile/providers/theme_provider.dart';
-import 'package:soulfluent_mobile/widgets/logo_widgets.dart';
+import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/providers/auth_provider.dart';
+import 'package:fluentsoul_mobile/providers/theme_provider.dart';
+import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -109,7 +109,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Brand text indicator matching the screenshot (Soul in dark, Fluent in coral)
-                      SoulFluentBrandText(
+                      FluentSoulBrandText(
                         fontSize: 20,
                         isDark: isDark,
                       ),
@@ -176,7 +176,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           children: [
                             // 1. Logo Icon
                             const Center(
-                              child: SoulFluentLogo(size: 58),
+                              child: FluentSoulLogo(size: 58),
                             ),
 
                             const SizedBox(height: 20),
@@ -343,7 +343,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
                             const SizedBox(height: 24),
 
-                            // 4. Primary Button: Log in to SoulFluent ->
+                            // 4. Primary Button: Log in to FluentSoul ->
                             SizedBox(
                               height: 50,
                               child: ElevatedButton(
@@ -369,7 +369,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            isLogin ? 'Log in to SoulFluent' : 'Create account',
+                                            isLogin ? 'Log in to FluentSoul' : 'Create account',
                                             style: GoogleFonts.inter(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600,

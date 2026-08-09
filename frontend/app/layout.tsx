@@ -24,8 +24,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SoulFluent — Speak Fluently & Confidently with AI",
-  description: "A calm, creative space to practice spoken English in GDs and 1:1 Debates.",
+  title: "FluentSoul: Speak English Fluently & Confidently",
+  description: "Speak English Fluently & Confidently — practice spoken English in GDs and 1:1 Debates.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

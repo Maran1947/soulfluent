@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:soulfluent_mobile/config/theme.dart';
-import 'package:soulfluent_mobile/widgets/logo_widgets.dart';
+import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 
 /// Animated Pulsing Skeleton Base Widget
 class SkeletonItem extends StatefulWidget {
@@ -300,7 +300,7 @@ class _AnimatedReportAnalysisLoaderState
                           shape: BoxShape.circle,
                           color: AppTheme.primary.withOpacity(glowOpacity),
                         ),
-                        child: const SoulFluentLogo(size: 62),
+                        child: const FluentSoulLogo(size: 62),
                       ),
                     );
                   },

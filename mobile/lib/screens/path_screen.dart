@@ -2,12 +2,12 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:soulfluent_mobile/config/theme.dart';
-import 'package:soulfluent_mobile/models/curriculum.dart';
-import 'package:soulfluent_mobile/providers/gd_provider.dart';
-import 'package:soulfluent_mobile/screens/day_detail_screen.dart';
-import 'package:soulfluent_mobile/widgets/app_header.dart';
-import 'package:soulfluent_mobile/widgets/logo_widgets.dart';
+import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/models/curriculum.dart';
+import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/screens/day_detail_screen.dart';
+import 'package:fluentsoul_mobile/widgets/app_header.dart';
+import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 
 class PathScreen extends StatefulWidget {
   const PathScreen({super.key});
@@ -155,7 +155,7 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
     final completedDays = gd.completedPathDays;
 
     return Scaffold(
-      appBar: const AppHeader(title: 'SoulFluent'),
+      appBar: const AppHeader(title: 'FluentSoul'),
       body: Stack(
         children: [
           // Ambient Waves Background in Both Dark and Light Modes

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soulfluent_mobile/providers/auth_provider.dart';
-import 'package:soulfluent_mobile/providers/gd_provider.dart';
-import 'package:soulfluent_mobile/providers/theme_provider.dart';
+import 'package:fluentsoul_mobile/providers/auth_provider.dart';
+import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/providers/theme_provider.dart';
 
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -276,7 +276,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
             ),
             const SizedBox(width: 4),
           ],
-          // SoulFluent Brand Icon
+          // FluentSoul Brand Icon
           Container(
             width: 32,
             height: 32,
@@ -305,11 +305,11 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               children: [
                 TextSpan(
-                  text: 'Soul',
+                  text: 'Fluent',
                   style: TextStyle(color: isDark ? Colors.white : const Color(0xFF0F172A)),
                 ),
                 TextSpan(
-                  text: 'Fluent',
+                  text: 'Soul',
                   style: TextStyle(color: Theme.of(context).primaryColor),
                 ),
               ],

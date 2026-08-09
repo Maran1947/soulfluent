@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:soulfluent_mobile/config/constants.dart';
-import 'package:soulfluent_mobile/models/user.dart';
-import 'package:soulfluent_mobile/services/api_service.dart';
+import 'package:fluentsoul_mobile/config/constants.dart';
+import 'package:fluentsoul_mobile/models/user.dart';
+import 'package:fluentsoul_mobile/services/api_service.dart';
 
 class AuthProvider extends ChangeNotifier {
   final ApiService _apiService;

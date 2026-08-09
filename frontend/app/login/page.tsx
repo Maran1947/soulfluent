@@ -129,7 +129,7 @@ export default function LoginPage() {
                 disabled={submitting}
                 className="btn-primary w-full py-3.5 text-sm font-semibold flex items-center justify-center gap-2 shadow-md shadow-[#F25C40]/20 bg-[#F25C40] hover:bg-[#E04B30] text-white rounded-xl"
               >
-                <span>{submitting ? "Logging in…" : "Log in to SoulFluent"}</span>
+                <span>{submitting ? "Logging in…" : "Log in to FluentSoul"}</span>
                 {!submitting && <ArrowRight size={16} />}
               </button>
             </form>
