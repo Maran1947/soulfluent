@@ -17,9 +17,7 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 60 * 24 * 7  # 7 days
 
     # Database
-    database_url: str = (
-        "postgresql+asyncpg://soulfluent:soulfluent@localhost:5432/soulfluent"
-    )
+    database_url: str = "postgresql+asyncpg://soulfluent:soulfluent@localhost:5432/soulfluent"
 
     # Gemini
     # gemini-2.5-flash was restricted from new API keys ahead of its official

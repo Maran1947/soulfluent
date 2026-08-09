@@ -1,4 +1,3 @@
-from typing import Any, Dict, List, Optional
 from pydantic import BaseModel
 
 
@@ -21,7 +20,7 @@ class ChallengeOut(BaseModel):
     title: str
     zone: str
     requires_voice: bool
-    timer_seconds: Optional[int] = None
+    timer_seconds: int | None = None
     timer_type: str
     description: str
     xp: int
@@ -29,18 +28,18 @@ class ChallengeOut(BaseModel):
     icon: str
     in_daily_rotation: bool
     has_mood_checkin: bool
-    unlock: Optional[str] = None
+    unlock: str | None = None
 
 
 class RankProgressOut(BaseModel):
     current: RankOut
-    next: Optional[RankOut] = None
+    next: RankOut | None = None
     xp: int
     progress: float
 
 
 class ChallengesLibraryOut(BaseModel):
-    zones: Dict[str, ZoneOut]
-    ranks: List[RankOut]
-    challenges: List[ChallengeOut]
+    zones: dict[str, ZoneOut]
+    ranks: list[RankOut]
+    challenges: list[ChallengeOut]
     daily_featured: ChallengeOut

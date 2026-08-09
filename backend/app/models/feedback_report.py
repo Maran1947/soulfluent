@@ -16,9 +16,7 @@ class FeedbackReport(Base):
     __tablename__ = "feedback_reports"
     __table_args__ = {"schema": "analytics"}
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     session_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("conversation.sessions.id", ondelete="CASCADE"),
@@ -34,8 +32,6 @@ class FeedbackReport(Base):
     recommendation: Mapped[str] = mapped_column(Text, default="")
     total_tokens: Mapped[int] = mapped_column(default=0)
     total_cost_usd: Mapped[float] = mapped_column(Float, default=0.0)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     session: Mapped["Session"] = relationship(back_populates="report")

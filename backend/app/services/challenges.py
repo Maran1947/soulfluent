@@ -14,13 +14,13 @@ daily-rotating featured challenge.
 """
 
 import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # ---------------------------------------------------------------------------
 # ZONES
 # ---------------------------------------------------------------------------
 
-ZONES: Dict[str, Dict[str, Any]] = {
+ZONES: dict[str, dict[str, Any]] = {
     "confidence": {
         "id": "confidence",
         "name": "Confidence zone",
@@ -58,7 +58,7 @@ ZONES: Dict[str, Dict[str, Any]] = {
     },
 }
 
-RANKS: List[Dict[str, Any]] = [
+RANKS: list[dict[str, Any]] = [
     {"id": "bronze", "name": "Bronze", "min_xp": 0},
     {"id": "silver", "name": "Silver", "min_xp": 500},
     {"id": "gold", "name": "Gold", "min_xp": 1500},
@@ -72,7 +72,7 @@ RANKS: List[Dict[str, Any]] = [
 # difficulty (bronze/silver/gold), icon, in_daily_rotation (bool)
 # ---------------------------------------------------------------------------
 
-CHALLENGES: List[Dict[str, Any]] = [
+CHALLENGES: list[dict[str, Any]] = [
     # ---- VOICE: Confidence zone ----
     {
         "id": "say_it_scared",
@@ -116,7 +116,6 @@ CHALLENGES: List[Dict[str, Any]] = [
         "in_daily_rotation": False,
         "has_mood_checkin": False,
     },
-
     # ---- VOICE: Speed zone (daily-timer friendly) ----
     {
         "id": "show_and_tell",
@@ -174,7 +173,6 @@ CHALLENGES: List[Dict[str, Any]] = [
         "in_daily_rotation": True,
         "has_mood_checkin": False,
     },
-
     # ---- VOICE: Social zone ----
     {
         "id": "streak_squad",
@@ -204,7 +202,6 @@ CHALLENGES: List[Dict[str, Any]] = [
         "in_daily_rotation": False,
         "has_mood_checkin": False,
     },
-
     # ---- VOICE: Boss battles (rare, gated) ----
     {
         "id": "interruption_test",
@@ -236,7 +233,6 @@ CHALLENGES: List[Dict[str, Any]] = [
         "has_mood_checkin": True,
         "unlock": "weekly",
     },
-
     # ---- QUIET: no voice required ----
     {
         "id": "word_race",
@@ -312,7 +308,12 @@ CHALLENGES: List[Dict[str, Any]] = [
 
 # Daily voice rotation for the timer slot — cycles so each day trains a
 # different skill without repeating the same format two days in a row.
-DAILY_VOICE_ROTATION: List[str] = ["show_and_tell", "one_breath", "story_chain", "zero_filler_minute"]
+DAILY_VOICE_ROTATION: list[str] = [
+    "show_and_tell",
+    "one_breath",
+    "story_chain",
+    "zero_filler_minute",
+]
 
 # Quiet-mode nudge: after this many quiet challenges in a row, prompt the
 # user back toward a voice challenge instead of letting quiet mode replace
@@ -329,30 +330,31 @@ QUIET_MODE_DAILY_XP_CAP = 30
 # HELPERS
 # ---------------------------------------------------------------------------
 
-def get_challenge(challenge_id: str) -> Optional[Dict[str, Any]]:
+
+def get_challenge(challenge_id: str) -> dict[str, Any] | None:
     for c in CHALLENGES:
         if c["id"] == challenge_id:
             return c
     return None
 
 
-def get_challenges_by_zone(zone_id: str) -> List[Dict[str, Any]]:
+def get_challenges_by_zone(zone_id: str) -> list[dict[str, Any]]:
     return [c for c in CHALLENGES if c["zone"] == zone_id]
 
 
-def get_quiet_mode_challenges() -> List[Dict[str, Any]]:
+def get_quiet_mode_challenges() -> list[dict[str, Any]]:
     return [c for c in CHALLENGES if not c["requires_voice"]]
 
 
-def get_voice_challenges() -> List[Dict[str, Any]]:
+def get_voice_challenges() -> list[dict[str, Any]]:
     return [c for c in CHALLENGES if c["requires_voice"]]
 
 
-def get_boss_battles() -> List[Dict[str, Any]]:
+def get_boss_battles() -> list[dict[str, Any]]:
     return get_challenges_by_zone("boss")
 
 
-def get_daily_challenge(date: Optional[datetime.date] = None) -> Dict[str, Any]:
+def get_daily_challenge(date: datetime.date | None = None) -> dict[str, Any]:
     """Deterministic daily pick from the voice rotation — same challenge for
     all users on a given date, so it can double as a shared daily ritual."""
     date = date or datetime.date.today()
@@ -360,7 +362,7 @@ def get_daily_challenge(date: Optional[datetime.date] = None) -> Dict[str, Any]:
     return get_challenge(DAILY_VOICE_ROTATION[index]) or CHALLENGES[0]
 
 
-def get_rank(xp: int) -> Dict[str, Any]:
+def get_rank(xp: int) -> dict[str, Any]:
     current = RANKS[0]
     for r in RANKS:
         if xp >= r["min_xp"]:
@@ -368,7 +370,7 @@ def get_rank(xp: int) -> Dict[str, Any]:
     return current
 
 
-def get_rank_progress(xp: int) -> Dict[str, Any]:
+def get_rank_progress(xp: int) -> dict[str, Any]:
     """Returns current rank, next rank, and progress fraction toward it —
     everything the XP bar in the UI needs."""
     ranks_sorted = sorted(RANKS, key=lambda r: r["min_xp"])

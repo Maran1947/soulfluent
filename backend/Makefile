@@ -1,5 +1,6 @@
 .PHONY: help up down build logs migrate makemigration migrate-down shell db-shell install \
-        db db-down run migrate-local makemigration-local migrate-down-local
+        db db-down run migrate-local makemigration-local migrate-down-local \
+        lint format typecheck check
 
 help:
 	@echo "FluentSoul backend — commands"
@@ -12,6 +13,10 @@ help:
 	@echo "  make makemigration-local m='message'   Autogenerate a revision directly"
 	@echo "  make migrate-down-local    Roll back the last migration directly"
 	@echo "  make run                   uvicorn app.main:app --reload (no Docker)"
+	@echo "  make lint                  Run ruff linter check"
+	@echo "  make format                Run ruff auto-formatter & import organizer"
+	@echo "  make typecheck             Run pyright type checker"
+	@echo "  make check                 Run format, lint, and typecheck"
 	@echo ""
 	@echo "Full Docker mode (Postgres + backend both containerized):"
 	@echo "  make up                    Start db + backend via docker compose"
@@ -46,6 +51,18 @@ migrate-down-local:
 
 run:
 	uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+lint:
+	ruff check app
+
+format:
+	ruff format app
+	ruff check --fix app
+
+typecheck:
+	pyright app
+
+check: format lint typecheck
 
 # --- Full Docker mode -----------------------------------------------------
 

@@ -10,13 +10,13 @@ Every day is built around the loop:
   Shadow/Listen (optional runway) -> Mood check-in (optional) -> Speak -> Rescue phrase if blank -> Reflect
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # ---------------------------------------------------------------------------
 # PERSONAS
 # ---------------------------------------------------------------------------
 
-PERSONAS_INFO: Dict[str, Dict[str, Any]] = {
+PERSONAS_INFO: dict[str, dict[str, Any]] = {
     "riya": {
         "name": "Riya",
         "initial": "R",
@@ -56,7 +56,7 @@ PERSONAS_INFO: Dict[str, Dict[str, Any]] = {
 
 # Rescue phrases are available on EVERY foundation/milestone day in Track A so a user
 # always has an escape hatch instead of going silent. Defined once, reused everywhere.
-DEFAULT_RESCUE_PHRASES: List[str] = [
+DEFAULT_RESCUE_PHRASES: list[str] = [
     "Give me a sec...",
     "Let me think about that...",
     "How do I say this...",
@@ -64,13 +64,13 @@ DEFAULT_RESCUE_PHRASES: List[str] = [
 ]
 
 # Lighter version for beginners (Track B) - shorter, easier to physically say
-BEGINNER_RESCUE_PHRASES: List[str] = [
+BEGINNER_RESCUE_PHRASES: list[str] = [
     "Wait, please...",
     "One moment...",
     "I think... umm...",
 ]
 
-MOOD_OPTIONS: List[str] = ["😰 Nervous", "😐 Neutral", "😊 Confident"]
+MOOD_OPTIONS: list[str] = ["😰 Nervous", "😐 Neutral", "😊 Confident"]
 
 
 # ---------------------------------------------------------------------------
@@ -78,7 +78,7 @@ MOOD_OPTIONS: List[str] = ["😰 Nervous", "😐 Neutral", "😊 Confident"]
 # For users who understand English but blank when speaking.
 # ---------------------------------------------------------------------------
 
-TRACK_A_WEEKS: List[Dict[str, Any]] = [
+TRACK_A_WEEKS: list[dict[str, Any]] = [
     {
         "title": "Day 0 · Freeze Protocol",
         "range": "Onboarding",
@@ -137,7 +137,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "Right after I wake up, I check my phone and make tea.",
                 "moodCheckIn": False,
-                "script": ["Riya: What's the first thing you do after waking up?", "You: I check my phone, then I make tea."],
+                "script": [
+                    "Riya: What's the first thing you do after waking up?",
+                    "You: I check my phone, then I make tea.",
+                ],
                 "wpm": 82,
                 "filler": "≤6/min",
             },
@@ -153,7 +156,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "This is my sister — she's funny and very supportive.",
                 "moodCheckIn": False,
-                "script": ["Riya: Who's someone you talk to every day?", "You: My sister — she is funny and very supportive."],
+                "script": [
+                    "Riya: Who's someone you talk to every day?",
+                    "You: My sister — she is funny and very supportive.",
+                ],
                 "wpm": 84,
                 "filler": "≤5/min",
             },
@@ -169,7 +175,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "I like tea. I don't like coffee — it's too strong for me.",
                 "moodCheckIn": False,
-                "script": ["Riya: Coffee or tea?", "You: Tea — I don't like coffee, it's too strong for me."],
+                "script": [
+                    "Riya: Coffee or tea?",
+                    "You: Tea — I don't like coffee, it's too strong for me.",
+                ],
                 "wpm": 86,
                 "filler": "≤5/min",
             },
@@ -185,7 +194,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "It's currently nine thirty in the morning.",
                 "moodCheckIn": False,
-                "script": ["Riya: What time do you usually start work?", "You: Around nine thirty in the morning."],
+                "script": [
+                    "Riya: What time do you usually start work?",
+                    "You: Around nine thirty in the morning.",
+                ],
                 "wpm": 88,
                 "filler": "≤5/min",
             },
@@ -201,7 +213,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "Can I ask you something — where are you from?",
                 "moodCheckIn": False,
-                "script": ["You: Where are you from, Riya?", "Riya: I'm based in Bengaluru! Your turn to ask another."],
+                "script": [
+                    "You: Where are you from, Riya?",
+                    "Riya: I'm based in Bengaluru! Your turn to ask another.",
+                ],
                 "wpm": 90,
                 "filler": "≤4/min",
             },
@@ -217,7 +232,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": None,
                 "moodCheckIn": True,
-                "script": ["Riya: Ready when you are — just press and talk.", "You: (60-second free response)"],
+                "script": [
+                    "Riya: Ready when you are — just press and talk.",
+                    "You: (60-second free response)",
+                ],
                 "wpm": 92,
                 "filler": "≤4/min",
                 "milestoneReport": True,
@@ -235,12 +253,19 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "mode": "foundation",
                 "aiLine": "Let's structure this: greeting, order, one follow-up question. Ready to order?",
                 "instruction": "Roleplay ordering food at a restaurant. Greet, place your order, then answer Rohan's follow-up.",
-                "phrasesA": ["I'll have the...", "Could I also get...", "Actually, can you make that..."],
+                "phrasesA": [
+                    "I'll have the...",
+                    "Could I also get...",
+                    "Actually, can you make that...",
+                ],
                 "phrasesB": ["I would like...", "Can I get...", "For here or to go"],
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "I'll have the coffee, and could I also get a sandwich?",
                 "moodCheckIn": False,
-                "script": ["Rohan: What can I get you today?", "You: I'd like a coffee and a sandwich, please."],
+                "script": [
+                    "Rohan: What can I get you today?",
+                    "You: I'd like a coffee and a sandwich, please.",
+                ],
                 "wpm": 94,
                 "filler": "≤4/min",
             },
@@ -256,7 +281,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "Go straight, then turn left. You can't miss it.",
                 "moodCheckIn": False,
-                "script": ["Rohan: How do I get to the station from here?", "You: Go straight, then turn left at the signal."],
+                "script": [
+                    "Rohan: How do I get to the station from here?",
+                    "You: Go straight, then turn left at the signal.",
+                ],
                 "wpm": 96,
                 "filler": "≤4/min",
             },
@@ -288,7 +316,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "Can you believe this weather? How's your day going so far?",
                 "moodCheckIn": False,
-                "script": ["Rohan: It's really humid today, isn't it?", "You: Yes, definitely. Do you like this season?"],
+                "script": [
+                    "Rohan: It's really humid today, isn't it?",
+                    "You: Yes, definitely. Do you like this season?",
+                ],
                 "wpm": 100,
                 "filler": "≤3/min",
             },
@@ -304,7 +335,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "Right after that, I called my friend, and by the end of the day I was tired.",
                 "moodCheckIn": False,
-                "script": ["Rohan: What did you do yesterday evening?", "You: I finished work, then I called my friend."],
+                "script": [
+                    "Rohan: What did you do yesterday evening?",
+                    "You: I finished work, then I called my friend.",
+                ],
                 "wpm": 102,
                 "filler": "≤3/min",
             },
@@ -320,7 +354,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "My plan is to visit my parents, and I'm hoping to rest too.",
                 "moodCheckIn": False,
-                "script": ["Rohan: Any plans this weekend?", "You: I'm going to visit my parents on Saturday."],
+                "script": [
+                    "Rohan: Any plans this weekend?",
+                    "You: I'm going to visit my parents on Saturday.",
+                ],
                 "wpm": 104,
                 "filler": "≤3/min",
             },
@@ -336,7 +373,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": None,
                 "moodCheckIn": True,
-                "script": ["Rohan: Let's discuss — is remote work better than office work?", "Riya: I'd love to hear your take first!"],
+                "script": [
+                    "Rohan: Let's discuss — is remote work better than office work?",
+                    "Riya: I'd love to hear your take first!",
+                ],
                 "wpm": 106,
                 "filler": "≤3/min",
                 "milestoneReport": True,
@@ -375,7 +415,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "What sets me apart is my ability to learn fast.",
                 "moodCheckIn": True,
-                "script": ["Emily: Why should we hire you?", "You: I bring strong problem-solving skills and I learn fast."],
+                "script": [
+                    "Emily: Why should we hire you?",
+                    "You: I bring strong problem-solving skills and I learn fast.",
+                ],
                 "wpm": 110,
                 "filler": "≤2/min",
             },
@@ -391,7 +434,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "I see it differently because it also removes commute stress.",
                 "moodCheckIn": False,
-                "script": ["Emily: I think remote work hurts collaboration.", "You: I see your point, but it also removes commute stress."],
+                "script": [
+                    "Emily: I think remote work hurts collaboration.",
+                    "You: I see your point, but it also removes commute stress.",
+                ],
                 "wpm": 112,
                 "filler": "≤2/min",
             },
@@ -407,7 +453,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "Here's exactly what happened — my order arrived damaged.",
                 "moodCheckIn": False,
-                "script": ["Emily: What seems to be the issue?", "You: There's a problem with my order — it arrived damaged."],
+                "script": [
+                    "Emily: What seems to be the issue?",
+                    "You: There's a problem with my order — it arrived damaged.",
+                ],
                 "wpm": 114,
                 "filler": "≤2/min",
             },
@@ -418,12 +467,18 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "mode": "foundation",
                 "aiLine": "Good and bad are boring words — give me something sharper.",
                 "instruction": "Describe how you feel today using 3 different feeling words, and explain why for each.",
-                "phrasesA": ["I'm a bit overwhelmed because...", "Honestly, I feel relieved that..."],
+                "phrasesA": [
+                    "I'm a bit overwhelmed because...",
+                    "Honestly, I feel relieved that...",
+                ],
                 "phrasesB": ["I feel happy", "I feel tired", "I feel worried"],
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "Honestly, I feel a little tired, but hopeful about the weekend.",
                 "moodCheckIn": True,
-                "script": ["Emily: How are you feeling about this week?", "You: A little tired, but hopeful about the weekend."],
+                "script": [
+                    "Emily: How are you feeling about this week?",
+                    "You: A little tired, but hopeful about the weekend.",
+                ],
                 "wpm": 116,
                 "filler": "≤2/min",
             },
@@ -439,7 +494,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": "I have a reservation under Aditya Sharma. Is breakfast included?",
                 "moodCheckIn": False,
-                "script": ["Emily: Welcome! Do you have a reservation?", "You: Yes, it's under Aditya Sharma."],
+                "script": [
+                    "Emily: Welcome! Do you have a reservation?",
+                    "You: Yes, it's under Aditya Sharma.",
+                ],
                 "wpm": 118,
                 "filler": "≤2/min",
             },
@@ -455,7 +513,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": None,
                 "moodCheckIn": True,
-                "script": ["Emily: Let's talk about something unexpected — favorite childhood memory?", "You: (free response)"],
+                "script": [
+                    "Emily: Let's talk about something unexpected — favorite childhood memory?",
+                    "You: (free response)",
+                ],
                 "wpm": 120,
                 "filler": "≤2/min",
                 "milestoneReport": True,
@@ -478,7 +539,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": None,
                 "moodCheckIn": False,
-                "script": ["Alex: Should schools teach coding from age 5?", "You: (60-second impromptu response)"],
+                "script": [
+                    "Alex: Should schools teach coding from age 5?",
+                    "You: (60-second impromptu response)",
+                ],
                 "wpm": 122,
                 "filler": "≤2/min",
             },
@@ -494,7 +558,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": None,
                 "moodCheckIn": False,
-                "script": ["Alex: Social media does more harm than good — agree?", "You: I see your point, but it also connects people globally."],
+                "script": [
+                    "Alex: Social media does more harm than good — agree?",
+                    "You: I see your point, but it also connects people globally.",
+                ],
                 "wpm": 124,
                 "filler": "≤1/min",
             },
@@ -510,7 +577,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": None,
                 "moodCheckIn": False,
-                "script": ["Alex: Tell me about a time something went wrong.", "You: It all started when I missed my train..."],
+                "script": [
+                    "Alex: Tell me about a time something went wrong.",
+                    "You: It all started when I missed my train...",
+                ],
                 "wpm": 126,
                 "filler": "≤1/min",
             },
@@ -526,7 +596,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": None,
                 "moodCheckIn": False,
-                "script": ["Alex: What's your idea?", "You: I want to talk about a way to reduce commute time for teams."],
+                "script": [
+                    "Alex: What's your idea?",
+                    "You: I want to talk about a way to reduce commute time for teams.",
+                ],
                 "wpm": 128,
                 "filler": "≤1/min",
             },
@@ -542,7 +615,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": None,
                 "moodCheckIn": False,
-                "script": ["Alex: Wait, that can't be — (interrupts)", "You: Sorry, let me finish — what I meant was..."],
+                "script": [
+                    "Alex: Wait, that can't be — (interrupts)",
+                    "You: Sorry, let me finish — what I meant was...",
+                ],
                 "wpm": 130,
                 "filler": "≤1/min",
             },
@@ -558,7 +634,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": None,
                 "moodCheckIn": False,
-                "script": ["Alex: What do you think about AI in classrooms?", "You: Well, actually, I think it depends on the age group."],
+                "script": [
+                    "Alex: What do you think about AI in classrooms?",
+                    "You: Well, actually, I think it depends on the age group.",
+                ],
                 "wpm": 132,
                 "filler": "Controlled use",
             },
@@ -574,7 +653,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": None,
                 "moodCheckIn": True,
-                "script": ["Rohan: Let's structure the debate first.", "Alex: Or let's just dive in — what do you think?"],
+                "script": [
+                    "Rohan: Let's structure the debate first.",
+                    "Alex: Or let's just dive in — what do you think?",
+                ],
                 "wpm": 134,
                 "filler": "Minimal",
                 "milestoneReport": True,
@@ -597,7 +679,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": None,
                 "moodCheckIn": True,
-                "script": ["Riya: Scenario 1 — introduce yourself to a new colleague.", "You: (free response, then Alex jumps in with Scenario 2)"],
+                "script": [
+                    "Riya: Scenario 1 — introduce yourself to a new colleague.",
+                    "You: (free response, then Alex jumps in with Scenario 2)",
+                ],
                 "wpm": 135,
                 "filler": "0–1/min",
             },
@@ -613,7 +698,10 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
                 "rescuePhrases": DEFAULT_RESCUE_PHRASES,
                 "shadowLine": None,
                 "moodCheckIn": True,
-                "script": ["Alex: Final round — is remote learning as effective as in-person?", "You: (free 3-minute debate)"],
+                "script": [
+                    "Alex: Final round — is remote learning as effective as in-person?",
+                    "You: (free 3-minute debate)",
+                ],
                 "wpm": 135,
                 "filler": "0 Filler",
                 "milestoneReport": True,
@@ -630,7 +718,7 @@ TRACK_A_WEEKS: List[Dict[str, Any]] = [
 # Feeds directly into Track A Day 1 at the end of Week 5.
 # ---------------------------------------------------------------------------
 
-TRACK_B_WEEKS: List[Dict[str, Any]] = [
+TRACK_B_WEEKS: list[dict[str, Any]] = [
     {
         "title": "Sounds & Survival",
         "range": "Days 1–6",
@@ -842,7 +930,10 @@ TRACK_B_WEEKS: List[Dict[str, Any]] = [
                 "shadowLine": None,
                 "moodCheckIn": True,
                 "textVisibleOnScreen": True,
-                "script": ["Riya: Your turn — 10 in a row!", "You: Red apple, blue shirt, my mother..."],
+                "script": [
+                    "Riya: Your turn — 10 in a row!",
+                    "You: Red apple, blue shirt, my mother...",
+                ],
                 "wpm": 60,
                 "filler": "n/a",
                 "milestoneReport": True,
@@ -951,7 +1042,10 @@ TRACK_B_WEEKS: List[Dict[str, Any]] = [
                 "shadowLine": None,
                 "moodCheckIn": True,
                 "textVisibleOnScreen": False,
-                "script": ["Riya: Tell me 5 things about yourself.", "You: (free response, no text support)"],
+                "script": [
+                    "Riya: Tell me 5 things about yourself.",
+                    "You: (free response, no text support)",
+                ],
                 "wpm": 66,
                 "filler": "n/a",
                 "milestoneReport": True,
@@ -1026,7 +1120,10 @@ TRACK_B_WEEKS: List[Dict[str, Any]] = [
                 "shadowLine": "I would like... a coffee, please.",
                 "moodCheckIn": False,
                 "textVisibleOnScreen": True,
-                "script": ["Rohan: What would you like to...", "You: ...order? I would like a coffee."],
+                "script": [
+                    "Rohan: What would you like to...",
+                    "You: ...order? I would like a coffee.",
+                ],
                 "wpm": 70,
                 "filler": "n/a",
             },
@@ -1060,7 +1157,10 @@ TRACK_B_WEEKS: List[Dict[str, Any]] = [
                 "shadowLine": None,
                 "moodCheckIn": True,
                 "textVisibleOnScreen": True,
-                "script": ["Rohan: Let's do 3 roleplays together.", "You: (complete each one as text fades)"],
+                "script": [
+                    "Rohan: Let's do 3 roleplays together.",
+                    "You: (complete each one as text fades)",
+                ],
                 "wpm": 72,
                 "filler": "n/a",
                 "milestoneReport": True,
@@ -1084,7 +1184,10 @@ TRACK_B_WEEKS: List[Dict[str, Any]] = [
                 "shadowLine": "I think... my favorite food is rice.",
                 "moodCheckIn": True,
                 "textVisibleOnScreen": True,
-                "script": ["Riya: What's your favorite food?", "You: I think... my favorite food is rice."],
+                "script": [
+                    "Riya: What's your favorite food?",
+                    "You: I think... my favorite food is rice.",
+                ],
                 "wpm": 74,
                 "filler": "≤7/min",
             },
@@ -1101,7 +1204,10 @@ TRACK_B_WEEKS: List[Dict[str, Any]] = [
                 "shadowLine": "I like rice, and I also like tea.",
                 "moodCheckIn": False,
                 "textVisibleOnScreen": True,
-                "script": ["Riya: Tell me about your weekend.", "You: I rested, and I also visited my family."],
+                "script": [
+                    "Riya: Tell me about your weekend.",
+                    "You: I rested, and I also visited my family.",
+                ],
                 "wpm": 76,
                 "filler": "≤7/min",
             },
@@ -1118,7 +1224,10 @@ TRACK_B_WEEKS: List[Dict[str, Any]] = [
                 "shadowLine": None,
                 "moodCheckIn": True,
                 "textVisibleOnScreen": False,
-                "script": ["Riya: Just talk to me for 30 seconds — anything at all.", "You: (free response)"],
+                "script": [
+                    "Riya: Just talk to me for 30 seconds — anything at all.",
+                    "You: (free response)",
+                ],
                 "wpm": 78,
                 "filler": "≤7/min",
             },
@@ -1135,7 +1244,10 @@ TRACK_B_WEEKS: List[Dict[str, Any]] = [
                 "shadowLine": "Give me a sec... Let me think about that...",
                 "moodCheckIn": True,
                 "textVisibleOnScreen": True,
-                "script": ["Riya: If you ever blank, just say 'Give me a sec.'", "You: (repeat each rescue phrase)"],
+                "script": [
+                    "Riya: If you ever blank, just say 'Give me a sec.'",
+                    "You: (repeat each rescue phrase)",
+                ],
                 "wpm": 78,
                 "filler": "n/a",
             },
@@ -1152,7 +1264,10 @@ TRACK_B_WEEKS: List[Dict[str, Any]] = [
                 "shadowLine": None,
                 "moodCheckIn": False,
                 "textVisibleOnScreen": False,
-                "script": ["Rohan: Let's mix it up today.", "You: (respond across greeting, roleplay, opinion)"],
+                "script": [
+                    "Rohan: Let's mix it up today.",
+                    "You: (respond across greeting, roleplay, opinion)",
+                ],
                 "wpm": 80,
                 "filler": "≤6/min",
             },
@@ -1169,7 +1284,10 @@ TRACK_B_WEEKS: List[Dict[str, Any]] = [
                 "shadowLine": None,
                 "moodCheckIn": True,
                 "textVisibleOnScreen": False,
-                "script": ["Riya: Introduce yourself to me one more time.", "You: (free 30-second response)"],
+                "script": [
+                    "Riya: Introduce yourself to me one more time.",
+                    "You: (free 30-second response)",
+                ],
                 "wpm": 80,
                 "filler": "≤6/min",
                 "milestoneReport": True,
@@ -1183,7 +1301,7 @@ TRACK_B_WEEKS: List[Dict[str, Any]] = [
 # Backwards-compatibility alias
 WEEKS_DATA = TRACK_A_WEEKS
 
-TRACKS: Dict[str, Dict[str, Any]] = {
+TRACKS: dict[str, dict[str, Any]] = {
     "track_a": {
         "id": "track_a",
         "name": "Unfreeze",
@@ -1199,23 +1317,23 @@ TRACKS: Dict[str, Dict[str, Any]] = {
 }
 
 
-def get_track(track_id: str) -> Optional[Dict[str, Any]]:
+def get_track(track_id: str) -> dict[str, Any] | None:
     """Return the full track object ('track_a' or 'track_b')."""
     return TRACKS.get(track_id)
 
 
-def get_all_days(track_id: str) -> List[Dict[str, Any]]:
+def get_all_days(track_id: str) -> list[dict[str, Any]]:
     """Flatten all days for a given track, in order."""
     track = get_track(track_id)
     if not track:
         return []
-    days: List[Dict[str, Any]] = []
+    days: list[dict[str, Any]] = []
     for w in track["weeks"]:
         days.extend(w["days"])
     return days
 
 
-def get_day_by_number(track_id: str, day_num: int) -> Optional[Dict[str, Any]]:
+def get_day_by_number(track_id: str, day_num: int) -> dict[str, Any] | None:
     """Get a specific day's data from a specific track."""
     for d in get_all_days(track_id):
         if d["d"] == day_num:
@@ -1223,7 +1341,7 @@ def get_day_by_number(track_id: str, day_num: int) -> Optional[Dict[str, Any]]:
     return None
 
 
-def get_week_for_day(track_id: str, day_num: int) -> Optional[Dict[str, Any]]:
+def get_week_for_day(track_id: str, day_num: int) -> dict[str, Any] | None:
     """Return the week block (title/range) that contains the given day number."""
     track = get_track(track_id)
     if not track:
@@ -1251,7 +1369,7 @@ def is_graduation_day(track_id: str, day_num: int) -> bool:
     return bool(day and day.get("graduatesToTrackA"))
 
 
-def get_lightweight_day_display(day: Dict[str, Any], track_id: str = "track_a") -> Dict[str, Any]:
+def get_lightweight_day_display(day: dict[str, Any], track_id: str = "track_a") -> dict[str, Any]:
     """Derived display layer for UI rendering.
 
     Computes lightweight UI versions (short hook, short instruction, stat chips,

@@ -62,15 +62,19 @@ def _build_turn_prompt(
     time_remaining_seconds: int,
 ) -> str:
     persona_block = "\n\n".join(
-        f"### {p.name} (key: \"{p.key}\")\n{p.system_prompt()}" for p in personas
+        f'### {p.name} (key: "{p.key}")\n{p.system_prompt()}' for p in personas
     )
-    history_block = "\n".join(
-        f"{t['speaker']}: {t['text']}" for t in recent_turns[-10:]
-    ) or "(discussion just started)"
+    history_block = (
+        "\n".join(f"{t['speaker']}: {t['text']}" for t in recent_turns[-10:])
+        or "(discussion just started)"
+    )
 
-    silence_notes = ", ".join(
-        f"{key} has been silent for {count} turn(s)" for key, count in silent_turns.items()
-    ) or "no one has been silent long"
+    silence_notes = (
+        ", ".join(
+            f"{key} has been silent for {count} turn(s)" for key, count in silent_turns.items()
+        )
+        or "no one has been silent long"
+    )
 
     return f"""
 You are the turn-selection engine for a voice Group Discussion practice app.
@@ -124,7 +128,7 @@ async def generate_next_turn(
         ),
     )
     await log_usage(db, session_id, CallType.turn, settings.gemini_text_model, response)
-    return NextTurn.model_validate_json(response.text)
+    return NextTurn.model_validate_json(response.text or "{}")
 
 
 # ---------------------------------------------------------------------------
@@ -160,8 +164,13 @@ async def synthesize_speech(
         ),
     )
     await log_usage(db, session_id, CallType.tts, settings.gemini_tts_model, response)
-    pcm_data = response.candidates[0].content.parts[0].inline_data.data
-    return _pcm_to_wav(pcm_data)
+    candidates = response.candidates
+    if not candidates or not candidates[0].content or not candidates[0].content.parts:
+        raise RuntimeError("Gemini TTS response missing audio content")
+    inline_data = candidates[0].content.parts[0].inline_data
+    if not inline_data or not inline_data.data:
+        raise RuntimeError("Gemini TTS response missing audio data")
+    return _pcm_to_wav(inline_data.data)
 
 
 # ---------------------------------------------------------------------------
@@ -225,4 +234,4 @@ and specific analysis following the requested schema exactly.
         ),
     )
     await log_usage(db, session_id, CallType.analysis, settings.gemini_text_model, response)
-    return QualitativeFeedback.model_validate_json(response.text)
+    return QualitativeFeedback.model_validate_json(response.text or "{}")

@@ -9,7 +9,10 @@ from app.models.user import User, UserRole
 
 async def get_user_by_email(db: AsyncSession, email: str) -> User | None:
     result = await db.execute(
-        select(User).join(User.account).where(Account.email == email).options(selectinload(User.account))
+        select(User)
+        .join(User.account)
+        .where(Account.email == email)
+        .options(selectinload(User.account))
     )
     return result.scalar_one_or_none()
 
@@ -52,6 +55,8 @@ async def authenticate_user(db: AsyncSession, email: str, password: str) -> User
         return None
     if user.account.status in (AccountStatus.SUSPENDED, AccountStatus.DELETED):
         return None
-    if not user.account.hashed_password or not verify_password(password, user.account.hashed_password):
+    if not user.account.hashed_password or not verify_password(
+        password, user.account.hashed_password
+    ):
         return None
     return user

@@ -2,6 +2,7 @@ import base64
 import contextlib
 import uuid
 import wave
+from datetime import UTC
 from io import BytesIO
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
@@ -75,9 +76,7 @@ async def _get_owned_session(
 ) -> Session:
     stmt = select(Session).where(Session.id == session_id)
     if with_messages:
-        stmt = stmt.options(
-            selectinload(Session.messages), selectinload(Session.report)
-        )
+        stmt = stmt.options(selectinload(Session.messages), selectinload(Session.report))
     result = await db.execute(stmt)
     session = result.scalar_one_or_none()
     if session is None:
@@ -156,7 +155,7 @@ async def create_session(
             session.silent_turns = update_silent_turns(session, speaker_persona.key)
             await db.commit()
             await db.refresh(session)
-        except Exception as e:
+        except Exception:
             # Fallback if TTS fails on startup
             ai_message = Message(
                 session_id=session.id,
@@ -230,9 +229,7 @@ async def submit_turn(
 ):
     session = await _get_owned_session(session_id, current_user, db, with_messages=True)
     if session.status != SessionStatus.active:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Session is not active"
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Session is not active")
 
     audio_bytes = await audio.read()
     mime_type = audio.content_type or "audio/webm"
@@ -263,9 +260,9 @@ async def submit_turn(
 
     remaining = seconds_remaining(session)
     personas = get_personas(session.personas)
-    recent_turns = [
-        {"speaker": m.speaker, "text": m.text} for m in session.messages
-    ] + [{"speaker": "user", "text": user_transcript}]
+    recent_turns = [{"speaker": m.speaker, "text": m.text} for m in session.messages] + [
+        {"speaker": "user", "text": user_transcript}
+    ]
 
     next_turn = await generate_next_turn(
         topic=session.topic,
@@ -302,9 +299,9 @@ async def submit_turn(
     remaining_after = seconds_remaining(session)
     if remaining_after <= 0:
         session.status = SessionStatus.completed
-        from datetime import datetime, timezone
+        from datetime import datetime
 
-        session.ended_at = datetime.now(timezone.utc)
+        session.ended_at = datetime.now(UTC)
 
     await db.commit()
 
@@ -326,7 +323,7 @@ async def end_session(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     from sqlalchemy import func
 
@@ -340,7 +337,7 @@ async def end_session(
 
     if session.status == SessionStatus.active:
         session.status = SessionStatus.completed
-        session.ended_at = datetime.now(timezone.utc)
+        session.ended_at = datetime.now(UTC)
 
     if not session.messages:
         raise HTTPException(
@@ -383,7 +380,9 @@ async def get_report(
     )
     session = result.scalar_one()
     if session.report is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Report not generated yet")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Report not generated yet"
+        )
     return FeedbackReportOut.model_validate(session.report)
 
 

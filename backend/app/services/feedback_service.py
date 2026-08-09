@@ -50,9 +50,7 @@ def compute_objective_metrics(messages: list[Message]) -> dict:
 
     total_speaking_time = user_duration_total + ai_duration_total
     talk_time_pct = (
-        round((user_duration_total / total_speaking_time) * 100, 1)
-        if total_speaking_time
-        else 0.0
+        round((user_duration_total / total_speaking_time) * 100, 1) if total_speaking_time else 0.0
     )
 
     sentence_lengths = [_word_count(m.text) for m in user_msgs if m.text.strip()]

@@ -39,9 +39,7 @@ async def ensure_bucket() -> None:
     await asyncio.to_thread(_ensure_bucket_sync)
 
 
-def build_audio_key(
-    session_id: uuid.UUID, turn_index: int, speaker: str, extension: str
-) -> str:
+def build_audio_key(session_id: uuid.UUID, turn_index: int, speaker: str, extension: str) -> str:
     return f"sessions/{session_id}/turn-{turn_index:04d}-{speaker}.{extension}"
 
 

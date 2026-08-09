@@ -23,9 +23,9 @@ def estimate_cost_usd(model: str, input_tokens: int, output_tokens: int) -> floa
     prices = settings.gemini_pricing.get(model)
     if not prices:
         return 0.0
-    return (input_tokens / 1_000_000) * prices["input"] + (
-        output_tokens / 1_000_000
-    ) * prices["output"]
+    return (input_tokens / 1_000_000) * prices["input"] + (output_tokens / 1_000_000) * prices[
+        "output"
+    ]
 
 
 async def log_usage(

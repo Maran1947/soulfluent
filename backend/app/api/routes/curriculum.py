@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user
-from app.database import get_db
 from app.models.user import User
 from app.schemas.curriculum import (
     CurriculumLibraryOut,
@@ -19,8 +17,9 @@ _USER_PROGRESS: dict[str, dict] = {}
 
 @router.get("", response_model=CurriculumLibraryOut)
 async def get_curriculum():
-    return CurriculumLibraryOut(personas=PERSONAS_INFO, weeks=TRACK_A_WEEKS, tracks=TRACKS)
-
+    return CurriculumLibraryOut.model_validate(
+        {"personas": PERSONAS_INFO, "weeks": TRACK_A_WEEKS, "tracks": TRACKS}
+    )
 
 
 @router.get("/progress", response_model=CurriculumProgressOut)
