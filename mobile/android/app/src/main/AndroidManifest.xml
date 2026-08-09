@@ -8,7 +8,7 @@
     <application
         android:label="FluentSoul"
         android:name="${applicationName}"
-        android:icon="@android:drawable/ic_dialog_info"
+        android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"

@@ -7,16 +7,34 @@ class FluentSoulLogo extends StatelessWidget {
   final double size;
   final Color primaryColor;
   final Color backgroundColor;
+  final bool useAssetImage;
 
   const FluentSoulLogo({
     super.key,
     this.size = 58.0,
     this.primaryColor = AppTheme.primary,
     this.backgroundColor = const Color(0xFFFFEBE5),
+    this.useAssetImage = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (useAssetImage) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(size * 0.32),
+        child: Image.asset(
+          'assets/images/logo.png',
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => _buildWaveFallback(),
+        ),
+      );
+    }
+    return _buildWaveFallback();
+  }
+
+  Widget _buildWaveFallback() {
     return Container(
       width: size,
       height: size,
@@ -74,82 +92,68 @@ class GoogleLogoIcon extends StatelessWidget {
 class _GoogleLogoPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final double w = size.width;
-    final double h = size.height;
-    final double cx = w / 2;
-    final double cy = h / 2;
-    final double radius = w / 2;
+    final double s = size.width;
+    final double scale = s / 24.0;
+    canvas.scale(scale, scale);
 
     final Paint paint = Paint()..style = PaintingStyle.fill;
 
-    // Blue sweep (Right & Top right)
+    // 1. Blue Path (#4285F4)
     paint.color = const Color(0xFF4285F4);
     final Path bluePath = Path()
-      ..moveTo(cx, cy)
-      ..lineTo(w, cy)
-      ..arcTo(
-        Rect.fromCircle(center: Offset(cx, cy), radius: radius),
-        0,
-        -math.pi * 0.45,
-        false,
-      )
+      ..moveTo(22.56, 12.25)
+      ..cubicTo(22.56, 11.47, 22.49, 10.72, 22.36, 10.0)
+      ..lineTo(12.0, 10.0)
+      ..lineTo(12.0, 14.26)
+      ..lineTo(17.92, 14.26)
+      ..cubicTo(17.66, 15.63, 16.88, 16.79, 15.71, 17.57)
+      ..lineTo(15.71, 20.34)
+      ..lineTo(19.28, 20.34)
+      ..cubicTo(21.36, 18.42, 22.56, 15.6, 22.56, 12.25)
       ..close();
     canvas.drawPath(bluePath, paint);
 
-    // Red sweep (Top left)
-    paint.color = const Color(0xFFEA4335);
-    final Path redPath = Path()
-      ..moveTo(cx, cy)
-      ..arcTo(
-        Rect.fromCircle(center: Offset(cx, cy), radius: radius),
-        -math.pi * 0.45,
-        -math.pi * 0.55,
-        false,
-      )
-      ..close();
-    canvas.drawPath(redPath, paint);
-
-    // Yellow sweep (Bottom left)
-    paint.color = const Color(0xFFFBBC05);
-    final Path yellowPath = Path()
-      ..moveTo(cx, cy)
-      ..arcTo(
-        Rect.fromCircle(center: Offset(cx, cy), radius: radius),
-        math.pi,
-        -math.pi * 0.45,
-        false,
-      )
-      ..close();
-    canvas.drawPath(yellowPath, paint);
-
-    // Green sweep (Bottom right)
+    // 2. Green Path (#34A853)
     paint.color = const Color(0xFF34A853);
     final Path greenPath = Path()
-      ..moveTo(cx, cy)
-      ..arcTo(
-        Rect.fromCircle(center: Offset(cx, cy), radius: radius),
-        math.pi * 0.55,
-        -math.pi * 0.55,
-        false,
-      )
+      ..moveTo(12.0, 23.0)
+      ..cubicTo(14.97, 23.0, 17.46, 22.02, 19.28, 20.34)
+      ..lineTo(15.71, 17.57)
+      ..cubicTo(14.73, 18.23, 13.48, 18.63, 12.0, 18.63)
+      ..cubicTo(9.14, 18.63, 6.71, 16.7, 5.84, 14.1)
+      ..lineTo(2.18, 14.1)
+      ..lineTo(2.18, 16.94)
+      ..cubicTo(3.99, 20.53, 7.7, 23.0, 12.0, 23.0)
       ..close();
     canvas.drawPath(greenPath, paint);
 
-    // Center cutout hole
-    paint.color = Colors.white;
-    canvas.drawCircle(Offset(cx, cy), radius * 0.55, paint);
+    // 3. Yellow Path (#FBBC05)
+    paint.color = const Color(0xFFFBBC05);
+    final Path yellowPath = Path()
+      ..moveTo(5.84, 14.09)
+      ..cubicTo(5.62, 13.43, 5.49, 12.73, 5.49, 12.0)
+      ..cubicTo(5.49, 11.27, 5.62, 10.57, 5.84, 9.91)
+      ..lineTo(5.84, 7.07)
+      ..lineTo(2.18, 7.07)
+      ..cubicTo(1.43, 8.55, 1.0, 10.22, 1.0, 12.0)
+      ..cubicTo(1.0, 13.78, 1.43, 15.45, 2.18, 16.93)
+      ..lineTo(5.03, 14.71)
+      ..lineTo(5.84, 14.09)
+      ..close();
+    canvas.drawPath(yellowPath, paint);
 
-    // Horizontal bar cutout in white
-    paint.color = Colors.white;
-    final Rect cutoutRect = Rect.fromLTRB(cx, cy - radius * 0.55, w, cy);
-    canvas.drawRect(cutoutRect, paint);
-
-    // Blue horizontal bar
-    paint.color = const Color(0xFF4285F4);
-    final Rect blueBarRect = Rect.fromLTRB(
-        cx - radius * 0.1, cy - radius * 0.28, w, cy + radius * 0.28);
-    canvas.drawRRect(
-        RRect.fromRectAndRadius(blueBarRect, const Radius.circular(1)), paint);
+    // 4. Red Path (#EA4335)
+    paint.color = const Color(0xFFEA4335);
+    final Path redPath = Path()
+      ..moveTo(12.0, 5.38)
+      ..cubicTo(13.62, 5.38, 15.06, 5.94, 16.21, 7.02)
+      ..lineTo(19.36, 3.87)
+      ..cubicTo(17.45, 2.09, 14.97, 1.0, 12.0, 1.0)
+      ..cubicTo(7.7, 1.0, 3.99, 3.47, 2.18, 7.07)
+      ..lineTo(5.84, 9.91)
+      ..cubicTo(6.71, 7.31, 9.14, 5.38, 12.0, 5.38)
+      ..close();
+    canvas.drawPath(redPath, paint);
   }
 
   @override
