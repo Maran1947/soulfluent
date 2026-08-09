@@ -130,7 +130,7 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
                           Row(
                             children: [
                               Text(
-                                'Your Path',
+                                'Fluency Track',
                                 style: GoogleFonts.outfit(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,

@@ -411,15 +411,15 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.map_rounded),
-            label: '30-Day Path',
+            icon: Icon(Icons.alt_route_rounded),
+            label: 'Fluency Track',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.stadium_rounded),
             label: 'Arena',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.crop_square_rounded),
+            icon: Icon(Icons.bolt_rounded),
             label: 'Challenges',
           ),
         ],
