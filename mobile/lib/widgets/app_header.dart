@@ -300,19 +300,62 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  String _getGreetingMessage(String? userName) {
+  Widget _buildGreetingHeaderWidget(String? userName) {
     final hour = DateTime.now().hour;
     final firstName = (userName != null && userName.trim().isNotEmpty)
         ? userName.trim().split(' ')[0]
-        : '';
+        : 'Practitioner';
     final timeGreeting = hour < 12
         ? 'Good Morning'
         : (hour < 17 ? 'Good Afternoon' : 'Good Evening');
 
-    if (firstName.isNotEmpty) {
-      return '$timeGreeting, $firstName 👋';
-    }
-    return '$timeGreeting 👋';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '$timeGreeting, ',
+                style: GoogleFonts.outfit(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFFFA5A3A),
+                ),
+              ),
+              Text(
+                firstName,
+                style: GoogleFonts.outfit(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 3),
+              const Text(
+                '👋',
+                style: TextStyle(fontSize: 17),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 1),
+        Text(
+          "Keep showing up. You've got this!",
+          style: GoogleFonts.inter(
+            fontSize: 11,
+            color: const Color(0xFF94A3B8),
+            fontWeight: FontWeight.w500,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
   }
 
   @override
@@ -321,12 +364,11 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     final auth = context.watch<AuthProvider>();
     final user = auth.currentUser;
 
-    final displayTitle = (title.isEmpty || title == 'FluentSoul')
-        ? _getGreetingMessage(user?.name)
-        : title;
+    final isDefaultGreeting = (title.isEmpty || title == 'FluentSoul');
 
     return AppBar(
       automaticallyImplyLeading: false,
+      toolbarHeight: isDefaultGreeting ? 64 : 56,
       title: Row(
         children: [
           if (showBack) ...[
@@ -340,25 +382,27 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           const FluentSoulLogo(size: 32),
           const SizedBox(width: 10),
           Expanded(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: ShaderMask(
-                shaderCallback: (bounds) => const LinearGradient(
-                  colors: [Color(0xFFFA5A3A), Color(0xFFF25C40)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ).createShader(bounds),
-                child: Text(
-                  displayTitle,
-                  style: GoogleFonts.outfit(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+            child: isDefaultGreeting
+                ? _buildGreetingHeaderWidget(user?.name)
+                : FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: ShaderMask(
+                      shaderCallback: (bounds) => const LinearGradient(
+                        colors: [Color(0xFFFA5A3A), Color(0xFFF25C40)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds),
+                      child: Text(
+                        title,
+                        style: GoogleFonts.outfit(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
           ),
           const Spacer(),
 

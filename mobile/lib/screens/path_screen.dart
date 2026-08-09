@@ -43,6 +43,19 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  String _getWeekSubtitle(String range) {
+    if (range.contains('1-7') || range.contains('1–7')) {
+      return 'Start your journey. Build momentum.';
+    }
+    if (range.contains('8-14') || range.contains('8–14')) {
+      return 'Organize thoughts with conviction.';
+    }
+    if (range.contains('15-21') || range.contains('15–21')) {
+      return 'Debate with grace and clarity.';
+    }
+    return 'Command presence in any room.';
+  }
+
   String _dayState(CurriculumDay day, int currentDay, bool reviewMode,
       List<int> completedDays) {
     if (completedDays.contains(day.d)) return 'done';
@@ -219,201 +232,111 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
                         ..._weeks.map((week) {
                           return Column(
                             children: [
-                              // Week Banner Card
+                              // Week Banner Card matching reference screenshot 1
                               Container(
-                                margin:
-                                    const EdgeInsets.only(bottom: 24, top: 12),
-                                width: MediaQuery.of(context).size.width * 0.88,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 18, vertical: 14),
+                                margin: const EdgeInsets.only(
+                                    bottom: 28, top: 14, left: 16, right: 16),
+                                padding: const EdgeInsets.fromLTRB(20, 18, 18, 18),
                                 decoration: BoxDecoration(
-                                  color: cardBg,
-                                  borderRadius: BorderRadius.circular(18),
-                                  border: Border.all(color: borderColor),
+                                  color: isDark
+                                      ? const Color(0xFF0F172A)
+                                      : const Color(0xFFFFFFFF),
+                                  borderRadius: BorderRadius.circular(22),
+                                  border: Border.all(
+                                    color: const Color(0xFFFA5A3A).withOpacity(0.45),
+                                    width: 1.2,
+                                  ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black
-                                          .withOpacity(isDark ? 0.2 : 0.04),
-                                      blurRadius: 10,
+                                      color: const Color(0xFFFA5A3A).withOpacity(0.12),
+                                      blurRadius: 18,
                                       offset: const Offset(0, 4),
                                     ),
                                   ],
                                 ),
-                                child: Column(
+                                child: Row(
                                   children: [
-                                    Text(
-                                      week.range.toUpperCase(),
-                                      style: GoogleFonts.inter(
-                                        fontSize: 11,
-                                        color: AppTheme.primary,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 0.08,
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            week.range.toUpperCase(),
+                                            style: GoogleFonts.inter(
+                                              fontSize: 11,
+                                              color: const Color(0xFFFA5A3A),
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 0.6,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            week.title,
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: headingColor,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            _getWeekSubtitle(week.range),
+                                            style: GoogleFonts.inter(
+                                              fontSize: 12.5,
+                                              color: subtitleColor,
+                                              height: 1.3,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      week.title,
-                                      style: GoogleFonts.outfit(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: headingColor,
+                                    const SizedBox(width: 12),
+                                    // Glowing 3D Flame Icon on Base Platform
+                                    Container(
+                                      width: 54,
+                                      height: 54,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: isDark
+                                            ? const Color(0xFF1E293B)
+                                            : const Color(0xFFFFEBE5),
+                                        border: Border.all(
+                                          color: const Color(0xFFFA5A3A)
+                                              .withOpacity(0.3),
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: const Color(0xFFFA5A3A)
+                                                .withOpacity(0.3),
+                                            blurRadius: 14,
+                                            spreadRadius: 2,
+                                          )
+                                        ],
+                                      ),
+                                      child: const Center(
+                                        child: Text('🔥',
+                                            style: TextStyle(fontSize: 26)),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
 
-                              // Week Days Nodes
-                              ...week.days.asMap().entries.map((entry) {
-                                final i = entry.key;
-                                final day = entry.value;
-                                final state = _dayState(
-                                    day, currentDay, reviewMode, completedDays);
-                                final isMilestone = day.mode == 'milestone';
-
-                                // Calculate X fraction for serpentine S-curve layout
-                                final xFrac = 0.5 + math.sin(i * 1.05) * 0.28;
-                                final size = isMilestone ? 72.0 : 64.0;
-
-                                return Container(
-                                  height: 92,
-                                  width: double.infinity,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Positioned(
-                                        left:
-                                            (MediaQuery.of(context).size.width *
-                                                    xFrac) -
-                                                (size / 2),
-                                        child: Column(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                if (state == 'locked') {
-                                                  _showToast(
-                                                      'Complete Day ${day.d - 1} to unlock Day ${day.d}',
-                                                      isDark);
-                                                  return;
-                                                }
-                                                _openSheet(
-                                                    day, activeTrack, isDark);
-                                              },
-                                              child: AnimatedBuilder(
-                                                animation: _pulseAnimation,
-                                                builder: (context, child) {
-                                                  return Container(
-                                                    width: size,
-                                                    height: size,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: state == 'done'
-                                                          ? const Color(
-                                                              0xFF10B981)
-                                                          : (state == 'current'
-                                                              ? AppTheme.primary
-                                                              : (isDark
-                                                                  ? const Color(
-                                                                      0xFF1E293B)
-                                                                  : const Color(
-                                                                      0xFFE2E8F0))),
-                                                      border: Border.all(
-                                                        color: isMilestone
-                                                            ? AppTheme.primary
-                                                            : (state == 'locked'
-                                                                ? borderColor
-                                                                : Colors
-                                                                    .transparent),
-                                                        width: isMilestone
-                                                            ? 3
-                                                            : (state == 'locked'
-                                                                ? 2
-                                                                : 0),
-                                                      ),
-                                                      boxShadow: state ==
-                                                              'current'
-                                                          ? [
-                                                              BoxShadow(
-                                                                color: AppTheme
-                                                                    .primary
-                                                                    .withOpacity(
-                                                                        0.35),
-                                                                blurRadius: 18 +
-                                                                    _pulseAnimation
-                                                                        .value,
-                                                                spreadRadius: 2 +
-                                                                    (_pulseAnimation
-                                                                            .value /
-                                                                        3),
-                                                              ),
-                                                            ]
-                                                          : [
-                                                              BoxShadow(
-                                                                color: Colors
-                                                                    .black
-                                                                    .withOpacity(
-                                                                        0.1),
-                                                                blurRadius: 8,
-                                                                offset:
-                                                                    const Offset(
-                                                                        0, 4),
-                                                              )
-                                                            ],
-                                                    ),
-                                                    child: Center(
-                                                      child: state == 'locked'
-                                                          ? Icon(
-                                                              Icons
-                                                                  .lock_outline,
-                                                              color:
-                                                                  subtitleColor,
-                                                              size: 20)
-                                                          : (isMilestone
-                                                              ? const Text(
-                                                                  '🏆',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          24))
-                                                              : (state == 'done'
-                                                                  ? const Icon(
-                                                                      Icons
-                                                                          .check,
-                                                                      color: Colors
-                                                                          .white,
-                                                                      size: 28)
-                                                                  : Text(
-                                                                      '${day.d}',
-                                                                      style: GoogleFonts
-                                                                          .outfit(
-                                                                        fontSize:
-                                                                            20,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        color: Colors
-                                                                            .white,
-                                                                      ),
-                                                                    ))),
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                            const SizedBox(height: 4),
-                                            Text(
-                                              'Day ${day.d}',
-                                              style: GoogleFonts.inter(
-                                                fontSize: 11,
-                                                fontWeight: FontWeight.w600,
-                                                color: subtitleColor,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }),
+                              // Week Days Nodes with S-Curve Layout & Connecting Dashed Line
+                              _WeekNodesWidget(
+                                week: week,
+                                currentDay: currentDay,
+                                reviewMode: reviewMode,
+                                completedDays: completedDays,
+                                activeTrack: activeTrack,
+                                isDark: isDark,
+                                headingColor: headingColor,
+                                subtitleColor: subtitleColor,
+                                pulseAnimation: _pulseAnimation,
+                                onOpenSheet: _openSheet,
+                                onShowToast: _showToast,
+                                dayState: _dayState,
+                              ),
                             ],
                           );
                         }),
@@ -533,6 +456,292 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Dashed Curve Line Painter for path nodes
+class _WindingPathDashedPainter extends CustomPainter {
+  final List<Offset> points;
+  final Color color;
+
+  _WindingPathDashedPainter({
+    required this.points,
+    this.color = const Color(0xFF475569),
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (points.length < 2) return;
+
+    final paint = Paint()
+      ..color = color.withOpacity(0.6)
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final path = Path();
+    path.moveTo(points[0].dx, points[0].dy);
+
+    for (int i = 0; i < points.length - 1; i++) {
+      final p1 = points[i];
+      final p2 = points[i + 1];
+      final controlY = (p1.dy + p2.dy) / 2;
+      path.cubicTo(p1.dx, controlY, p2.dx, controlY, p2.dx, p2.dy);
+    }
+
+    final pathMetrics = path.computeMetrics();
+    for (final metric in pathMetrics) {
+      double distance = 0.0;
+      const dashWidth = 5.0;
+      const dashSpace = 6.0;
+
+      while (distance < metric.length) {
+        final len = (distance + dashWidth < metric.length)
+            ? dashWidth
+            : metric.length - distance;
+        final extractPath = metric.extractPath(distance, distance + len);
+        canvas.drawPath(extractPath, paint);
+        distance += dashWidth + dashSpace;
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _WindingPathDashedPainter oldDelegate) => true;
+}
+
+/// Week Nodes Widget with connecting dashed curves
+class _WeekNodesWidget extends StatelessWidget {
+  final CurriculumWeek week;
+  final int currentDay;
+  final bool reviewMode;
+  final List<int> completedDays;
+  final String activeTrack;
+  final bool isDark;
+  final Color headingColor;
+  final Color subtitleColor;
+  final Animation<double> pulseAnimation;
+  final Function(CurriculumDay, String, bool) onOpenSheet;
+  final Function(String, bool) onShowToast;
+  final String Function(CurriculumDay, int, bool, List<int>) dayState;
+
+  const _WeekNodesWidget({
+    required this.week,
+    required this.currentDay,
+    required this.reviewMode,
+    required this.completedDays,
+    required this.activeTrack,
+    required this.isDark,
+    required this.headingColor,
+    required this.subtitleColor,
+    required this.pulseAnimation,
+    required this.onOpenSheet,
+    required this.onShowToast,
+    required this.dayState,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    const nodeRowHeight = 118.0;
+    final totalHeight = week.days.length * nodeRowHeight;
+    const xFractions = [0.22, 0.52, 0.78, 0.48, 0.22, 0.52, 0.78];
+
+    // Calculate (X, Y) center coordinates for each node
+    final List<Offset> points = [];
+    for (int i = 0; i < week.days.length; i++) {
+      final xFrac = xFractions[i % xFractions.length];
+      final x = screenWidth * xFrac;
+      final y = (i + 0.5) * nodeRowHeight - 18;
+      points.add(Offset(x, y));
+    }
+
+    return Container(
+      height: totalHeight,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          // 1. Dashed Curve Line Painter behind nodes
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _WindingPathDashedPainter(
+                points: points,
+                color: isDark
+                    ? const Color(0xFF64748B)
+                    : const Color(0xFF94A3B8),
+              ),
+            ),
+          ),
+
+          // 2. Day Nodes
+          ...week.days.asMap().entries.map((entry) {
+            final i = entry.key;
+            final day = entry.value;
+            final state = dayState(day, currentDay, reviewMode, completedDays);
+            final isMilestone = day.mode == 'milestone';
+
+            final xFrac = xFractions[i % xFractions.length];
+            final nodeSize = isMilestone ? 68.0 : 60.0;
+            final isCurrent = state == 'current';
+            final isDone = state == 'done';
+            final isLocked = state == 'locked';
+
+            return Positioned(
+              top: i * nodeRowHeight,
+              left: (screenWidth * xFrac) - (nodeSize / 2),
+              child: GestureDetector(
+                onTap: () {
+                  if (isLocked) {
+                    onShowToast(
+                        'Complete Day ${day.d - 1} to unlock Day ${day.d}',
+                        isDark);
+                    return;
+                  }
+                  onOpenSheet(day, activeTrack, isDark);
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        AnimatedBuilder(
+                          animation: pulseAnimation,
+                          builder: (context, child) {
+                            return Container(
+                              width: nodeSize,
+                              height: nodeSize,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: isCurrent
+                                    ? const LinearGradient(
+                                        colors: [
+                                          Color(0xFFFA5A3A),
+                                          Color(0xFFF25C40)
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      )
+                                    : null,
+                                color: isDone
+                                    ? const Color(0xFF10B981)
+                                    : (isCurrent
+                                        ? null
+                                        : (isDark
+                                            ? const Color(0xFF161E2E)
+                                            : const Color(0xFFE2E8F0))),
+                                border: Border.all(
+                                  color: isCurrent
+                                      ? const Color(0xFFFF8A75)
+                                      : (isDone
+                                          ? const Color(0xFF34D399)
+                                          : (isDark
+                                              ? const Color(0xFF334155)
+                                              : const Color(0xFFCBD5E1))),
+                                  width: isCurrent ? 3 : 2,
+                                ),
+                                boxShadow: isCurrent
+                                    ? [
+                                        BoxShadow(
+                                          color: const Color(0xFFFA5A3A)
+                                              .withOpacity(0.4),
+                                          blurRadius: 18 + pulseAnimation.value,
+                                          spreadRadius: 2 +
+                                              (pulseAnimation.value / 3),
+                                        ),
+                                      ]
+                                    : [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.12),
+                                          blurRadius: 6,
+                                          offset: const Offset(0, 3),
+                                        )
+                                      ],
+                              ),
+                              child: Center(
+                                child: isLocked
+                                    ? const Icon(Icons.lock_outline_rounded,
+                                        color: Color(0xFF64748B), size: 22)
+                                    : (isMilestone
+                                        ? const Text('🏆',
+                                            style: TextStyle(fontSize: 24))
+                                        : (isDone
+                                            ? const Icon(Icons.check_rounded,
+                                                color: Colors.white, size: 28)
+                                            : Text(
+                                                '${day.d}',
+                                                style: GoogleFonts.outfit(
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              ))),
+                              ),
+                            );
+                          },
+                        ),
+
+                        // Green Top Right Checkmark Badge ONLY when Day is ACTUALLY COMPLETED
+                        if (isDone)
+                          Positioned(
+                            top: -1,
+                            right: -1,
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: const Color(0xFF10B981),
+                                border: Border.all(
+                                    color: Colors.white, width: 1.5),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.25),
+                                    blurRadius: 4,
+                                  )
+                                ],
+                              ),
+                              child: const Center(
+                                child: Icon(Icons.check_rounded,
+                                    color: Colors.white, size: 12),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      'Day ${day.d}',
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: isCurrent
+                            ? const Color(0xFFFA5A3A)
+                            : (isDone
+                                ? const Color(0xFF10B981)
+                                : subtitleColor),
+                      ),
+                    ),
+                    Text(
+                      isCurrent
+                          ? "Let's begin!"
+                          : (isDone ? "Completed" : "Locked"),
+                      style: GoogleFonts.inter(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w500,
+                        color: isCurrent
+                            ? const Color(0xFFFA5A3A).withOpacity(0.85)
+                            : subtitleColor.withOpacity(0.7),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
         ],
       ),
     );
