@@ -51,7 +51,8 @@ class TimeStepWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppTheme.primary.withOpacity(isDark ? 0.18 : 0.1)
@@ -81,7 +82,9 @@ class TimeStepWidget extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppTheme.primary.withOpacity(0.2)
-                            : (isDark ? Colors.white10 : Colors.black.withOpacity(0.04)),
+                            : (isDark
+                                ? Colors.white10
+                                : Colors.black.withOpacity(0.04)),
                         shape: BoxShape.circle,
                       ),
                       child: Center(
@@ -89,7 +92,9 @@ class TimeStepWidget extends StatelessWidget {
                           time['icon'] as IconData,
                           color: isSelected
                               ? AppTheme.primary
-                              : (isDark ? AppTheme.textMain : AppTheme.textMainLight),
+                              : (isDark
+                                  ? AppTheme.textMain
+                                  : AppTheme.textMainLight),
                           size: 22,
                         ),
                       ),
@@ -103,16 +108,21 @@ class TimeStepWidget extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: isSelected
                               ? AppTheme.primary
-                              : (isDark ? AppTheme.textMain : AppTheme.textMainLight),
+                              : (isDark
+                                  ? AppTheme.textMain
+                                  : AppTheme.textMainLight),
                         ),
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppTheme.primary
-                            : (isDark ? Colors.white10 : Colors.black.withOpacity(0.05)),
+                            : (isDark
+                                ? Colors.white10
+                                : Colors.black.withOpacity(0.05)),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
@@ -122,7 +132,9 @@ class TimeStepWidget extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: isSelected
                               ? Colors.white
-                              : (isDark ? AppTheme.textMuted : AppTheme.textMutedLight),
+                              : (isDark
+                                  ? AppTheme.textMuted
+                                  : AppTheme.textMutedLight),
                         ),
                       ),
                     ),

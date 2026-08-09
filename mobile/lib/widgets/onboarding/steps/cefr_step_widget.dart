@@ -57,7 +57,8 @@ class CEFRStepWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppTheme.primary.withOpacity(isDark ? 0.18 : 0.1)
@@ -82,11 +83,14 @@ class CEFRStepWidget extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppTheme.primary
-                            : (isDark ? Colors.white10 : Colors.black.withOpacity(0.06)),
+                            : (isDark
+                                ? Colors.white10
+                                : Colors.black.withOpacity(0.06)),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -96,7 +100,9 @@ class CEFRStepWidget extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: isSelected
                               ? Colors.white
-                              : (isDark ? AppTheme.textMain : AppTheme.textMainLight),
+                              : (isDark
+                                  ? AppTheme.textMain
+                                  : AppTheme.textMainLight),
                         ),
                       ),
                     ),
@@ -115,16 +121,21 @@ class CEFRStepWidget extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                     color: isSelected
                                         ? AppTheme.primary
-                                        : (isDark ? AppTheme.textMain : AppTheme.textMainLight),
+                                        : (isDark
+                                            ? AppTheme.textMain
+                                            : AppTheme.textMainLight),
                                   ),
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 3),
                                 decoration: BoxDecoration(
                                   color: isSelected
                                       ? AppTheme.primary.withOpacity(0.2)
-                                      : (isDark ? Colors.white10 : Colors.black.withOpacity(0.05)),
+                                      : (isDark
+                                          ? Colors.white10
+                                          : Colors.black.withOpacity(0.05)),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
@@ -134,7 +145,9 @@ class CEFRStepWidget extends StatelessWidget {
                                     fontWeight: FontWeight.w600,
                                     color: isSelected
                                         ? AppTheme.primary
-                                        : (isDark ? AppTheme.textMuted : AppTheme.textMutedLight),
+                                        : (isDark
+                                            ? AppTheme.textMuted
+                                            : AppTheme.textMutedLight),
                                   ),
                                 ),
                               ),
@@ -145,7 +158,9 @@ class CEFRStepWidget extends StatelessWidget {
                             level['subtitle']!,
                             style: TextStyle(
                               fontSize: 12,
-                              color: isDark ? AppTheme.textMuted : AppTheme.textMutedLight,
+                              color: isDark
+                                  ? AppTheme.textMuted
+                                  : AppTheme.textMutedLight,
                             ),
                           ),
                         ],

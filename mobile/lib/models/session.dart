@@ -41,14 +41,17 @@ class GDMessage {
   });
 
   factory GDMessage.fromJson(Map<String, dynamic> json) {
-    final rawSpeaker = json['speaker'] as String? ?? json['speaker_type'] as String? ?? 'user';
+    final rawSpeaker =
+        json['speaker'] as String? ?? json['speaker_type'] as String? ?? 'user';
     final isUser = rawSpeaker == 'user';
     return GDMessage(
       id: json['id']?.toString() ?? '',
       sessionId: json['session_id']?.toString() ?? '',
-      personaKey: isUser ? null : (json['persona_key'] as String? ?? rawSpeaker),
+      personaKey:
+          isUser ? null : (json['persona_key'] as String? ?? rawSpeaker),
       speakerType: isUser ? 'user' : 'persona',
-      transcript: json['text'] as String? ?? json['transcript'] as String? ?? '',
+      transcript:
+          json['text'] as String? ?? json['transcript'] as String? ?? '',
       audioUrl: json['audio_url'] as String?,
       createdAt: json['created_at'] as String? ?? '',
     );

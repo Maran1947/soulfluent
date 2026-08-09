@@ -82,7 +82,8 @@ class GoalsStepWidget extends StatelessWidget {
               ),
               if (selectedGoals.isNotEmpty)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
                     color: AppTheme.primary.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(12),
@@ -108,7 +109,8 @@ class GoalsStepWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppTheme.primary.withOpacity(isDark ? 0.18 : 0.1)
@@ -117,7 +119,9 @@ class GoalsStepWidget extends StatelessWidget {
                     border: Border.all(
                       color: isSelected
                           ? AppTheme.primary
-                          : (isDark ? AppTheme.borderDark : AppTheme.borderLight),
+                          : (isDark
+                              ? AppTheme.borderDark
+                              : AppTheme.borderLight),
                       width: isSelected ? 2 : 1,
                     ),
                     boxShadow: isSelected
@@ -138,7 +142,9 @@ class GoalsStepWidget extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: isSelected
                               ? AppTheme.primary.withOpacity(0.2)
-                              : (isDark ? Colors.white10 : Colors.black.withOpacity(0.04)),
+                              : (isDark
+                                  ? Colors.white10
+                                  : Colors.black.withOpacity(0.04)),
                           shape: BoxShape.circle,
                         ),
                         child: Center(
@@ -146,7 +152,9 @@ class GoalsStepWidget extends StatelessWidget {
                             goal['icon'] as IconData,
                             color: isSelected
                                 ? AppTheme.primary
-                                : (isDark ? AppTheme.textMain : AppTheme.textMainLight),
+                                : (isDark
+                                    ? AppTheme.textMain
+                                    : AppTheme.textMainLight),
                             size: 22,
                           ),
                         ),
@@ -163,7 +171,9 @@ class GoalsStepWidget extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color: isSelected
                                     ? AppTheme.primary
-                                    : (isDark ? AppTheme.textMain : AppTheme.textMainLight),
+                                    : (isDark
+                                        ? AppTheme.textMain
+                                        : AppTheme.textMainLight),
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -171,7 +181,9 @@ class GoalsStepWidget extends StatelessWidget {
                               goal['subtitle'] as String,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: isDark ? AppTheme.textMuted : AppTheme.textMutedLight,
+                                color: isDark
+                                    ? AppTheme.textMuted
+                                    : AppTheme.textMutedLight,
                               ),
                             ),
                           ],
@@ -184,16 +196,21 @@ class GoalsStepWidget extends StatelessWidget {
                         height: 22,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: isSelected ? AppTheme.primary : Colors.transparent,
+                          color: isSelected
+                              ? AppTheme.primary
+                              : Colors.transparent,
                           border: Border.all(
                             color: isSelected
                                 ? AppTheme.primary
-                                : (isDark ? AppTheme.textMuted : AppTheme.textMutedLight),
+                                : (isDark
+                                    ? AppTheme.textMuted
+                                    : AppTheme.textMutedLight),
                             width: 2,
                           ),
                         ),
                         child: isSelected
-                            ? const Icon(Icons.check, size: 14, color: Colors.white)
+                            ? const Icon(Icons.check,
+                                size: 14, color: Colors.white)
                             : null,
                       ),
                     ],

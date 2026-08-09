@@ -87,7 +87,8 @@ class OnboardingProvider extends ChangeNotifier {
   Future<void> initOnboarding() async {
     try {
       final rawData = await _storage.read(key: AppConstants.onboardingKey);
-      final isOnboardedStr = await _storage.read(key: AppConstants.isOnboardedKey);
+      final isOnboardedStr =
+          await _storage.read(key: AppConstants.isOnboardedKey);
 
       if (rawData != null && rawData.isNotEmpty) {
         _data = OnboardingData.decodeJson(rawData);
@@ -159,7 +160,8 @@ class OnboardingProvider extends ChangeNotifier {
 
   Future<void> completeOnboarding(BuildContext context) async {
     _data = _data.copyWith(isOnboarded: true);
-    await _storage.write(key: AppConstants.onboardingKey, value: _data.encodeJson());
+    await _storage.write(
+        key: AppConstants.onboardingKey, value: _data.encodeJson());
     await _storage.write(key: AppConstants.isOnboardedKey, value: 'true');
     notifyListeners();
 

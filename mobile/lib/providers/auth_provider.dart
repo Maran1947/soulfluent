@@ -33,7 +33,9 @@ class AuthProvider extends ChangeNotifier {
         } catch (e) {
           final errStr = e.toString().toLowerCase();
           // Only purge token if it is explicitly unauthorized/invalid (401)
-          if (errStr.contains('401') || errStr.contains('invalid') || errStr.contains('expired')) {
+          if (errStr.contains('401') ||
+              errStr.contains('invalid') ||
+              errStr.contains('expired')) {
             _token = null;
             _currentUser = null;
             _apiService.setAuthToken(null);

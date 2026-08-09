@@ -5,7 +5,8 @@ class OnboardingData {
   String cefrLevel; // 'A1', 'A2', 'B1', 'B2', 'C1' or '' (unselected)
   List<String> selectedGoals; // Multi-select list of focus area goals
   int dailyGoalMinutes; // 5, 10, 15, 30 or 0 (unselected)
-  Map<String, dynamic> customAnswers; // Extensible key-value map for future steps
+  Map<String, dynamic>
+      customAnswers; // Extensible key-value map for future steps
   bool isOnboarded;
 
   OnboardingData({

@@ -45,7 +45,8 @@ class LanguageStepWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppTheme.primary.withOpacity(isDark ? 0.18 : 0.1)
@@ -75,7 +76,9 @@ class LanguageStepWidget extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppTheme.primary.withOpacity(0.2)
-                            : (isDark ? Colors.white10 : Colors.black.withOpacity(0.04)),
+                            : (isDark
+                                ? Colors.white10
+                                : Colors.black.withOpacity(0.04)),
                         shape: BoxShape.circle,
                       ),
                       child: Center(
@@ -83,7 +86,9 @@ class LanguageStepWidget extends StatelessWidget {
                           lang['icon'] as IconData,
                           color: isSelected
                               ? AppTheme.primary
-                              : (isDark ? AppTheme.textMain : AppTheme.textMainLight),
+                              : (isDark
+                                  ? AppTheme.textMain
+                                  : AppTheme.textMainLight),
                           size: 22,
                         ),
                       ),
@@ -100,7 +105,9 @@ class LanguageStepWidget extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               color: isSelected
                                   ? AppTheme.primary
-                                  : (isDark ? AppTheme.textMain : AppTheme.textMainLight),
+                                  : (isDark
+                                      ? AppTheme.textMain
+                                      : AppTheme.textMainLight),
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -108,7 +115,9 @@ class LanguageStepWidget extends StatelessWidget {
                             lang['subtitle'] as String,
                             style: TextStyle(
                               fontSize: 12,
-                              color: isDark ? AppTheme.textMuted : AppTheme.textMutedLight,
+                              color: isDark
+                                  ? AppTheme.textMuted
+                                  : AppTheme.textMutedLight,
                             ),
                           ),
                         ],
@@ -120,16 +129,20 @@ class LanguageStepWidget extends StatelessWidget {
                       height: 22,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: isSelected ? AppTheme.primary : Colors.transparent,
+                        color:
+                            isSelected ? AppTheme.primary : Colors.transparent,
                         border: Border.all(
                           color: isSelected
                               ? AppTheme.primary
-                              : (isDark ? AppTheme.textMuted : AppTheme.textMutedLight),
+                              : (isDark
+                                  ? AppTheme.textMuted
+                                  : AppTheme.textMutedLight),
                           width: 2,
                         ),
                       ),
                       child: isSelected
-                          ? const Icon(Icons.check, size: 14, color: Colors.white)
+                          ? const Icon(Icons.check,
+                              size: 14, color: Colors.white)
                           : null,
                     ),
                   ],

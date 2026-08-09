@@ -112,8 +112,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final gd = context.read<GDProvider>();
 
-    final personaKeys =
-        selectedMode == 'debate' ? [selectedDebateOpponent] : selectedGdPartners;
+    final personaKeys = selectedMode == 'debate'
+        ? [selectedDebateOpponent]
+        : selectedGdPartners;
 
     final success = await gd.startSession(
       topic: topic,
@@ -1030,7 +1031,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.smart_toy_rounded, color: AppTheme.primary, size: 20),
+                const Icon(Icons.smart_toy_rounded,
+                    color: AppTheme.primary, size: 20),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
@@ -1058,28 +1060,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
-      ],
-    );
-  }
-
-  Widget _buildPersonaRow(String name, String desc, Color textColor) {
-    return Row(
-      children: [
-        const Icon(Icons.check_circle, size: 16, color: AppTheme.primary),
-        const SizedBox(width: 8),
-        Expanded(
-          child: RichText(
-            text: TextSpan(
-              style: GoogleFonts.inter(fontSize: 13, color: textColor),
-              children: [
-                TextSpan(
-                    text: '$name: ',
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(text: desc),
-              ],
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -1132,7 +1112,8 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             _buildDifficultyChip('beginner', 'Beginner', isDark, borderColor),
             const SizedBox(width: 8),
-            _buildDifficultyChip('intermediate', 'Intermediate', isDark, borderColor),
+            _buildDifficultyChip(
+                'intermediate', 'Intermediate', isDark, borderColor),
             const SizedBox(width: 8),
             _buildDifficultyChip('advanced', 'Advanced', isDark, borderColor),
           ],

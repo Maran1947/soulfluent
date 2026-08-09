@@ -34,7 +34,8 @@ class PersonaCard extends StatelessWidget {
 
   String get flag {
     if (isUser) return '🇮🇳';
-    if (personaKey.contains('riya') || personaKey.contains('rohan')) return '🇮🇳';
+    if (personaKey.contains('riya') || personaKey.contains('rohan'))
+      return '🇮🇳';
     return '🇺🇸';
   }
 
@@ -163,7 +164,8 @@ class PersonaCard extends StatelessWidget {
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.volume_up_rounded, size: 12, color: Colors.white),
+                    Icon(Icons.volume_up_rounded,
+                        size: 12, color: Colors.white),
                     SizedBox(width: 4),
                     Text(
                       'SPEAKING',

@@ -8,7 +8,8 @@ class PlanGeneratorStepWidget extends StatefulWidget {
   const PlanGeneratorStepWidget({super.key});
 
   @override
-  State<PlanGeneratorStepWidget> createState() => _PlanGeneratorStepWidgetState();
+  State<PlanGeneratorStepWidget> createState() =>
+      _PlanGeneratorStepWidgetState();
 }
 
 class _PlanGeneratorStepWidgetState extends State<PlanGeneratorStepWidget> {
@@ -142,7 +143,8 @@ class _PlanGeneratorStepWidgetState extends State<PlanGeneratorStepWidget> {
                                   : (isDark ? Colors.white10 : Colors.black12)),
                         ),
                         child: isCompleted
-                            ? const Icon(Icons.check, size: 14, color: Colors.white)
+                            ? const Icon(Icons.check,
+                                size: 14, color: Colors.white)
                             : (isCurrent
                                 ? const Padding(
                                     padding: EdgeInsets.all(4),
@@ -163,7 +165,9 @@ class _PlanGeneratorStepWidgetState extends State<PlanGeneratorStepWidget> {
                                 ? FontWeight.w600
                                 : FontWeight.normal,
                             color: isCompleted
-                                ? (isDark ? AppTheme.textMain : AppTheme.textMainLight)
+                                ? (isDark
+                                    ? AppTheme.textMain
+                                    : AppTheme.textMainLight)
                                 : (isCurrent
                                     ? AppTheme.primary
                                     : (isDark
@@ -219,7 +223,9 @@ class _PlanGeneratorStepWidgetState extends State<PlanGeneratorStepWidget> {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: isDark ? AppTheme.textMuted : AppTheme.textMutedLight,
+                          color: isDark
+                              ? AppTheme.textMuted
+                              : AppTheme.textMutedLight,
                         ),
                       ),
                     ],
@@ -263,7 +269,8 @@ class _PlanGeneratorStepWidgetState extends State<PlanGeneratorStepWidget> {
                   ),
                   elevation: 4,
                 ),
-                icon: const Icon(Icons.rocket_launch_rounded, color: Colors.white, size: 20),
+                icon: const Icon(Icons.rocket_launch_rounded,
+                    color: Colors.white, size: 20),
                 label: const Text(
                   'Start My Journey',
                   style: TextStyle(

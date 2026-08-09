@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -236,19 +235,22 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
                               Container(
                                 margin: const EdgeInsets.only(
                                     bottom: 28, top: 14, left: 16, right: 16),
-                                padding: const EdgeInsets.fromLTRB(20, 18, 18, 18),
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 18, 18, 18),
                                 decoration: BoxDecoration(
                                   color: isDark
                                       ? const Color(0xFF0F172A)
                                       : const Color(0xFFFFFFFF),
                                   borderRadius: BorderRadius.circular(22),
                                   border: Border.all(
-                                    color: const Color(0xFFFA5A3A).withOpacity(0.45),
+                                    color: const Color(0xFFFA5A3A)
+                                        .withOpacity(0.45),
                                     width: 1.2,
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: const Color(0xFFFA5A3A).withOpacity(0.12),
+                                      color: const Color(0xFFFA5A3A)
+                                          .withOpacity(0.12),
                                       blurRadius: 18,
                                       offset: const Offset(0, 4),
                                     ),
@@ -258,7 +260,8 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
                                   children: [
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             week.range.toUpperCase(),
@@ -372,33 +375,41 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
                                     height: 44,
                                     decoration: BoxDecoration(
                                       gradient: const LinearGradient(
-                                        colors: [Color(0xFFFA5A3A), Color(0xFFF25C40)],
+                                        colors: [
+                                          Color(0xFFFA5A3A),
+                                          Color(0xFFF25C40)
+                                        ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
                                       ),
                                       borderRadius: BorderRadius.circular(14),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: const Color(0xFFF25C40).withOpacity(0.4),
+                                          color: const Color(0xFFF25C40)
+                                              .withOpacity(0.4),
                                           blurRadius: 10,
                                         )
                                       ],
                                     ),
                                     child: const Center(
-                                      child: Text('🚀', style: TextStyle(fontSize: 22)),
+                                      child: Text('🚀',
+                                          style: TextStyle(fontSize: 22)),
                                     ),
                                   ),
                                   const SizedBox(width: 14),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8, vertical: 3),
                                           decoration: BoxDecoration(
-                                            color: AppTheme.primary.withOpacity(0.15),
-                                            borderRadius: BorderRadius.circular(6),
+                                            color: AppTheme.primary
+                                                .withOpacity(0.15),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
                                           ),
                                           child: Text(
                                             '✨ MORE TRACKS COMING SOON',
@@ -569,9 +580,8 @@ class _WeekNodesWidget extends StatelessWidget {
             child: CustomPaint(
               painter: _WindingPathDashedPainter(
                 points: points,
-                color: isDark
-                    ? const Color(0xFF64748B)
-                    : const Color(0xFF94A3B8),
+                color:
+                    isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
               ),
             ),
           ),
@@ -649,8 +659,8 @@ class _WeekNodesWidget extends StatelessWidget {
                                           color: const Color(0xFFFA5A3A)
                                               .withOpacity(0.4),
                                           blurRadius: 18 + pulseAnimation.value,
-                                          spreadRadius: 2 +
-                                              (pulseAnimation.value / 3),
+                                          spreadRadius:
+                                              2 + (pulseAnimation.value / 3),
                                         ),
                                       ]
                                     : [
@@ -695,8 +705,8 @@ class _WeekNodesWidget extends StatelessWidget {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: const Color(0xFF10B981),
-                                border: Border.all(
-                                    color: Colors.white, width: 1.5),
+                                border:
+                                    Border.all(color: Colors.white, width: 1.5),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.25),

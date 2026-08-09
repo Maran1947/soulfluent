@@ -66,7 +66,8 @@ class AudioService {
       _isPlaying = true;
       final bytes = base64Decode(base64String);
       final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/ai_reply_${DateTime.now().millisecondsSinceEpoch}.wav');
+      final file = File(
+          '${tempDir.path}/ai_reply_${DateTime.now().millisecondsSinceEpoch}.wav');
       await file.writeAsBytes(bytes);
       await _player.setFilePath(file.path);
       await _player.play();

@@ -35,11 +35,16 @@ class TranscriptDrawer extends StatelessWidget {
         String speakerName = 'You';
         if (!isUser && msg.personaKey != null) {
           final pk = msg.personaKey!.toLowerCase();
-          if (pk.contains('riya')) speakerName = 'Riya';
-          else if (pk.contains('rohan')) speakerName = 'Rohan';
-          else if (pk.contains('alex')) speakerName = 'Alex';
-          else if (pk.contains('emily')) speakerName = 'Emily';
-          else speakerName = msg.personaKey!.toUpperCase();
+          if (pk.contains('riya'))
+            speakerName = 'Riya';
+          else if (pk.contains('rohan'))
+            speakerName = 'Rohan';
+          else if (pk.contains('alex'))
+            speakerName = 'Alex';
+          else if (pk.contains('emily'))
+            speakerName = 'Emily';
+          else
+            speakerName = msg.personaKey!.toUpperCase();
         }
 
         final Color avatarBg = isUser

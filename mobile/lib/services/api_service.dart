@@ -64,7 +64,8 @@ class ApiService {
     if (response.statusCode != 200) {
       try {
         final error = jsonDecode(response.body);
-        throw Exception(error['detail'] ?? 'Failed to get user profile (${response.statusCode})');
+        throw Exception(error['detail'] ??
+            'Failed to get user profile (${response.statusCode})');
       } catch (_) {
         throw Exception('Failed to get user profile (${response.statusCode})');
       }
@@ -219,7 +220,8 @@ class ApiService {
       'audio',
       filePath,
       filename: filename,
-      contentType: isM4a ? MediaType('audio', 'm4a') : MediaType('audio', 'webm'),
+      contentType:
+          isM4a ? MediaType('audio', 'm4a') : MediaType('audio', 'webm'),
     ));
 
     final streamedResponse = await request.send();

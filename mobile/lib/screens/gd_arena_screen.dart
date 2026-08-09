@@ -56,7 +56,6 @@ class _GDArenaScreenState extends State<GDArenaScreen> {
     }
 
     final personas = session.personas;
-    final totalParticipants = personas.length + 1; // personas + user
 
     return Scaffold(
       backgroundColor: const Color(0xFF090D16),
@@ -194,7 +193,8 @@ class _GDArenaScreenState extends State<GDArenaScreen> {
             // 3. Meeting Grid Layout (Google Meet Flexible Grid Tiles)
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final allTiles = <Widget>[
@@ -213,7 +213,8 @@ class _GDArenaScreenState extends State<GDArenaScreen> {
                         personality: gd.isRecording
                             ? 'Speaking...'
                             : 'Active Participant',
-                        isSpeaking: gd.isRecording || gd.activeSpeaker == 'user',
+                        isSpeaking:
+                            gd.isRecording || gd.activeSpeaker == 'user',
                         isUser: true,
                       ),
                     ];
@@ -543,21 +544,25 @@ class _GDArenaScreenState extends State<GDArenaScreen> {
         backgroundColor: const Color(0xFF1E293B),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text('Leave Call?',
-            style: GoogleFonts.outfit(color: Colors.white, fontWeight: FontWeight.bold)),
+            style: GoogleFonts.outfit(
+                color: Colors.white, fontWeight: FontWeight.bold)),
         content: Text(
           'Are you sure you want to leave the call? Your GD feedback report will be generated for recorded turns.',
-          style: GoogleFonts.inter(color: const Color(0xFF94A3B8), fontSize: 13),
+          style:
+              GoogleFonts.inter(color: const Color(0xFF94A3B8), fontSize: 13),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text('Cancel', style: GoogleFonts.inter(color: const Color(0xFF94A3B8))),
+            child: Text('Cancel',
+                style: GoogleFonts.inter(color: const Color(0xFF94A3B8))),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFEF4444),
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
             ),
             onPressed: () {
               Navigator.pop(ctx);

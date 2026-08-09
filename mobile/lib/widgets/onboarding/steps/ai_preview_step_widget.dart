@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
@@ -103,11 +102,13 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: isDark ? AppTheme.textMain : AppTheme.textMainLight,
+                        color:
+                            isDark ? AppTheme.textMain : AppTheme.textMainLight,
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppTheme.primary.withOpacity(0.18),
                         borderRadius: BorderRadius.circular(12),
@@ -154,10 +155,14 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                       child: Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.03),
+                          color: isDark
+                              ? Colors.white.withOpacity(0.05)
+                              : Colors.black.withOpacity(0.03),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: isDark ? AppTheme.borderDark : AppTheme.borderLight,
+                            color: isDark
+                                ? AppTheme.borderDark
+                                : AppTheme.borderLight,
                           ),
                         ),
                         child: Column(
@@ -168,7 +173,9 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
-                                color: isDark ? AppTheme.textMuted : AppTheme.textMutedLight,
+                                color: isDark
+                                    ? AppTheme.textMuted
+                                    : AppTheme.textMutedLight,
                               ),
                             ),
                             const SizedBox(height: 3),
@@ -177,7 +184,9 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                               style: TextStyle(
                                 fontSize: 12.5,
                                 fontWeight: FontWeight.bold,
-                                color: isDark ? AppTheme.textMain : AppTheme.textMainLight,
+                                color: isDark
+                                    ? AppTheme.textMain
+                                    : AppTheme.textMainLight,
                               ),
                             ),
                             const Text(
@@ -192,14 +201,16 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                       ),
                     ),
                     const SizedBox(width: 8),
-                    const Icon(Icons.arrow_forward_rounded, color: AppTheme.primary, size: 18),
+                    const Icon(Icons.arrow_forward_rounded,
+                        color: AppTheme.primary, size: 18),
                     const SizedBox(width: 8),
                     // With FluentSoul Card
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppTheme.primary.withOpacity(isDark ? 0.2 : 0.1),
+                          color:
+                              AppTheme.primary.withOpacity(isDark ? 0.2 : 0.1),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                             color: AppTheme.primary.withOpacity(0.5),
@@ -222,7 +233,9 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                               style: TextStyle(
                                 fontSize: 12.5,
                                 fontWeight: FontWeight.bold,
-                                color: isDark ? AppTheme.textMain : AppTheme.textMainLight,
+                                color: isDark
+                                    ? AppTheme.textMain
+                                    : AppTheme.textMainLight,
                               ),
                             ),
                             const Text(
@@ -270,9 +283,24 @@ class _GrowthProgressionPainter extends CustomPainter {
     // Stage Milestone Data Points (No Days!)
     final List<Map<String, dynamic>> stages = [
       {'label': 'Start', 'x': width * 0.08, 'y': height * 0.85, 'score': '45%'},
-      {'label': 'Practice', 'x': width * 0.35, 'y': height * 0.65, 'score': '65%'},
-      {'label': 'Confidence', 'x': width * 0.65, 'y': height * 0.40, 'score': '82%'},
-      {'label': 'Mastery', 'x': width * 0.92, 'y': height * 0.15, 'score': '95%'},
+      {
+        'label': 'Practice',
+        'x': width * 0.35,
+        'y': height * 0.65,
+        'score': '65%'
+      },
+      {
+        'label': 'Confidence',
+        'x': width * 0.65,
+        'y': height * 0.40,
+        'score': '82%'
+      },
+      {
+        'label': 'Mastery',
+        'x': width * 0.92,
+        'y': height * 0.15,
+        'score': '95%'
+      },
     ];
 
     // Grid Horizontal Reference Lines
@@ -286,7 +314,8 @@ class _GrowthProgressionPainter extends CustomPainter {
     }
 
     // Build Curve Path connecting stage nodes
-    final Path curvePath = Path()..moveTo(stages[0]['x'] as double, stages[0]['y'] as double);
+    final Path curvePath = Path()
+      ..moveTo(stages[0]['x'] as double, stages[0]['y'] as double);
     for (int i = 0; i < stages.length - 1; i++) {
       final double x1 = stages[i]['x'] as double;
       final double y1 = stages[i]['y'] as double;
@@ -324,7 +353,8 @@ class _GrowthProgressionPainter extends CustomPainter {
     canvas.drawPath(curvePath, linePaint);
 
     // Draw Stage Nodes & Labels
-    final TextPainter textPainter = TextPainter(textDirection: TextDirection.ltr);
+    final TextPainter textPainter =
+        TextPainter(textDirection: TextDirection.ltr);
 
     for (int i = 0; i < stages.length; i++) {
       final double mx = stages[i]['x'] as double;
@@ -347,7 +377,9 @@ class _GrowthProgressionPainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2.5;
       final Paint innerCircle = Paint()
-        ..color = isActive ? primaryColor : (isDark ? const Color(0xFF1E293B) : Colors.white);
+        ..color = isActive
+            ? primaryColor
+            : (isDark ? const Color(0xFF1E293B) : Colors.white);
 
       canvas.drawCircle(Offset(mx, my), 6, innerCircle);
       canvas.drawCircle(Offset(mx, my), 6, outerCircle);
@@ -358,7 +390,9 @@ class _GrowthProgressionPainter extends CustomPainter {
         style: TextStyle(
           fontSize: 10.5,
           fontWeight: FontWeight.bold,
-          color: isActive ? primaryColor : (isDark ? AppTheme.textMuted : AppTheme.textMutedLight),
+          color: isActive
+              ? primaryColor
+              : (isDark ? AppTheme.textMuted : AppTheme.textMutedLight),
         ),
       );
       textPainter.layout();

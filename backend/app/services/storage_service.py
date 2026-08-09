@@ -44,7 +44,9 @@ def build_audio_key(session_id: uuid.UUID, turn_index: int, speaker: str, extens
 
 
 def _put_object_sync(key: str, data: bytes, content_type: str) -> None:
-    _s3.put_object(Bucket=settings.cloud_storage_bucket, Key=key, Body=data, ContentType=content_type)
+    _s3.put_object(
+        Bucket=settings.cloud_storage_bucket, Key=key, Body=data, ContentType=content_type
+    )
 
 
 async def upload_audio(key: str, data: bytes, content_type: str) -> str:

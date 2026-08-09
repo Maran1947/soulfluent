@@ -73,9 +73,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     children: [
                       if (!provider.isFirstStep && !isLastStep)
                         IconButton(
-                          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                          icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                              size: 20),
                           onPressed: _previousStep,
-                          color: isDark ? AppTheme.textMain : AppTheme.textMainLight,
+                          color: isDark
+                              ? AppTheme.textMain
+                              : AppTheme.textMainLight,
                         )
                       else
                         const SizedBox(width: 40),
@@ -95,7 +98,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
-                                color: isDark ? AppTheme.textMuted : AppTheme.textMutedLight,
+                                color: isDark
+                                    ? AppTheme.textMuted
+                                    : AppTheme.textMutedLight,
                               ),
                             ),
                           ],
@@ -111,7 +116,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: LinearProgressIndicator(
                       value: provider.progressRatio,
                       minHeight: 5,
-                      backgroundColor: isDark ? AppTheme.cardDark : AppTheme.borderLight,
+                      backgroundColor:
+                          isDark ? AppTheme.cardDark : AppTheme.borderLight,
                       color: AppTheme.primary,
                     ),
                   ),
@@ -129,7 +135,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   children: [
                     Row(
                       children: [
-                        Icon(currentStep.icon, color: AppTheme.primary, size: 22),
+                        Icon(currentStep.icon,
+                            color: AppTheme.primary, size: 22),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
@@ -137,7 +144,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: isDark ? AppTheme.textMain : AppTheme.textMainLight,
+                              color: isDark
+                                  ? AppTheme.textMain
+                                  : AppTheme.textMainLight,
                             ),
                           ),
                         ),
@@ -148,7 +157,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       currentStep.subtitle,
                       style: TextStyle(
                         fontSize: 12,
-                        color: isDark ? AppTheme.textMuted : AppTheme.textMutedLight,
+                        color: isDark
+                            ? AppTheme.textMuted
+                            : AppTheme.textMutedLight,
                       ),
                     ),
                   ],
@@ -162,7 +173,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(), // Controlled via buttons
+                physics:
+                    const NeverScrollableScrollPhysics(), // Controlled via buttons
                 onPageChanged: _onPageChanged,
                 itemCount: provider.steps.length,
                 itemBuilder: (context, index) {
@@ -179,7 +191,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   color: isDark ? AppTheme.cardDark : AppTheme.cardLight,
                   border: Border(
                     top: BorderSide(
-                      color: isDark ? AppTheme.borderDark : AppTheme.borderLight,
+                      color:
+                          isDark ? AppTheme.borderDark : AppTheme.borderLight,
                     ),
                   ),
                 ),
@@ -193,7 +206,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             side: BorderSide(
-                              color: isDark ? AppTheme.borderDark : AppTheme.borderLight,
+                              color: isDark
+                                  ? AppTheme.borderDark
+                                  : AppTheme.borderLight,
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -204,7 +219,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
-                              color: isDark ? AppTheme.textMain : AppTheme.textMainLight,
+                              color: isDark
+                                  ? AppTheme.textMain
+                                  : AppTheme.textMainLight,
                             ),
                           ),
                         ),
@@ -240,11 +257,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                provider.isFirstStep ? 'Get Started' : 'Continue',
+                                provider.isFirstStep
+                                    ? 'Get Started'
+                                    : 'Continue',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: isValid ? Colors.white : Colors.white38,
+                                  color:
+                                      isValid ? Colors.white : Colors.white38,
                                 ),
                               ),
                               const SizedBox(width: 8),

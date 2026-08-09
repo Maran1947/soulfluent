@@ -3,6 +3,7 @@ from app.models.feedback_report import FeedbackReport
 from app.models.llm_usage import CallType, LLMUsageLog
 from app.models.message import GDMessage, Message
 from app.models.session import Difficulty, GDSession, Session, SessionMode, SessionStatus
+from app.models.user import User, UserRole
 from app.models.user_preference import UserPreference
 
 __all__ = [
