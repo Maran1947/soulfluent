@@ -1,0 +1,84 @@
+name: CI/CD Pipeline - Backend Deploy to GCP
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Backend Lint & Type Check
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy')) || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Backend Dependencies
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install ruff pyright
+
+      - name: Backend Lint & Typecheck
+        run: |
+          cd backend
+          ruff check app
+          pyright app
+
+  deploy:
+    name: Deploy Backend to GCP VM
+    needs: check
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy')) || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH to GCP VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.GCP_VM_IP }}
+          username: ${{ secrets.GCP_VM_USERNAME }}
+          key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            echo "==== Connected to GCP Compute Engine VM ===="
+            
+            PROJECT_DIR="soulfluent"
+            if [ ! -d "$PROJECT_DIR" ]; then
+              git clone https://github.com/Maran1947/soulfluent.git $PROJECT_DIR
+            fi
+            cd $PROJECT_DIR
+            
+            echo "==== Pulling latest backend code ===="
+            git fetch origin main
+            git reset --hard origin/main
+            
+            echo "==== Configuring Production Environment ===="
+            cat << 'EOF' > .env.prod
+            POSTGRES_USER=${{ secrets.POSTGRES_USER || 'fluentsoul' }}
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD || 'fluentsoul123' }}
+            POSTGRES_DB=${{ secrets.POSTGRES_DB || 'flountsoul' }}
+            DATABASE_URL=${{ secrets.DATABASE_URL || 'postgresql+asyncpg://fluentsoul:fluentsoul123@db:5432/flountsoul' }}
+            SECRET_KEY=${{ secrets.JWT_SECRET_KEY || 'production_secret_key_change_me' }}
+            FRONTEND_ORIGIN=${{ secrets.FRONTEND_ORIGIN || '*' }}
+            EOF
+            
+            echo "==== Building and Deploying Backend Container ===="
+            docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build --remove-orphans
+            
+            echo "==== Cleaning up unused images ===="
+            docker image prune -f
+            
+            echo "==== Backend Deployment Complete! ===="
