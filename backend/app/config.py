@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 60 * 24 * 7  # 7 days
 
     # Database
-    database_url: str = "postgresql+asyncpg://soulfluent:soulfluent@localhost:5432/soulfluent"
+    database_url: str = "postgresql+asyncpg://fluentsoul:fluentsoul@localhost:5432/flountsoul"
 
     # Gemini
     # gemini-2.5-flash was restricted from new API keys ahead of its official
@@ -44,9 +44,9 @@ class Settings(BaseSettings):
 
     # Object storage (Cloud Storage / MinIO, S3-compatible) for user + AI turn audio
     cloud_storage_endpoint_url: str = "http://localhost:9010"
-    cloud_storage_access_key: str = "soulfluent"
-    cloud_storage_secret_key: str = "soulfluent123"
-    cloud_storage_bucket: str = "soulfluent-audio"
+    cloud_storage_access_key: str = "fluentsoul"
+    cloud_storage_secret_key: str = "fluentsoul123"
+    cloud_storage_bucket: str = "fluentsoul-audio"
     cloud_storage_presigned_url_expire_seconds: int = 3600
 
     # GD session defaults
