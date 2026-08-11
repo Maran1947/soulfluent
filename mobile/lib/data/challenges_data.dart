@@ -222,6 +222,21 @@ const List<Challenge> ALL_CHALLENGES = [
 
   // ---- QUIET: no voice required ----
   Challenge(
+    id: 'word_search_grid',
+    title: 'Word Search Grid',
+    zone: 'quiet',
+    requiresVoice: false,
+    timerSeconds: 90,
+    timerType: 'countdown',
+    description:
+        'A letter grid with boundaries. Read 1-line definitions and find hidden words inside!',
+    xp: 50,
+    difficulty: 'silver',
+    icon: 'ti-grid-dots',
+    inDailyRotation: true,
+    hasMoodCheckin: false,
+  ),
+  Challenge(
     id: 'word_race',
     title: 'Word race',
     zone: 'quiet',

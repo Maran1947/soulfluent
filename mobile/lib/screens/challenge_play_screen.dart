@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/models/challenge.dart';
 import 'package:fluentsoul_mobile/providers/challenges_provider.dart';
+import 'package:fluentsoul_mobile/widgets/word_search_grid_widget.dart';
 
 class ChallengePlayScreen extends StatefulWidget {
   final Challenge challenge;
@@ -353,6 +354,14 @@ class _ChallengePlayScreenState extends State<ChallengePlayScreen> {
     Color coralPrimary,
   ) {
     final id = widget.challenge.id;
+
+    if (id == 'word_search_grid') {
+      return WordSearchGridWidget(
+        onComplete: () {
+          _finishChallenge();
+        },
+      );
+    }
 
     if (id == 'word_race') {
       return Column(

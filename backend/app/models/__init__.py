@@ -1,5 +1,15 @@
 from app.models.account import Account, AccountStatus, SignupSource
 from app.models.feedback_report import FeedbackReport
+from app.models.fluency_track import (
+    ActivityStatus,
+    ActivityType,
+    FluencyTrack,
+    FluencyTrackType,
+    NodeActivity,
+    Stage,
+    StageNode,
+    UserActivityProgress,
+)
 from app.models.llm_usage import CallType, LLMUsageLog
 from app.models.message import GDMessage, Message
 from app.models.session import Difficulty, GDSession, Session, SessionMode, SessionStatus
@@ -23,4 +33,12 @@ __all__ = [
     "FeedbackReport",
     "LLMUsageLog",
     "CallType",
+    "FluencyTrack",
+    "FluencyTrackType",
+    "Stage",
+    "StageNode",
+    "NodeActivity",
+    "ActivityType",
+    "ActivityStatus",
+    "UserActivityProgress",
 ]

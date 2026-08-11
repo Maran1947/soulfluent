@@ -34,3 +34,24 @@ async def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found or inactive"
         )
     return user
+
+
+async def get_current_user_optional(
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    db: AsyncSession = Depends(get_db),
+) -> User | None:
+    if credentials is None or not credentials.credentials:
+        return None
+    try:
+        user_id = decode_access_token(credentials.credentials)
+        if user_id is None:
+            return None
+        result = await db.execute(
+            select(User).where(User.id == user_id).options(selectinload(User.account))
+        )
+        user = result.scalar_one_or_none()
+        if user is None or not user.is_active or (user.account and not user.account.is_active):
+            return None
+        return user
+    except Exception:
+        return None

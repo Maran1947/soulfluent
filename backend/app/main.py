@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import auth, challenges, curriculum, gd
+from app.api.routes import auth, gd, tracks
 from app.config import get_settings
+from app.database import AsyncSessionLocal
+from app.seeds.seed_fluency_tracks import seed_fluency_tracks
 from app.services.storage_service import ensure_bucket
 
 settings = get_settings()
@@ -19,13 +21,17 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix=settings.api_prefix)
 app.include_router(gd.router, prefix=settings.api_prefix)
-app.include_router(curriculum.router, prefix=settings.api_prefix)
-app.include_router(challenges.router, prefix=settings.api_prefix)
+app.include_router(tracks.router, prefix=settings.api_prefix)
 
 
 @app.on_event("startup")
 async def on_startup():
     await ensure_bucket()
+    try:
+        async with AsyncSessionLocal() as db:
+            await seed_fluency_tracks(db)
+    except Exception as e:
+        print(f"Auto-seed error on startup: {e}")
 
 
 @app.get("/health")
