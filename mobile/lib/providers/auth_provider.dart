@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluentsoul_mobile/config/constants.dart';
 import 'package:fluentsoul_mobile/models/user.dart';
 import 'package:fluentsoul_mobile/services/api_service.dart';
+import 'package:fluentsoul_mobile/utils/error_utils.dart';
 
 class AuthProvider extends ChangeNotifier {
   final ApiService _apiService;
@@ -10,13 +11,16 @@ class AuthProvider extends ChangeNotifier {
 
   User? _currentUser;
   String? _token;
-  bool _isLoading = true;
+  bool _isInitializing = true;
+  bool _isSubmitting = false;
   String? _errorMessage;
 
   User? get currentUser => _currentUser;
   String? get token => _token;
   bool get isAuthenticated => _token != null && _currentUser != null;
-  bool get isLoading => _isLoading;
+  bool get isInitializing => _isInitializing;
+  bool get isSubmitting => _isSubmitting;
+  bool get isLoading => _isInitializing || _isSubmitting;
   String? get errorMessage => _errorMessage;
 
   AuthProvider(this._apiService) {
@@ -48,13 +52,13 @@ class AuthProvider extends ChangeNotifier {
       _currentUser = null;
       _apiService.setAuthToken(null);
     } finally {
-      _isLoading = false;
+      _isInitializing = false;
       notifyListeners();
     }
   }
 
   Future<bool> login(String email, String password) async {
-    _isLoading = true;
+    _isSubmitting = true;
     _errorMessage = null;
     notifyListeners();
 
@@ -64,19 +68,19 @@ class AuthProvider extends ChangeNotifier {
       _currentUser = res.user;
       _apiService.setAuthToken(_token);
       await _storage.write(key: AppConstants.tokenKey, value: _token);
-      _isLoading = false;
+      _isSubmitting = false;
       notifyListeners();
       return true;
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
-      _isLoading = false;
+      _errorMessage = formatUserFriendlyError(e);
+      _isSubmitting = false;
       notifyListeners();
       return false;
     }
   }
 
   Future<bool> register(String email, String password, String name) async {
-    _isLoading = true;
+    _isSubmitting = true;
     _errorMessage = null;
     notifyListeners();
 
@@ -86,12 +90,12 @@ class AuthProvider extends ChangeNotifier {
       _currentUser = res.user;
       _apiService.setAuthToken(_token);
       await _storage.write(key: AppConstants.tokenKey, value: _token);
-      _isLoading = false;
+      _isSubmitting = false;
       notifyListeners();
       return true;
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
-      _isLoading = false;
+      _errorMessage = formatUserFriendlyError(e);
+      _isSubmitting = false;
       notifyListeners();
       return false;
     }

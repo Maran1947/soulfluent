@@ -19,7 +19,7 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _obscurePassword = true;
 
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'you@example.com');
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
 
@@ -267,7 +267,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     style: GoogleFonts.inter(
                                         color: textMainColor, fontSize: 14),
                                     decoration: _buildInputDecoration(
-                                      hintText: 'you@example.com',
+                                      hintText: 'Enter your email address',
                                       prefixIcon: Icons.email_outlined,
                                       inputBgColor: inputBgColor,
                                       borderColor: borderColor,
@@ -375,7 +375,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             SizedBox(
                               height: 50,
                               child: ElevatedButton(
-                                onPressed: auth.isLoading ? null : _submit,
+                                onPressed: auth.isSubmitting ? null : _submit,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppTheme.primary,
                                   foregroundColor: Colors.white,
@@ -384,7 +384,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     borderRadius: BorderRadius.circular(14),
                                   ),
                                 ),
-                                child: auth.isLoading
+                                child: auth.isSubmitting
                                     ? const SizedBox(
                                         width: 22,
                                         height: 22,

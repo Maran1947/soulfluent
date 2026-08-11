@@ -332,13 +332,21 @@ class _WordSearchGridWidgetState extends State<WordSearchGridWidget> {
           ),
           const SizedBox(height: 16),
 
-          // Raw Pointer Listener for Smooth Drag & Tap Grid Selection
-          Listener(
-            key: _gridKey,
-            onPointerDown: _onPointerDown,
-            onPointerMove: _onPointerMove,
-            onPointerUp: _onPointerUp,
-            child: Container(
+          // Raw Pointer Listener & GestureDetector to prevent screen scrolling during grid drag selection
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onVerticalDragStart: (_) {},
+            onVerticalDragUpdate: (_) {},
+            onVerticalDragEnd: (_) {},
+            onHorizontalDragStart: (_) {},
+            onHorizontalDragUpdate: (_) {},
+            onHorizontalDragEnd: (_) {},
+            child: Listener(
+              key: _gridKey,
+              onPointerDown: _onPointerDown,
+              onPointerMove: _onPointerMove,
+              onPointerUp: _onPointerUp,
+              child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: isDark
@@ -417,6 +425,7 @@ class _WordSearchGridWidgetState extends State<WordSearchGridWidget> {
                 ),
               ),
             ),
+          ),
           ),
 
           const SizedBox(height: 20),

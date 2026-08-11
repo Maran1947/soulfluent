@@ -42,17 +42,11 @@ class FluentSoulApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: themeProvider.themeMode,
-            home: (auth.isLoading || onboarding.isLoading)
-                ? const Scaffold(
-                    body: Center(
-                      child: CircularProgressIndicator(color: AppTheme.primary),
-                    ),
-                  )
-                : (auth.isAuthenticated
-                    ? (onboarding.isOnboarded
-                        ? const HomeScreen()
-                        : const OnboardingScreen())
-                    : const AuthScreen()),
+            home: auth.isAuthenticated
+                ? (onboarding.isOnboarded
+                    ? const HomeScreen()
+                    : const OnboardingScreen())
+                : const AuthScreen(),
             routes: {
               '/auth': (context) => const AuthScreen(),
               '/onboarding': (context) => const OnboardingScreen(),

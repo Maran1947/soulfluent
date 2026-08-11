@@ -345,7 +345,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
         ),
         const SizedBox(height: 1),
         Text(
-          "Keep showing up. You've got this!",
+          "Keep showing up",
           style: GoogleFonts.inter(
             fontSize: 11,
             color: const Color(0xFF94A3B8),

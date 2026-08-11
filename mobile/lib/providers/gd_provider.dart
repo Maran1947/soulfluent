@@ -5,6 +5,7 @@ import 'package:fluentsoul_mobile/models/session.dart';
 import 'package:fluentsoul_mobile/models/report.dart';
 import 'package:fluentsoul_mobile/services/api_service.dart';
 import 'package:fluentsoul_mobile/services/audio_service.dart';
+import 'package:fluentsoul_mobile/utils/error_utils.dart';
 
 import 'package:fluentsoul_mobile/models/curriculum.dart';
 
@@ -127,7 +128,7 @@ class GDProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _errorMessage = formatUserFriendlyError(e);
       _isLoading = false;
       notifyListeners();
       return false;
@@ -176,7 +177,7 @@ class GDProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _errorMessage = formatUserFriendlyError(e);
       _isLoading = false;
       notifyListeners();
       return false;
@@ -202,7 +203,7 @@ class GDProvider extends ChangeNotifier {
       _activeSpeaker = 'user';
       notifyListeners();
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _errorMessage = formatUserFriendlyError(e);
       notifyListeners();
     }
   }
@@ -260,7 +261,7 @@ class GDProvider extends ChangeNotifier {
         await _audioService.playBase64Audio(turnRes.aiAudioBase64);
       }
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _errorMessage = formatUserFriendlyError(e);
     } finally {
       _isProcessingTurn = false;
       _activeSpeaker = null;
@@ -299,7 +300,7 @@ class GDProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _errorMessage = formatUserFriendlyError(e);
       _isLoading = false;
       notifyListeners();
       return false;
@@ -312,7 +313,7 @@ class GDProvider extends ChangeNotifier {
     try {
       _currentReport = await _apiService.getReport(sessionId);
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = formatUserFriendlyError(e);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -337,7 +338,7 @@ class GDProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _errorMessage = formatUserFriendlyError(e);
     } finally {
       _isLoading = false;
       notifyListeners();

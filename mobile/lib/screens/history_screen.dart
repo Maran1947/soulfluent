@@ -6,6 +6,7 @@ import 'package:fluentsoul_mobile/models/session.dart';
 import 'package:fluentsoul_mobile/providers/auth_provider.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
 import 'package:fluentsoul_mobile/services/api_service.dart';
+import 'package:fluentsoul_mobile/utils/error_utils.dart';
 import 'package:fluentsoul_mobile/widgets/app_header.dart';
 import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 import 'package:fluentsoul_mobile/widgets/skeleton_loader.dart';
@@ -44,7 +45,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       });
     } catch (e) {
       setState(() {
-        _error = e.toString().replaceAll('Exception: ', '');
+        _error = formatUserFriendlyError(e);
         _isLoading = false;
       });
     }
