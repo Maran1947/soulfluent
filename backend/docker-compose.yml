@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_USER: fluentsoul
       POSTGRES_PASSWORD: fluentsoul
-      POSTGRES_DB: flountsoul
+      POSTGRES_DB: fluentsoul
     ports:
       - "5346:5432"
     volumes:

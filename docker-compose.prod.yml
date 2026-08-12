@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-fluentsoul}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fluentsoul}
-      POSTGRES_DB: ${POSTGRES_DB:-flountsoul}
+      POSTGRES_DB: ${POSTGRES_DB:-fluentsoul}
     ports:
       - "5432:5432"
     volumes:
@@ -19,9 +19,7 @@ services:
       retries: 10
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: ghcr.io/maran1947/fluentsoul-backend:latest
     restart: unless-stopped
     env_file:
       - ${ENV_FILE:-.env.prod}

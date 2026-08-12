@@ -1,37 +1,58 @@
-"""S3-compatible (Cloud Storage / MinIO) storage for turn audio — both the user's original
-recording and the AI persona's synthesized reply, so a session can be
-replayed later rather than only leaving behind a text transcript.
+"""Storage service for turn audio — user recordings and AI persona replies.
 
-boto3 is synchronous, so every call here is pushed through a thread via
-asyncio.to_thread to avoid blocking the FastAPI event loop.
+Supports both:
+1. GCP Cloud Storage natively via `google-cloud-storage` using the VM's IAM Service Account (ADC)
+2. MinIO / S3 via `boto3` for local development
 """
 
 import asyncio
+from datetime import timedelta
 import uuid
-
-import boto3
-from botocore.client import Config
-from botocore.exceptions import ClientError
 
 from app.config import get_settings
 
 settings = get_settings()
 
-_s3 = boto3.client(
-    "s3",
-    endpoint_url=settings.cloud_storage_endpoint_url,
-    aws_access_key_id=settings.cloud_storage_access_key,
-    aws_secret_access_key=settings.cloud_storage_secret_key,
-    config=Config(signature_version="s3v4"),
-    region_name="us-east-1",
+_is_gcs = (
+    "storage.googleapis.com" in settings.cloud_storage_endpoint_url
+    or not settings.cloud_storage_access_key
 )
+
+if _is_gcs:
+    from google.cloud import storage  # type: ignore
+
+    _gcs_client = storage.Client()
+    _gcs_bucket = _gcs_client.bucket(settings.cloud_storage_bucket)
+    _s3 = None
+else:
+    import boto3
+    from botocore.client import Config
+    from botocore.exceptions import ClientError
+
+    _gcs_client = None
+    _gcs_bucket = None
+    _s3 = boto3.client(
+        "s3",
+        endpoint_url=settings.cloud_storage_endpoint_url,
+        aws_access_key_id=settings.cloud_storage_access_key,
+        aws_secret_access_key=settings.cloud_storage_secret_key,
+        config=Config(signature_version="s3v4"),
+        region_name="us-east-1",
+    )
 
 
 def _ensure_bucket_sync() -> None:
-    try:
-        _s3.head_bucket(Bucket=settings.cloud_storage_bucket)
-    except ClientError:
-        _s3.create_bucket(Bucket=settings.cloud_storage_bucket)
+    if _is_gcs and _gcs_client and _gcs_bucket:
+        try:
+            if not _gcs_bucket.exists():
+                _gcs_client.create_bucket(settings.cloud_storage_bucket)
+        except Exception as e:
+            print(f"GCS bucket verification/creation note: {e}")
+    elif _s3:
+        try:
+            _s3.head_bucket(Bucket=settings.cloud_storage_bucket)
+        except Exception:
+            _s3.create_bucket(Bucket=settings.cloud_storage_bucket)
 
 
 async def ensure_bucket() -> None:
@@ -44,9 +65,13 @@ def build_audio_key(session_id: uuid.UUID, turn_index: int, speaker: str, extens
 
 
 def _put_object_sync(key: str, data: bytes, content_type: str) -> None:
-    _s3.put_object(
-        Bucket=settings.cloud_storage_bucket, Key=key, Body=data, ContentType=content_type
-    )
+    if _is_gcs and _gcs_bucket:
+        blob = _gcs_bucket.blob(key)
+        blob.upload_from_string(data, content_type=content_type)
+    elif _s3:
+        _s3.put_object(
+            Bucket=settings.cloud_storage_bucket, Key=key, Body=data, ContentType=content_type
+        )
 
 
 async def upload_audio(key: str, data: bytes, content_type: str) -> str:
@@ -56,11 +81,23 @@ async def upload_audio(key: str, data: bytes, content_type: str) -> str:
 
 
 def _presigned_url_sync(key: str, expires_seconds: int) -> str:
-    return _s3.generate_presigned_url(
-        "get_object",
-        Params={"Bucket": settings.cloud_storage_bucket, "Key": key},
-        ExpiresIn=expires_seconds,
-    )
+    if _is_gcs and _gcs_bucket:
+        blob = _gcs_bucket.blob(key)
+        try:
+            return blob.generate_signed_url(
+                version="v4",
+                expiration=timedelta(seconds=expires_seconds),
+                method="GET",
+            )
+        except Exception:
+            return f"https://storage.googleapis.com/{settings.cloud_storage_bucket}/{key}"
+    elif _s3:
+        return _s3.generate_presigned_url(
+            "get_object",
+            Params={"Bucket": settings.cloud_storage_bucket, "Key": key},
+            ExpiresIn=expires_seconds,
+        )
+    return ""
 
 
 async def get_playback_url(key: str | None) -> str | None:
@@ -72,3 +109,4 @@ async def get_playback_url(key: str | None) -> str | None:
     return await asyncio.to_thread(
         _presigned_url_sync, key, settings.cloud_storage_presigned_url_expire_seconds
     )
+

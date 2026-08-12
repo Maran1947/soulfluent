@@ -91,7 +91,7 @@ shell:
 	docker compose exec backend bash
 
 db-shell:
-	docker compose exec db psql -U fluentsoul -d flountsoul
+	docker compose exec db psql -U fluentsoul -d fluentsoul
 
 minio:
 	docker compose up -d minio
