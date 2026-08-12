@@ -6,8 +6,8 @@ Supports both:
 """
 
 import asyncio
-from datetime import timedelta
 import uuid
+from datetime import timedelta
 
 from app.config import get_settings
 
@@ -27,7 +27,6 @@ if _is_gcs:
 else:
     import boto3
     from botocore.client import Config
-    from botocore.exceptions import ClientError
 
     _gcs_client = None
     _gcs_bucket = None
@@ -109,4 +108,3 @@ async def get_playback_url(key: str | None) -> str | None:
     return await asyncio.to_thread(
         _presigned_url_sync, key, settings.cloud_storage_presigned_url_expire_seconds
     )
-
