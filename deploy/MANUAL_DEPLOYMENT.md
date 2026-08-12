@@ -9,7 +9,7 @@ This guide details how to manually deploy the FluentSoul **Backend (FastAPI)** a
 - **Backend Service** (`port 8000` / `port 80`): FastAPI application running Uvicorn with auto database migration via Alembic on container startup.
 - **Database**:
   - **Option A (Cloud SQL - Recommended)**: Managed GCP PostgreSQL instance.
-  - **Option B (VM Containerized DB)**: PostgreSQL 16 Docker container running on the VM with `flountsoul` database.
+  - **Option B (VM Containerized DB)**: PostgreSQL 16 Docker container running on the VM with `fluentsoul` database.
 
 ---
 
@@ -65,8 +65,8 @@ cd soulfluent
 cat << 'EOF' > .env.prod
 POSTGRES_USER=fluentsoul
 POSTGRES_PASSWORD=your_secure_password_here
-POSTGRES_DB=flountsoul
-DATABASE_URL=postgresql+asyncpg://fluentsoul:your_secure_password_here@db:5432/flountsoul
+POSTGRES_DB=fluentsoul
+DATABASE_URL=postgresql+asyncpg://fluentsoul:your_secure_password_here@db:5432/fluentsoul
 SECRET_KEY=your_jwt_secret_key_here
 FRONTEND_ORIGIN=*
 EOF
@@ -99,12 +99,7 @@ curl http://localhost:8000/health
 
 ## 2. Automated CI/CD Deployment Trigger
 
-The GitHub Actions pipeline is configured to automatically run **only when a Pull Request is merged into `main` with the `deploy` label attached** (or when manually triggered via `workflow_dispatch`).
-
-### Trigger Workflow Requirements:
-1. Open a Pull Request pointing to `main`.
-2. Add the **`deploy`** label to the PR on GitHub.
-3. Merge the PR.
+The GitHub Actions pipeline is configured to automatically run **when code is pushed to `main`** or when a Pull Request is merged into `main` with the `deploy` label attached (or when manually triggered via `workflow_dispatch`).
 
 ---
 
@@ -116,7 +111,4 @@ Set up the following secrets in your GitHub repository under `Settings > Secrets
 |---|---|
 | `GCP_VM_IP` | Public IP of your GCP Compute Engine VM (e.g. `34.123.45.67`) |
 | `GCP_VM_USERNAME` | SSH User on GCP VM (e.g. `ubuntu`) |
-| `GCP_SSH_PRIVATE_KEY` | Contents of `~/.ssh/id_rsa` (Private Key corresponding to VM `~/.ssh/authorized_keys`) |
-| `POSTGRES_DB` | `flountsoul` |
-| `DATABASE_URL` | `postgresql+asyncpg://fluentsoul:password@db:5432/flountsoul` |
-| `JWT_SECRET_KEY` | Random secret key for backend authentication JWT tokens |
+| `GCP_SSH_PRIVATE_KEY` | Contents of `~/.ssh/gcp_deploy_key` (Private Key) |
