@@ -22,7 +22,7 @@ services:
     image: ghcr.io/maran1947/fluentsoul-backend:latest
     restart: unless-stopped
     env_file:
-      - ${ENV_FILE:-.env.prod}
+      - ${ENV_FILE:-.env}
     ports:
       - "8000:8000"
       - "80:8000"

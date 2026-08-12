@@ -62,7 +62,7 @@ newgrp docker
 git clone https://github.com/Maran1947/soulfluent.git
 cd soulfluent
 
-cat << 'EOF' > .env.prod
+cat << 'EOF' > .env
 POSTGRES_USER=fluentsoul
 POSTGRES_PASSWORD=your_secure_password_here
 POSTGRES_DB=fluentsoul
@@ -77,7 +77,7 @@ EOF
 ### Step 5: Launch Backend Container Stack
 
 ```bash
-docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+docker compose -f docker-compose.prod.yml --env-file .env up -d --build
 ```
 
 ### Step 6: Verify Deployment

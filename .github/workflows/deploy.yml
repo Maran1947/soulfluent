@@ -123,7 +123,7 @@ jobs:
                 image: ghcr.io/maran1947/fluentsoul-backend:latest
                 restart: unless-stopped
                 env_file:
-                  - ${ENV_FILE:-.env.prod}
+                  - ${ENV_FILE:-.env}
                 ports:
                   - "8000:8000"
                   - "80:8000"
@@ -139,7 +139,7 @@ jobs:
             docker compose -f docker-compose.prod.yml pull backend
             
             echo "==== Starting Backend Container Stack ===="
-            docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --remove-orphans
+            docker compose -f docker-compose.prod.yml --env-file .env up -d --remove-orphans
             
             echo "==== Cleaning up unused images ===="
             docker image prune -f
