@@ -85,10 +85,14 @@ jobs:
 
       - name: Deploy via SSH to GCP VM
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
         with:
           host: ${{ secrets.GCP_VM_IP }}
           username: ${{ secrets.GCP_VM_USERNAME }}
           key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          envs: GITHUB_TOKEN,GITHUB_ACTOR
           script: |
             set -e
             echo "==== Connected to GCP Compute Engine VM ===="
@@ -96,6 +100,9 @@ jobs:
             WORK_DIR="fluentsoul"
             mkdir -p $WORK_DIR
             cd $WORK_DIR
+            
+            echo "==== Logging into GitHub Container Registry on VM ===="
+            echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
             
             echo "==== Pulling Latest Docker Compose File ===="
             cat << 'EOF' > docker-compose.prod.yml
