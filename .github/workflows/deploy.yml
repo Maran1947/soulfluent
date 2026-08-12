@@ -102,44 +102,21 @@ jobs:
             version: '3.8'
 
             services:
-              db:
-                image: postgres:16-alpine
-                restart: unless-stopped
-                environment:
-                  POSTGRES_USER: ${POSTGRES_USER:-fluentsoul}
-                  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fluentsoul}
-                  POSTGRES_DB: ${POSTGRES_DB:-fluentsoul}
-                ports:
-                  - "5432:5432"
-                volumes:
-                  - fluentsoul_db_data:/var/lib/postgresql/data
-                healthcheck:
-                  test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-fluentsoul}"]
-                  interval: 5s
-                  timeout: 5s
-                  retries: 10
-
               backend:
                 image: ghcr.io/maran1947/fluentsoul-backend:latest
                 restart: unless-stopped
                 env_file:
-                  - ${ENV_FILE:-.env.prod}
+                  - ${ENV_FILE:-.env}
                 ports:
                   - "8000:8000"
                   - "80:8000"
-                depends_on:
-                  db:
-                    condition: service_healthy
-
-            volumes:
-              fluentsoul_db_data:
             EOF
             
             echo "==== Pulling Latest Backend Image from GHCR ===="
             docker compose -f docker-compose.prod.yml pull backend
             
             echo "==== Starting Backend Container Stack ===="
-            docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --remove-orphans
+            docker compose -f docker-compose.prod.yml --env-file .env up -d --remove-orphans
             
             echo "==== Cleaning up unused images ===="
             docker image prune -f
