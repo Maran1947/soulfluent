@@ -45,8 +45,9 @@ def _ensure_bucket_sync() -> None:
         try:
             if not _gcs_bucket.exists():
                 _gcs_client.create_bucket(settings.cloud_storage_bucket)
-        except Exception as e:
-            print(f"GCS bucket verification/creation note: {e}")
+        except Exception:
+            # Bucket exists or service account has Storage Object Admin permissions
+            pass
     elif _s3:
         try:
             _s3.head_bucket(Bucket=settings.cloud_storage_bucket)
