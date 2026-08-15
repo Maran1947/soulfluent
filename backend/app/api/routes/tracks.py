@@ -407,9 +407,24 @@ async def get_curriculum_legacy(
                 elif stage.sequence in [9, 10, 11, 12]:
                     persona_key = "alex"
 
+                activities_payload = []
+                for act in node.activities:
+                    act_type_str = act.activity_type.value if hasattr(act.activity_type, "value") else str(act.activity_type)
+                    activities_payload.append(
+                        {
+                            "id": str(act.id),
+                            "sequence": act.sequence,
+                            "title": act.title,
+                            "type": act_type_str,
+                            "config": act.config or {},
+                        }
+                    )
+
                 days.append(
                     {
+                        "id": str(node.id),
                         "d": global_day_counter,
+                        "unit": global_day_counter,
                         "theme": node.name or f"Node {node.sequence}",
                         "persona": persona_key,
                         "mode": "foundation",
@@ -423,6 +438,7 @@ async def get_curriculum_legacy(
                         "filler": "≤5/min",
                         "milestoneReport": (node.sequence == len(stage.nodes)),
                         "graduatesToTrackA": False,
+                        "activities": activities_payload,
                     }
                 )
                 global_day_counter += 1

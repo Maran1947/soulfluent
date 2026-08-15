@@ -38,6 +38,65 @@ typedef CurriculumDay = TrackNode;
 typedef CurriculumWeek = RoadmapStage;
 typedef CurriculumProgress = TrackProgress;
 
+class TrackActivity {
+  final String id;
+  final int sequence;
+  final String title;
+  final String type;
+  final Map<String, dynamic> config;
+  final int estimatedMinutes;
+  final bool isCompleted;
+
+  const TrackActivity({
+    required this.id,
+    required this.sequence,
+    required this.title,
+    required this.type,
+    required this.config,
+    this.estimatedMinutes = 2,
+    this.isCompleted = false,
+  });
+
+  String get typeLabel {
+    switch (type.toLowerCase()) {
+      case 'lesson':
+        return 'CONTEXT LESSON';
+      case 'listen_select':
+      case 'echo':
+        return 'LISTEN & ECHO';
+      case 'forming_sentence':
+      case 'production':
+        return 'SENTENCE BUILD';
+      case 'express_image':
+        return 'IMAGE EXPRESS';
+      case 'freestyle_speech':
+        return 'FREE SPEECH';
+      case 'ai_roleplay':
+      case 'roleplay':
+        return 'ROLEPLAY Practice';
+      case 'debate_spar':
+      case 'debate':
+        return 'DEBATE SPARRING';
+      case 'milestone_test':
+        return 'MILESTONE TEST';
+      default:
+        return type.toUpperCase().replaceAll('_', ' ');
+    }
+  }
+
+  factory TrackActivity.fromJson(Map<String, dynamic> json) {
+    return TrackActivity(
+      id: json['id']?.toString() ?? '',
+      sequence: json['sequence'] ?? 1,
+      title: json['title'] ?? json['type'] ?? 'Practice Activity',
+      type: json['type'] ?? json['activity_type'] ?? 'lesson',
+      config: json['config'] as Map<String, dynamic>? ?? {},
+      estimatedMinutes: json['estimated_minutes'] ?? 2,
+      isCompleted: json['is_completed'] ?? false,
+    );
+  }
+}
+
 class TrackNode {
   final int d; // Sequence number / Unit number
   final String theme;
@@ -57,6 +116,7 @@ class TrackNode {
   final String filler;
   final bool milestoneReport;
   final bool graduatesToTrackA;
+  final List<TrackActivity> activities;
 
   const TrackNode({
     required this.d,
@@ -76,6 +136,7 @@ class TrackNode {
     required this.filler,
     this.milestoneReport = false,
     this.graduatesToTrackA = false,
+    this.activities = const [],
   });
 
   int get unit => d;
@@ -142,6 +203,9 @@ class TrackNode {
       filler: json['filler'] ?? '≤5/min',
       milestoneReport: json['milestoneReport'] ?? false,
       graduatesToTrackA: json['graduatesToTrackA'] ?? false,
+      activities: (json['activities'] as List? ?? [])
+          .map((a) => TrackActivity.fromJson(a as Map<String, dynamic>))
+          .toList(),
     );
   }
 

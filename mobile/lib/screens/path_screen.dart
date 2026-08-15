@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
 import 'package:fluentsoul_mobile/models/curriculum.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
-import 'package:fluentsoul_mobile/screens/day_detail_screen.dart';
+import 'package:fluentsoul_mobile/screens/activity_runner_screen.dart';
 import 'package:fluentsoul_mobile/widgets/app_header.dart';
 import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 import 'package:fluentsoul_mobile/widgets/path_skeleton_loader.dart';
@@ -25,7 +25,7 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
     super.initState();
     _pulseController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 1400),
     )..repeat(reverse: true);
 
     _pulseAnimation = Tween<double>(begin: 1.0, end: 1.15).animate(
@@ -74,7 +74,7 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => DayDetailScreen(day: day),
+        builder: (_) => ActivityRunnerScreen(node: day),
       ),
     );
   }

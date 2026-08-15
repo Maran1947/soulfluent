@@ -278,33 +278,36 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Options List
-              Container(
-                decoration: BoxDecoration(
-                  color: cardBg,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: borderColor),
-                ),
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.history_rounded, color: AppTheme.primary),
-                      title: Text('Session History', style: GoogleFonts.inter(fontWeight: FontWeight.w600, color: headingColor)),
-                      trailing: const Icon(Icons.chevron_right_rounded, color: Colors.grey),
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const HistoryScreen()));
-                      },
-                    ),
-                    Divider(height: 1, color: borderColor),
-                    ListTile(
-                      leading: Icon(isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded, color: AppTheme.primary),
-                      title: Text('Dark Theme', style: GoogleFonts.inter(fontWeight: FontWeight.w600, color: headingColor)),
-                      trailing: Switch(
-                        value: isDark,
-                        activeColor: AppTheme.primary,
-                        onChanged: (val) => themeProvider.toggleTheme(val),
+              Material(
+                color: cardBg,
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: borderColor),
+                  ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.history_rounded, color: AppTheme.primary),
+                        title: Text('Session History', style: GoogleFonts.inter(fontWeight: FontWeight.w600, color: headingColor)),
+                        trailing: const Icon(Icons.chevron_right_rounded, color: Colors.grey),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => const HistoryScreen()));
+                        },
                       ),
-                    ),
-                  ],
+                      Divider(height: 1, color: borderColor),
+                      ListTile(
+                        leading: Icon(isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded, color: AppTheme.primary),
+                        title: Text('Dark Theme', style: GoogleFonts.inter(fontWeight: FontWeight.w600, color: headingColor)),
+                        trailing: Switch(
+                          value: isDark,
+                          activeColor: AppTheme.primary,
+                          onChanged: (val) => themeProvider.toggleTheme(val),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
 

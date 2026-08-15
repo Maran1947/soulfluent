@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
 import 'package:fluentsoul_mobile/models/curriculum.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/screens/activity_runner_screen.dart';
 
 typedef NodeDetailScreen = DayDetailScreen;
 
@@ -121,7 +122,7 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
               ),
             ),
             Text(
-              'Day ${day.d}',
+              'Unit ${day.unit}',
               style: GoogleFonts.inter(
                 fontSize: 13,
                 color: subtitleColor,
@@ -205,42 +206,112 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
 
                     const SizedBox(height: 24),
 
-                    // 3 Icon Stat Cards Row
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildIconStatCard(
-                            icon: Icons.access_time_rounded,
-                            value: day.wpm > 0 ? '${day.wpm} wpm' : 'free pace',
-                            cardBg: cardBg,
-                            borderColor: borderColor,
-                            headingColor: headingColor,
-                          ),
+                    // Node Activities List from Database
+                    if (day.activities.isNotEmpty) ...[
+                      Text(
+                        'Node Activities (${day.activities.length})',
+                        style: GoogleFonts.outfit(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: headingColor,
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: _buildIconStatCard(
-                            icon: Icons.track_changes_rounded,
-                            value: day.filler,
-                            cardBg: cardBg,
-                            borderColor: borderColor,
-                            headingColor: headingColor,
+                      ),
+                      const SizedBox(height: 12),
+                      ...day.activities.map((act) {
+                        final actInst = act.config['instruction']?.toString() ?? '';
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: cardBg,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: borderColor),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: _buildIconStatCard(
-                            icon: Icons.support_rounded,
-                            value: day.rescuePhrases.isNotEmpty
-                                ? 'rescue on'
-                                : 'standard',
-                            cardBg: cardBg,
-                            borderColor: borderColor,
-                            headingColor: headingColor,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      '${act.sequence}. ${act.title}',
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: headingColor,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.primary.withOpacity(0.12),
+                                      borderRadius: BorderRadius.circular(100),
+                                      border: Border.all(
+                                          color: AppTheme.primary.withOpacity(0.3)),
+                                    ),
+                                    child: Text(
+                                      act.typeLabel,
+                                      style: GoogleFonts.inter(
+                                        fontSize: 10.5,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppTheme.primary,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              if (actInst.isNotEmpty) ...[
+                                const SizedBox(height: 8),
+                                Text(
+                                  actInst,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 13.5,
+                                    color: subtitleColor,
+                                    height: 1.35,
+                                  ),
+                                ),
+                              ],
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      _startActivity(context, act, day);
+                                    },
+                                    icon: Icon(
+                                      _getActivityIcon(act.type),
+                                      size: 16,
+                                      color: Colors.white,
+                                    ),
+                                    label: Text(
+                                      'Start Activity',
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppTheme.primary,
+                                      elevation: 0,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 8),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
+                        );
+                      }),
+                      const SizedBox(height: 16),
+                    ],
 
                     const SizedBox(height: 20),
 
@@ -465,89 +536,48 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                 ),
               ),
             ),
-
-            // Fixed Bottom CTA Button
-            Container(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
-              decoration: BoxDecoration(
-                color: bgColor,
-                border: Border(
-                    top: BorderSide(color: borderColor.withOpacity(0.5))),
-              ),
-              child: SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFF25C40),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  onPressed: () async {
-                    final nav = Navigator.of(context);
-                    final success = await gd.startPathDaySession(
-                      day: day,
-                      track: currentTrack,
-                    );
-                    if (success) {
-                      nav.pushNamed('/arena');
-                    }
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.mic_rounded,
-                          color: Colors.white, size: 22),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Enter voice room',
-                        style: GoogleFonts.outfit(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildIconStatCard({
-    required IconData icon,
-    required String value,
-    required Color cardBg,
-    required Color borderColor,
-    required Color headingColor,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
-      decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: borderColor),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, size: 22, color: headingColor.withOpacity(0.8)),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: GoogleFonts.inter(
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: headingColor,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+  IconData _getActivityIcon(String type) {
+    switch (type.toLowerCase()) {
+      case 'lesson':
+        return Icons.menu_book_rounded;
+      case 'listen_select':
+      case 'echo':
+      case 'echo_repeat':
+        return Icons.headphones_rounded;
+      case 'forming_sentence':
+      case 'production':
+        return Icons.extension_rounded;
+      case 'express_image':
+        return Icons.image_rounded;
+      case 'free_response':
+      case 'freestyle_speech':
+        return Icons.mic_rounded;
+      case 'ai_roleplay':
+      case 'roleplay':
+        return Icons.record_voice_over_rounded;
+      case 'debate_spar':
+      case 'debate':
+        return Icons.forum_rounded;
+      default:
+        return Icons.play_arrow_rounded;
+    }
+  }
+
+  void _startActivity(BuildContext context, TrackActivity act, TrackNode node) {
+    final idx = node.activities.indexOf(act);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ActivityRunnerScreen(
+          node: node,
+          initialIndex: idx >= 0 ? idx : 0,
+        ),
       ),
     );
   }

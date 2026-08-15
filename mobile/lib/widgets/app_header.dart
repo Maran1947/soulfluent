@@ -157,9 +157,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                 const Text('🔥', style: TextStyle(fontSize: 12)),
                 const SizedBox(width: 4),
                 Text(
-                  '${gd.streakDays}d streak',
+                  '${gd.streakDays}',
                   style: GoogleFonts.outfit(
-                    fontSize: 11.5,
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
                     color: AppTheme.primary,
                   ),
