@@ -204,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final subtitleColor = isDark ? AppTheme.textMuted : AppTheme.textMutedLight;
 
     return Scaffold(
-      appBar: _activeTab == 1 ? const AppHeader(title: 'FluentSoul') : null,
+      appBar: (_activeTab == 1 || _activeTab == 2) ? const AppHeader(title: 'FluentSoul') : null,
       backgroundColor: isDark ? AppTheme.background : AppTheme.lightBackground,
       body: IndexedStack(
         index: _activeTab,
@@ -341,8 +341,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Text(
                                             currentStep == 4
                                                 ? (selectedMode == 'debate'
-                                                    ? (l10n?.start_debate ?? 'Start 1:1 Debate')
-                                                    : (l10n?.start_discussion ?? 'Start Group Discussion'))
+                                                    ? (l10n?.start_debate ?? 'Start Karein')
+                                                    : (l10n?.start_discussion ?? 'Start Karein'))
                                                 : (l10n?.next ?? 'Continue'),
                                             style: GoogleFonts.inter(
                                               fontSize: 15,
@@ -931,12 +931,14 @@ class _HomeScreenState extends State<HomeScreen> {
     Color cardBg,
     AppLocalizations? l10n,
   ) {
+    final isDebate = selectedMode == 'debate';
+
     return Column(
       key: const ValueKey(3),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          selectedMode == 'debate'
+          isDebate
               ? 'Select AI Debate Opponent'
               : 'Select AI Voice Partners',
           textAlign: TextAlign.center,
@@ -948,7 +950,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(height: 6),
         Text(
-          selectedMode == 'debate'
+          isDebate
               ? 'Choose your AI opponent for 1:1 structured rebuttal'
               : 'Tap to select 1 or more AI voice partners for your discussion',
           textAlign: TextAlign.center,
@@ -958,183 +960,127 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 1.4,
           ),
         ),
-        const SizedBox(height: 20),
-        if (selectedMode == 'debate')
-          Column(
-            children: debateOpponents.map((opp) {
-              final isSelected = selectedDebateOpponent == opp['key'];
+        const SizedBox(height: 18),
+        Column(
+          children: debateOpponents.map((opp) {
+            final key = opp['key']!;
+            final isSelected = isDebate
+                ? selectedDebateOpponent == key
+                : selectedGdPartners.contains(key);
 
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedDebateOpponent = opp['key']!;
-                  });
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppTheme.primary.withOpacity(0.12)
-                        : (isDark
-                            ? const Color(0xFF0F172A)
-                            : const Color(0xFFFAFAFA)),
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(
-                      color: isSelected ? AppTheme.primary : borderColor,
-                      width: isSelected ? 2 : 1,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(opp['flag']!, style: const TextStyle(fontSize: 24)),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${opp['name']} · ${opp['title']}',
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: isSelected
-                                    ? AppTheme.primary
-                                    : headingColor,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              opp['desc']!,
-                              style: GoogleFonts.inter(
-                                fontSize: 12,
-                                color: subtitleColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        isSelected
-                            ? Icons.check_circle_rounded
-                            : Icons.radio_button_unchecked_rounded,
-                        color: isSelected
-                            ? AppTheme.primary
-                            : subtitleColor.withOpacity(0.4),
-                        size: 22,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
-          )
-        else ...[
-          Column(
-            children: debateOpponents.map((opp) {
-              final isSelected = selectedGdPartners.contains(opp['key']);
-
-              return GestureDetector(
-                onTap: () => _toggleGdPartner(opp['key']!),
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppTheme.primary.withOpacity(0.12)
-                        : (isDark
-                            ? const Color(0xFF0F172A)
-                            : const Color(0xFFFAFAFA)),
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(
-                      color: isSelected ? AppTheme.primary : borderColor,
-                      width: isSelected ? 2 : 1,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(opp['flag']!, style: const TextStyle(fontSize: 24)),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${opp['name']} · ${opp['title']}',
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: isSelected
-                                    ? AppTheme.primary
-                                    : headingColor,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              opp['desc']!,
-                              style: GoogleFonts.inter(
-                                fontSize: 12,
-                                color: subtitleColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        isSelected
-                            ? Icons.check_circle_rounded
-                            : Icons.add_circle_outline_rounded,
-                        color: isSelected
-                            ? AppTheme.primary
-                            : subtitleColor.withOpacity(0.4),
-                        size: 22,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF0F172A) : const Color(0xFFFFF7F5),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.smart_toy_rounded,
-                    color: AppTheme.primary, size: 20),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'AI Group Moderator Included',
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                          color: headingColor,
-                        ),
-                      ),
-                      Text(
-                        'Automated turn-taking & performance analytics',
-                        style: GoogleFonts.inter(
-                          fontSize: 11,
-                          color: subtitleColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+            return _buildVoicePartnerCard(
+              opp: opp,
+              isSelected: isSelected,
+              isDark: isDark,
+              headingColor: headingColor,
+              subtitleColor: subtitleColor,
+              borderColor: borderColor,
+              onTap: () {
+                if (isDebate) {
+                  setState(() => selectedDebateOpponent = key);
+                } else {
+                  _toggleGdPartner(key);
+                }
+              },
+            );
+          }).toList(),
+        ),
       ],
+    );
+  }
+
+  Widget _buildVoicePartnerCard({
+    required Map<String, String> opp,
+    required bool isSelected,
+    required bool isDark,
+    required Color headingColor,
+    required Color subtitleColor,
+    required Color borderColor,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppTheme.primary.withOpacity(0.08)
+              : (isDark ? const Color(0xFF0F172A) : Colors.white),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected ? AppTheme.primary : borderColor,
+            width: isSelected ? 1.5 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(opp['flag']!, style: const TextStyle(fontSize: 20)),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: opp['name']!,
+                          style: GoogleFonts.outfit(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: isSelected ? AppTheme.primary : headingColor,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ' · ${opp['title']}',
+                          style: GoogleFonts.inter(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w500,
+                            color: subtitleColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    opp['desc']!,
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: subtitleColor.withOpacity(0.85),
+                      height: 1.3,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Icon(
+              isSelected
+                  ? Icons.check_circle_rounded
+                  : Icons.radio_button_unchecked_rounded,
+              color: isSelected
+                  ? AppTheme.primary
+                  : subtitleColor.withOpacity(0.3),
+              size: 22,
+            ),
+          ],
+        ),
+      ),
     );
   }
 

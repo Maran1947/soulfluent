@@ -141,9 +141,12 @@ class ApiService {
   }
 
   // Curriculum APIs
-  Future<Map<String, dynamic>> getCurriculum() async {
+  Future<Map<String, dynamic>> getCurriculum({String? track}) async {
+    final uri = (track != null && track.isNotEmpty)
+        ? Uri.parse('$baseUrl/curriculum?track=$track')
+        : Uri.parse('$baseUrl/curriculum');
     final response = await http.get(
-      Uri.parse('$baseUrl/curriculum'),
+      uri,
       headers: _headers,
     );
     if (response.statusCode != 200) {

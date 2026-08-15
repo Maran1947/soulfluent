@@ -50,10 +50,15 @@ class _GDArenaScreenState extends State<GDArenaScreen> {
       });
     }
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? AppTheme.background : AppTheme.lightBackground;
+    final headerBg = isDark ? AppTheme.cardDark : AppTheme.cardLight;
+    final borderColor = isDark ? AppTheme.borderDark : AppTheme.borderLight;
+
     if (session == null) {
-      return const Scaffold(
-        backgroundColor: Color(0xFF090D16),
-        body: Center(
+      return Scaffold(
+        backgroundColor: bgColor,
+        body: const Center(
           child: CircularProgressIndicator(color: AppTheme.primary),
         ),
       );
@@ -62,16 +67,16 @@ class _GDArenaScreenState extends State<GDArenaScreen> {
     final personas = session.personas;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF090D16),
+      backgroundColor: bgColor,
       body: SafeArea(
         child: Column(
           children: [
             // 1. Google Meet Top App Bar Header
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: const BoxDecoration(
-                color: Color(0xFF0F172A),
-                border: Border(bottom: BorderSide(color: Color(0xFF1E293B))),
+              decoration: BoxDecoration(
+                color: headerBg,
+                border: Border(bottom: BorderSide(color: borderColor)),
               ),
               child: Row(
                 children: [

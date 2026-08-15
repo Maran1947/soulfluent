@@ -31,6 +31,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildGreetingHeaderWidget(BuildContext context, String? userName) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
     final hour = DateTime.now().hour;
     final firstName = (userName != null && userName.trim().isNotEmpty)
@@ -63,7 +64,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                 style: GoogleFonts.outfit(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: isDark ? Colors.white : const Color(0xFF0F172A),
                 ),
               ),
               const SizedBox(width: 3),

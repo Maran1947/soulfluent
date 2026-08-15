@@ -24,10 +24,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get keep_showing_up => 'Keep showing up';
 
   @override
-  String get tab_path => '30-Day Path';
+  String get tab_path => 'Fluency Track';
 
   @override
-  String get tab_practice => 'Free Practice';
+  String get tab_practice => 'Arena';
 
   @override
   String get tab_challenges => 'Daily Challenges';
@@ -68,10 +68,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diff_advanced => 'Advanced';
 
   @override
-  String get start_discussion => 'Start Group Discussion';
+  String get start_discussion => 'Start Session';
 
   @override
-  String get start_debate => 'Start 1:1 Debate';
+  String get start_debate => 'Start Session';
 
   @override
   String get next => 'Next';
@@ -153,8 +153,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get get_started => 'Get Started';
 
   @override
-  String get error_network_failed =>
-      'Network error occurred. Please check your connection.';
+  String get error_network_failed => 'Network error occurred.';
 
   @override
   String get auth_login_title => 'Log In to FluentSoul';

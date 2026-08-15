@@ -24,14 +24,14 @@ class AppStrings {
 
     // Main Navigation Tabs
     'tab_path': {
-      'English': '30-Day Path',
-      'Hindi': '30-दिन का पथ',
-      'Hinglish': '30-Day Path',
+      'English': 'Fluency Track',
+      'Hindi': 'फ्लूएंसी ट्रैक',
+      'Hinglish': 'Fluency Track',
     },
     'tab_practice': {
-      'English': 'Free Practice',
-      'Hindi': 'निःशुल्क अभ्यास',
-      'Hinglish': 'Free Practice',
+      'English': 'Arena',
+      'Hindi': 'एरिना',
+      'Hinglish': 'Arena',
     },
     'tab_challenges': {
       'English': 'Daily Challenges',
@@ -102,14 +102,14 @@ class AppStrings {
 
     // Action Buttons
     'start_discussion': {
-      'English': 'Start Group Discussion',
-      'Hindi': 'समूह चर्चा शुरू करें',
-      'Hinglish': 'Group Discussion start karein',
+      'English': 'Start Session',
+      'Hindi': 'शुरू करें',
+      'Hinglish': 'Start Karein',
     },
     'start_debate': {
-      'English': 'Start 1:1 Debate',
-      'Hindi': '1:1 वाद-विवाद शुरू करें',
-      'Hinglish': '1:1 Debate start karein',
+      'English': 'Start Session',
+      'Hindi': 'शुरू करें',
+      'Hinglish': 'Start Karein',
     },
     'next': {
       'English': 'Next',

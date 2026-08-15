@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
 import 'package:fluentsoul_mobile/models/curriculum.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
-import 'package:fluentsoul_mobile/screens/day_exercise_screen.dart';
+import 'package:fluentsoul_mobile/screens/day_detail_screen.dart';
 import 'package:fluentsoul_mobile/widgets/app_header.dart';
 import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 import 'package:fluentsoul_mobile/widgets/path_skeleton_loader.dart';
@@ -74,7 +74,7 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => DayExerciseScreen(day: day),
+        builder: (_) => DayDetailScreen(day: day),
       ),
     );
   }
@@ -125,107 +125,109 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
           ),
 
           SafeArea(
-            child: Column(
-              children: [
-                // ---------- TOP BAR ----------
-                Container(
-                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-                  decoration: BoxDecoration(
-                    color: cardBg.withOpacity(0.92),
-                    border: Border(bottom: BorderSide(color: borderColor)),
-                  ),
-                  child: Column(
+            child: gd.isLoadingCurriculum
+                ? const PathSkeletonLoader()
+                : weeksToRender.isEmpty
+                    ? _buildEmptyState(context, isDark, cardBg, borderColor, headingColor, subtitleColor, gd)
+                    : Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Fluency Track',
-                                style: GoogleFonts.outfit(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  color: headingColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: AppTheme.primary.withOpacity(0.12),
-                              borderRadius: BorderRadius.circular(100),
-                              border: Border.all(
-                                  color: AppTheme.primary.withOpacity(0.3)),
-                            ),
-                            child: Row(
+                      // ---------- TOP BAR ----------
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+                        decoration: BoxDecoration(
+                          color: cardBg.withOpacity(0.92),
+                          border: Border(bottom: BorderSide(color: borderColor)),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('🔥', style: TextStyle(fontSize: 13)),
-                                const SizedBox(width: 6),
-                                Text(
-                                  '${gd.streakDays} day streak',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppTheme.primary,
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Fluency Track',
+                                      style: GoogleFonts.outfit(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: headingColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.primary.withOpacity(0.12),
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                        color: AppTheme.primary.withOpacity(0.3)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Text('🔥', style: TextStyle(fontSize: 13)),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        '${gd.streakDays} day streak',
+                                        style: GoogleFonts.outfit(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppTheme.primary,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
 
-                      const SizedBox(height: 12),
+                            const SizedBox(height: 12),
 
-                      // Progress Strip
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Unit $currentDay of 30',
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              color: subtitleColor,
-                              fontWeight: FontWeight.w600,
+                            // Progress Strip
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Unit $currentDay of 30',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    color: subtitleColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  activeTrack == 'A'
+                                      ? 'Track A · Unfreeze'
+                                      : 'Track B · Scratch',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    color: subtitleColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Text(
-                            activeTrack == 'A'
-                                ? 'Track A · Unfreeze'
-                                : 'Track B · Scratch',
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              color: subtitleColor,
-                              fontWeight: FontWeight.w600,
+                            const SizedBox(height: 8),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: LinearProgressIndicator(
+                                value: (currentDay / 30).clamp(0.0, 1.0),
+                                minHeight: 6,
+                                backgroundColor: isDark
+                                    ? const Color(0xFF1E293B)
+                                    : const Color(0xFFE2E8F0),
+                                valueColor: const AlwaysStoppedAnimation<Color>(
+                                    AppTheme.primary),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: LinearProgressIndicator(
-                          value: (currentDay / 30).clamp(0.0, 1.0),
-                          minHeight: 6,
-                          backgroundColor: isDark
-                              ? const Color(0xFF1E293B)
-                              : const Color(0xFFE2E8F0),
-                          valueColor: const AlwaysStoppedAnimation<Color>(
-                              AppTheme.primary),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
 
-                // ---------- PATH scrollview & Skeleton Loader ----------
-                Expanded(
-                  child: (gd.isLoadingCurriculum || weeksToRender.isEmpty)
-                      ? const PathSkeletonLoader()
-                      : SingleChildScrollView(
+                      // ---------- PATH scrollview ----------
+                      Expanded(
+                        child: SingleChildScrollView(
                           padding: const EdgeInsets.symmetric(vertical: 24),
                           child: Column(
                             children: [
@@ -343,11 +345,102 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
                             ],
                           ),
                         ),
-                ),
-              ],
-            ),
+                      ),
+                    ],
+                  ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(
+    BuildContext context,
+    bool isDark,
+    Color cardBg,
+    Color borderColor,
+    Color headingColor,
+    Color subtitleColor,
+    GDProvider gd,
+  ) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Container(
+          padding: const EdgeInsets.all(28),
+          decoration: BoxDecoration(
+            color: cardBg.withOpacity(0.95),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: borderColor),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: AppTheme.primary.withOpacity(0.12),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                      color: AppTheme.primary.withOpacity(0.25), width: 1.5),
+                ),
+                child: const Icon(
+                  Icons.auto_awesome_rounded,
+                  size: 36,
+                  color: AppTheme.primary,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'No Path Data Found',
+                style: GoogleFonts.outfit(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: headingColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'We couldn\'t retrieve your learning path at this moment. Tap below to try again.',
+                style: GoogleFonts.inter(
+                  fontSize: 13.5,
+                  color: subtitleColor,
+                  height: 1.4,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: () => gd.fetchCurriculum(),
+                icon: const Icon(Icons.refresh_rounded, size: 18),
+                label: Text(
+                  'Refresh Path',
+                  style: GoogleFonts.outfit(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

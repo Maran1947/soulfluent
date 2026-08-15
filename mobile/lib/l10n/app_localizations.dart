@@ -132,13 +132,13 @@ abstract class AppLocalizations {
   /// No description provided for @tab_path.
   ///
   /// In en, this message translates to:
-  /// **'30-Day Path'**
+  /// **'Fluency Track'**
   String get tab_path;
 
   /// No description provided for @tab_practice.
   ///
   /// In en, this message translates to:
-  /// **'Free Practice'**
+  /// **'Arena'**
   String get tab_practice;
 
   /// No description provided for @tab_challenges.
@@ -216,13 +216,13 @@ abstract class AppLocalizations {
   /// No description provided for @start_discussion.
   ///
   /// In en, this message translates to:
-  /// **'Start Group Discussion'**
+  /// **'Start Session'**
   String get start_discussion;
 
   /// No description provided for @start_debate.
   ///
   /// In en, this message translates to:
-  /// **'Start 1:1 Debate'**
+  /// **'Start Session'**
   String get start_debate;
 
   /// No description provided for @next.
@@ -378,7 +378,7 @@ abstract class AppLocalizations {
   /// No description provided for @error_network_failed.
   ///
   /// In en, this message translates to:
-  /// **'Network error occurred. Please check your connection.'**
+  /// **'Network error occurred.'**
   String get error_network_failed;
 
   /// No description provided for @auth_login_title.

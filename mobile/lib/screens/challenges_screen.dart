@@ -36,14 +36,11 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final bgColor = isDark ? const Color(0xFF131829) : const Color(0xFFF8FAFC);
-    final cardBg = isDark ? const Color(0xFF1B2138) : Colors.white;
-    final headingColor =
-        isDark ? const Color(0xFFEDEFF7) : const Color(0xFF0F172A);
-    final subtitleColor =
-        isDark ? const Color(0xFF8A8FA3) : const Color(0xFF64748B);
-    final borderColor =
-        isDark ? const Color(0xFF2E3654) : const Color(0xFFE2E8F0);
+    final bgColor = isDark ? AppTheme.background : AppTheme.lightBackground;
+    final cardBg = isDark ? AppTheme.cardDark : AppTheme.cardLight;
+    final headingColor = isDark ? AppTheme.textMain : AppTheme.textMainLight;
+    final subtitleColor = isDark ? AppTheme.textMuted : AppTheme.textMutedLight;
+    final borderColor = isDark ? AppTheme.borderDark : AppTheme.borderLight;
 
     return Scaffold(
       backgroundColor: bgColor,

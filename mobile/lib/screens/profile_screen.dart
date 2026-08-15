@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
 import 'package:fluentsoul_mobile/providers/auth_provider.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/providers/locale_provider.dart';
 import 'package:fluentsoul_mobile/providers/theme_provider.dart';
 import 'package:fluentsoul_mobile/screens/history_screen.dart';
 
@@ -15,15 +16,16 @@ class ProfileScreen extends StatelessWidget {
     final auth = context.watch<AuthProvider>();
     final gd = context.watch<GDProvider>();
     final themeProvider = context.watch<ThemeProvider>();
+    final localeProvider = context.watch<LocaleProvider>();
 
     final user = auth.currentUser;
     final isDark = themeProvider.isDarkMode;
 
-    final bgColor = isDark ? const Color(0xFF090D16) : const Color(0xFFF8FAFC);
-    final cardBg = isDark ? const Color(0xFF131C2E) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
-    final headingColor = isDark ? Colors.white : const Color(0xFF0F172A);
-    final subtitleColor = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+    final bgColor = isDark ? AppTheme.background : AppTheme.lightBackground;
+    final cardBg = isDark ? AppTheme.cardDark : AppTheme.cardLight;
+    final borderColor = isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final headingColor = isDark ? AppTheme.textMain : AppTheme.textMainLight;
+    final subtitleColor = isDark ? AppTheme.textMuted : AppTheme.textMutedLight;
 
     final initial = user?.name.isNotEmpty == true ? user!.name[0].toUpperCase() : 'U';
 
@@ -95,6 +97,67 @@ class ProfileScreen extends StatelessWidget {
                               fontSize: 13.5,
                               color: subtitleColor,
                             ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // App & Practice Language Card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: cardBg,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: borderColor),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'PRACTICE & APP LANGUAGE',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: subtitleColor,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: localeProvider.languageString,
+                        isExpanded: true,
+                        dropdownColor: cardBg,
+                        icon: const Icon(Icons.translate_rounded, color: AppTheme.primary),
+                        style: GoogleFonts.inter(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.bold,
+                          color: headingColor,
+                        ),
+                        onChanged: (val) {
+                          if (val != null) {
+                            localeProvider.setLanguageString(val);
+                            context.read<GDProvider>().fetchTopics(language: val);
+                          }
+                        },
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'Hinglish',
+                            child: Text('🇮🇳 Hinglish (Hindi + English)'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Hindi',
+                            child: Text('🇮🇳 Hindi (हिंदी)'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'English',
+                            child: Text('🌐 Pure English'),
                           ),
                         ],
                       ),

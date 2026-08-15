@@ -24,10 +24,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get keep_showing_up => 'अभ्यास जारी रखें';
 
   @override
-  String get tab_path => '30-दिन का पथ';
+  String get tab_path => 'फ्लूएंसी ट्रैक';
 
   @override
-  String get tab_practice => 'निःशुल्क अभ्यास';
+  String get tab_practice => 'एरिना';
 
   @override
   String get tab_challenges => 'दैनिक चुनौतियाँ';
@@ -68,10 +68,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get diff_advanced => 'उन्नत (Advanced)';
 
   @override
-  String get start_discussion => 'समूह चर्चा शुरू करें';
+  String get start_discussion => 'शुरू करें';
 
   @override
-  String get start_debate => '1:1 वाद-विवाद शुरू करें';
+  String get start_debate => 'शुरू करें';
 
   @override
   String get next => 'आगे बढ़ें';
@@ -152,8 +152,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get get_started => 'शुरू करें';
 
   @override
-  String get error_network_failed =>
-      'नेटवर्क त्रुटि हुई। कृपया अपना कनेक्शन जांचें।';
+  String get error_network_failed => 'नेटवर्क त्रुटि हुई।';
 
   @override
   String get auth_login_title => 'FluentSoul में साइन इन करें';
@@ -251,10 +250,10 @@ class AppLocalizationsHiIn extends AppLocalizationsHi {
   String get keep_showing_up => 'Practice jari rakhein';
 
   @override
-  String get tab_path => '30-Day Path';
+  String get tab_path => 'Fluency Track';
 
   @override
-  String get tab_practice => 'Free Practice';
+  String get tab_practice => 'Arena';
 
   @override
   String get tab_challenges => 'Daily Challenges';
@@ -295,10 +294,10 @@ class AppLocalizationsHiIn extends AppLocalizationsHi {
   String get diff_advanced => 'Advanced (कठिन)';
 
   @override
-  String get start_discussion => 'Group Discussion start karein';
+  String get start_discussion => 'Start Karein';
 
   @override
-  String get start_debate => '1:1 Debate start karein';
+  String get start_debate => 'Start Karein';
 
   @override
   String get next => 'Next';
@@ -382,8 +381,7 @@ class AppLocalizationsHiIn extends AppLocalizationsHi {
   String get get_started => 'Start Karein';
 
   @override
-  String get error_network_failed =>
-      'Network error hua hai. Connection check karein.';
+  String get error_network_failed => 'Network error hua hai.';
 
   @override
   String get auth_login_title => 'FluentSoul mein Sign In karein';

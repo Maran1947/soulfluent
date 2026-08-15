@@ -4,7 +4,7 @@ import 'dart:io';
 String formatUserFriendlyError(Object error) {
   if (error is SocketException ||
       error is TimeoutException) {
-    return 'Unable to connect. Please check your internet connection.';
+    return 'Unable to connect. Please try again.';
   }
 
   final rawMsg = error.toString().replaceAll('Exception: ', '').trim();
@@ -19,7 +19,7 @@ String formatUserFriendlyError(Object error) {
       rawMsg.contains('ClientException') ||
       rawMsg.contains('Connection refused') ||
       rawMsg.contains('Failed host lookup')) {
-    return 'Unable to connect to the server. Please check your network connection.';
+    return 'Unable to connect to the server. Please try again.';
   }
 
   if (rawMsg.contains('500') ||
