@@ -25,12 +25,7 @@ if TYPE_CHECKING:
 
 class FluencyTrackType(str, enum.Enum):
     UNFREEZE = "UNFREEZE"
-    A1 = "A1"
-    A2 = "A2"
-    B1 = "B1"
-    B2 = "B2"
-    C1 = "C1"
-    C2 = "C2"
+    SCRATCH = "SCRATCH"
 
 
 class ActivityType(str, enum.Enum):
@@ -62,13 +57,13 @@ class ActivityStatus(str, enum.Enum):
 
 
 class FluencyTrack(Base):
-    __tablename__ = "fluency_tracks"
-    __table_args__ = {"schema": "fluency_tracks"}
+    __tablename__ = "tracks"
+    __table_args__ = {"schema": "fluency"}
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     type: Mapped[FluencyTrackType] = mapped_column(
-        Enum(FluencyTrackType, name="fluency_track_type_enum", schema="fluency_tracks"),
+        Enum(FluencyTrackType, name="fluency_track_type_enum", schema="fluency"),
         nullable=False,
         default=FluencyTrackType.UNFREEZE,
     )
@@ -85,12 +80,12 @@ class FluencyTrack(Base):
 
 class Stage(Base):
     __tablename__ = "stages"
-    __table_args__ = {"schema": "fluency_tracks"}
+    __table_args__ = {"schema": "fluency"}
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     fluency_track_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
-        ForeignKey("fluency_tracks.fluency_tracks.id", ondelete="CASCADE"),
+        ForeignKey("fluency.tracks.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
@@ -110,12 +105,12 @@ class Stage(Base):
 
 class StageNode(Base):
     __tablename__ = "stage_nodes"
-    __table_args__ = {"schema": "fluency_tracks"}
+    __table_args__ = {"schema": "fluency"}
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     stage_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
-        ForeignKey("fluency_tracks.stages.id", ondelete="CASCADE"),
+        ForeignKey("fluency.stages.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
@@ -134,17 +129,17 @@ class StageNode(Base):
 
 class NodeActivity(Base):
     __tablename__ = "node_activities"
-    __table_args__ = {"schema": "fluency_tracks"}
+    __table_args__ = {"schema": "fluency"}
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     stage_node_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
-        ForeignKey("fluency_tracks.stage_nodes.id", ondelete="CASCADE"),
+        ForeignKey("fluency.stage_nodes.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
     activity_type: Mapped[ActivityType] = mapped_column(
-        Enum(ActivityType, name="activity_type_enum", schema="fluency_tracks"),
+        Enum(ActivityType, name="activity_type_enum", schema="fluency"),
         nullable=False,
     )
     config: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
@@ -164,7 +159,7 @@ class UserActivityProgress(Base):
     __tablename__ = "user_activity_progress"
     __table_args__ = (
         UniqueConstraint("user_id", "node_activity_id", name="uq_user_node_activity"),
-        {"schema": "fluency_tracks"},
+        {"schema": "fluency"},
     )
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -176,12 +171,12 @@ class UserActivityProgress(Base):
     )
     node_activity_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
-        ForeignKey("fluency_tracks.node_activities.id", ondelete="CASCADE"),
+        ForeignKey("fluency.node_activities.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
     status: Mapped[ActivityStatus] = mapped_column(
-        Enum(ActivityStatus, name="activity_status_enum", schema="fluency_tracks"),
+        Enum(ActivityStatus, name="activity_status_enum", schema="fluency"),
         nullable=False,
         default=ActivityStatus.not_started,
     )

@@ -12,7 +12,7 @@ engine = create_async_engine(
     echo=False,
     pool_pre_ping=True,
     connect_args={
-        "server_settings": {"search_path": "auth, conversation, analytics, fluency_tracks, public"}
+        "server_settings": {"search_path": "auth, conversation, analytics, fluency, public"}
     },
 )
 AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)

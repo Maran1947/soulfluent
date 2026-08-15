@@ -64,12 +64,12 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.execute("DROP TABLE IF EXISTS fluency_tracks.user_activity_progress CASCADE;")
-    op.execute("DROP TABLE IF EXISTS fluency_tracks.node_activities CASCADE;")
-    op.execute("DROP TABLE IF EXISTS fluency_tracks.stage_nodes CASCADE;")
-    op.execute("DROP TABLE IF EXISTS fluency_tracks.stages CASCADE;")
-    op.execute("DROP TABLE IF EXISTS fluency_tracks.fluency_tracks CASCADE;")
-    op.execute("DROP TYPE IF EXISTS fluency_tracks.activity_status_enum CASCADE;")
-    op.execute("DROP TYPE IF EXISTS fluency_tracks.activity_type_enum CASCADE;")
-    op.execute("DROP TYPE IF EXISTS fluency_tracks.fluency_track_type_enum CASCADE;")
-    op.execute("DROP SCHEMA IF EXISTS fluency_tracks CASCADE;")
+    op.execute("DROP TABLE IF EXISTS fluency.user_activity_progress CASCADE;")
+    op.execute("DROP TABLE IF EXISTS fluency.node_activities CASCADE;")
+    op.execute("DROP TABLE IF EXISTS fluency.stage_nodes CASCADE;")
+    op.execute("DROP TABLE IF EXISTS fluency.stages CASCADE;")
+    op.execute("DROP TABLE IF EXISTS fluency.tracks CASCADE;")
+    op.execute("DROP TYPE IF EXISTS fluency.activity_status_enum CASCADE;")
+    op.execute("DROP TYPE IF EXISTS fluency.activity_type_enum CASCADE;")
+    op.execute("DROP TYPE IF EXISTS fluency.fluency_track_type_enum CASCADE;")
+    op.execute("DROP SCHEMA IF EXISTS fluency CASCADE;")

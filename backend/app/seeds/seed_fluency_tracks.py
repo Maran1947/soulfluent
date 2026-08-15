@@ -18,15 +18,15 @@ from app.models.fluency_track import (
 logger = logging.getLogger(__name__)
 
 INIT_SQL_STATEMENTS = [
-    "CREATE SCHEMA IF NOT EXISTS fluency_tracks;",
+    "CREATE SCHEMA IF NOT EXISTS fluency;",
     """DO $$ BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type t JOIN pg_namespace n ON n.oid = t.typnamespace WHERE t.typname = 'fluency_track_type_enum' AND n.nspname = 'fluency_tracks') THEN
-        CREATE TYPE fluency_tracks.fluency_track_type_enum AS ENUM ('UNFREEZE', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2');
+    IF NOT EXISTS (SELECT 1 FROM pg_type t JOIN pg_namespace n ON n.oid = t.typnamespace WHERE t.typname = 'fluency_track_type_enum' AND n.nspname = 'fluency') THEN
+        CREATE TYPE fluency.fluency_track_type_enum AS ENUM ('UNFREEZE', 'SCRATCH');
     END IF;
 END $$;""",
     """DO $$ BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type t JOIN pg_namespace n ON n.oid = t.typnamespace WHERE t.typname = 'activity_type_enum' AND n.nspname = 'fluency_tracks') THEN
-        CREATE TYPE fluency_tracks.activity_type_enum AS ENUM (
+    IF NOT EXISTS (SELECT 1 FROM pg_type t JOIN pg_namespace n ON n.oid = t.typnamespace WHERE t.typname = 'activity_type_enum' AND n.nspname = 'fluency') THEN
+        CREATE TYPE fluency.activity_type_enum AS ENUM (
             'lesson', 'express_image', 'express_video', 'forming_sentence',
             'echo_repeat', 'word_picture_match', 'tpr_command', 'listen_select',
             'fill_blank', 'sentence_correction', 'dictation', 'shadow_speaking',
@@ -36,49 +36,49 @@ END $$;""",
     END IF;
 END $$;""",
     """DO $$ BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type t JOIN pg_namespace n ON n.oid = t.typnamespace WHERE t.typname = 'activity_status_enum' AND n.nspname = 'fluency_tracks') THEN
-        CREATE TYPE fluency_tracks.activity_status_enum AS ENUM ('not_started', 'in_progress', 'completed');
+    IF NOT EXISTS (SELECT 1 FROM pg_type t JOIN pg_namespace n ON n.oid = t.typnamespace WHERE t.typname = 'activity_status_enum' AND n.nspname = 'fluency') THEN
+        CREATE TYPE fluency.activity_status_enum AS ENUM ('not_started', 'in_progress', 'completed');
     END IF;
 END $$;""",
-    """CREATE TABLE IF NOT EXISTS fluency_tracks.fluency_tracks (
+    """CREATE TABLE IF NOT EXISTS fluency.tracks (
     id UUID PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    type fluency_tracks.fluency_track_type_enum NOT NULL DEFAULT 'UNFREEZE',
+    type fluency.fluency_track_type_enum NOT NULL DEFAULT 'UNFREEZE',
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );""",
-    """CREATE TABLE IF NOT EXISTS fluency_tracks.stages (
+    """CREATE TABLE IF NOT EXISTS fluency.stages (
     id UUID PRIMARY KEY,
-    fluency_track_id UUID NOT NULL REFERENCES fluency_tracks.fluency_tracks(id) ON DELETE CASCADE,
+    fluency_track_id UUID NOT NULL REFERENCES fluency.tracks(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     sequence INTEGER NOT NULL DEFAULT 1,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );""",
-    """CREATE TABLE IF NOT EXISTS fluency_tracks.stage_nodes (
+    """CREATE TABLE IF NOT EXISTS fluency.stage_nodes (
     id UUID PRIMARY KEY,
-    stage_id UUID NOT NULL REFERENCES fluency_tracks.stages(id) ON DELETE CASCADE,
+    stage_id UUID NOT NULL REFERENCES fluency.stages(id) ON DELETE CASCADE,
     sequence INTEGER NOT NULL DEFAULT 1,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );""",
-    """CREATE TABLE IF NOT EXISTS fluency_tracks.node_activities (
+    """CREATE TABLE IF NOT EXISTS fluency.node_activities (
     id UUID PRIMARY KEY,
-    stage_node_id UUID NOT NULL REFERENCES fluency_tracks.stage_nodes(id) ON DELETE CASCADE,
-    activity_type fluency_tracks.activity_type_enum NOT NULL,
+    stage_node_id UUID NOT NULL REFERENCES fluency.stage_nodes(id) ON DELETE CASCADE,
+    activity_type fluency.activity_type_enum NOT NULL,
     config JSONB NOT NULL DEFAULT '{}'::jsonb,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );""",
-    """CREATE TABLE IF NOT EXISTS fluency_tracks.user_activity_progress (
+    """CREATE TABLE IF NOT EXISTS fluency.user_activity_progress (
     id UUID PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-    node_activity_id UUID NOT NULL REFERENCES fluency_tracks.node_activities(id) ON DELETE CASCADE,
-    status fluency_tracks.activity_status_enum NOT NULL DEFAULT 'not_started',
+    node_activity_id UUID NOT NULL REFERENCES fluency.node_activities(id) ON DELETE CASCADE,
+    status fluency.activity_status_enum NOT NULL DEFAULT 'not_started',
     score DOUBLE PRECISION DEFAULT 0.0,
     response_data JSONB NOT NULL DEFAULT '{}'::jsonb,
     completed_at TIMESTAMPTZ,
@@ -213,8 +213,8 @@ INITIAL_TRACKS: list[dict[str, Any]] = [
         ],
     },
     {
-        "name": "Track A1: Foundations",
-        "type": FluencyTrackType.A1,
+        "name": "From Scratch Beginner",
+        "type": FluencyTrackType.SCRATCH,
         "stages": [
             {
                 "name": "Stage 1: Basic Conversations",
@@ -241,30 +241,6 @@ INITIAL_TRACKS: list[dict[str, Any]] = [
                                     "correct_option": "went",
                                 },
                             },
-                        ],
-                    }
-                ],
-            }
-        ],
-    },
-    {
-        "name": "Track A2: Elementary Fluency",
-        "type": FluencyTrackType.A2,
-        "stages": [
-            {
-                "name": "Stage 1: Storytelling & Expressing Feelings",
-                "sequence": 1,
-                "nodes": [
-                    {
-                        "sequence": 1,
-                        "activities": [
-                            {
-                                "type": ActivityType.free_response,
-                                "config": {
-                                    "title": "Describe Your Weekend",
-                                    "prompt": "Talk about a memorable moment from your last weekend in at least 3 sentences.",
-                                },
-                            }
                         ],
                     }
                 ],

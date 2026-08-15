@@ -50,11 +50,18 @@ class FluentSoulApp extends StatelessWidget {
             locale: localeProvider.locale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: auth.isAuthenticated
-                ? (onboarding.isOnboarded
-                    ? const HomeScreen()
-                    : const OnboardingScreen())
-                : const AuthScreen(),
+            home: auth.isInitializing
+                ? Scaffold(
+                    backgroundColor: themeProvider.isDarkMode ? AppTheme.background : AppTheme.lightBackground,
+                    body: const Center(
+                      child: CircularProgressIndicator(color: AppTheme.primary),
+                    ),
+                  )
+                : (auth.isAuthenticated
+                    ? (onboarding.isOnboarded
+                        ? const HomeScreen()
+                        : const OnboardingScreen())
+                    : const AuthScreen()),
             routes: {
               '/auth': (context) => const AuthScreen(),
               '/onboarding': (context) => const OnboardingScreen(),
