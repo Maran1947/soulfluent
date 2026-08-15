@@ -140,7 +140,18 @@ class ApiService {
     return GDSession.fromJson(jsonDecode(response.body));
   }
 
-  // Curriculum APIs
+  // Fluency Tracks & Curriculum APIs
+  Future<Map<String, dynamic>> getTracks() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/tracks'),
+      headers: _headers,
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load fluency tracks');
+    }
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  }
+
   Future<Map<String, dynamic>> getCurriculum({String? track}) async {
     final uri = (track != null && track.isNotEmpty)
         ? Uri.parse('$baseUrl/curriculum?track=$track')

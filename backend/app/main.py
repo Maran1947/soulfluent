@@ -22,6 +22,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix=settings.api_prefix)
 app.include_router(gd.router, prefix=settings.api_prefix)
 app.include_router(tracks.router, prefix=settings.api_prefix)
+app.include_router(tracks.curriculum_router, prefix=settings.api_prefix)
 
 
 @app.on_event("startup")

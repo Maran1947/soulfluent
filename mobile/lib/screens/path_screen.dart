@@ -103,7 +103,7 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
     for (final week in weeksToRender) {
       for (int i = 0; i < week.days.length; i++) {
         if (i == 0) {
-          stageHeaders[count] = '${week.title} (${week.range})';
+          stageHeaders[count] = week.title;
         }
         allDays.add(week.days[i]);
         count++;
@@ -129,225 +129,90 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
                 ? const PathSkeletonLoader()
                 : weeksToRender.isEmpty
                     ? _buildEmptyState(context, isDark, cardBg, borderColor, headingColor, subtitleColor, gd)
-                    : Column(
-                    children: [
-                      // ---------- TOP BAR ----------
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-                        decoration: BoxDecoration(
-                          color: cardBg.withOpacity(0.92),
-                          border: Border(bottom: BorderSide(color: borderColor)),
-                        ),
+                    : SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         child: Column(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
+                            // Continuous Connected Path Widget
+                            _ContinuousPathWidget(
+                              days: allDays,
+                              stageHeaders: stageHeaders,
+                              currentDay: currentDay,
+                              reviewMode: reviewMode,
+                              completedDays: completedDays,
+                              activeTrack: activeTrack,
+                              isDark: isDark,
+                              headingColor: headingColor,
+                              subtitleColor: subtitleColor,
+                              pulseAnimation: _pulseAnimation,
+                              onOpenSheet: _openSheet,
+                              onShowToast: _showToast,
+                              dayState: _dayState,
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            // Bottom Simple Card
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24),
+                              child: Container(
+                                padding: const EdgeInsets.all(18),
+                                decoration: BoxDecoration(
+                                  color: isDark
+                                      ? const Color(0xFF1E293B).withOpacity(0.5)
+                                      : const Color(0xFFF8FAFC),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                      color: borderColor.withOpacity(0.6)),
+                                ),
+                                child: Row(
                                   children: [
-                                    Text(
-                                      'Fluency Track',
-                                      style: GoogleFonts.outfit(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: headingColor,
+                                    Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: AppTheme.primary.withOpacity(0.1),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Center(
+                                        child: Text('🌟',
+                                            style: TextStyle(fontSize: 18)),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 14),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'New stages added regularly',
+                                            style: GoogleFonts.inter(
+                                              fontSize: 12.5,
+                                              fontWeight: FontWeight.w500,
+                                              color: subtitleColor,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 3),
+                                          Text(
+                                            'Keep practicing daily to build lasting fluency',
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 14.5,
+                                              fontWeight: FontWeight.w600,
+                                              color: headingColor,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    color: AppTheme.primary.withOpacity(0.12),
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                        color: AppTheme.primary.withOpacity(0.3)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const Text('🔥', style: TextStyle(fontSize: 13)),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        '${gd.streakDays} day streak',
-                                        style: GoogleFonts.outfit(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppTheme.primary,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            const SizedBox(height: 12),
-
-                            // Progress Strip
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Unit $currentDay of 30',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 12,
-                                    color: subtitleColor,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Text(
-                                  activeTrack == 'A'
-                                      ? 'Track A · Unfreeze'
-                                      : 'Track B · Scratch',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 12,
-                                    color: subtitleColor,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: LinearProgressIndicator(
-                                value: (currentDay / 30).clamp(0.0, 1.0),
-                                minHeight: 6,
-                                backgroundColor: isDark
-                                    ? const Color(0xFF1E293B)
-                                    : const Color(0xFFE2E8F0),
-                                valueColor: const AlwaysStoppedAnimation<Color>(
-                                    AppTheme.primary),
                               ),
                             ),
+                            const SizedBox(height: 32),
                           ],
                         ),
                       ),
-
-                      // ---------- PATH scrollview ----------
-                      Expanded(
-                        child: SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(vertical: 24),
-                          child: Column(
-                            children: [
-                              // Continuous Connected Path Widget
-                              _ContinuousPathWidget(
-                                days: allDays,
-                                stageHeaders: stageHeaders,
-                                currentDay: currentDay,
-                                reviewMode: reviewMode,
-                                completedDays: completedDays,
-                                activeTrack: activeTrack,
-                                isDark: isDark,
-                                headingColor: headingColor,
-                                subtitleColor: subtitleColor,
-                                pulseAnimation: _pulseAnimation,
-                                onOpenSheet: _openSheet,
-                                onShowToast: _showToast,
-                                dayState: _dayState,
-                              ),
-
-                              const SizedBox(height: 32),
-
-                              // ---------- MORE UNITS COMING SOON BANNER ----------
-                              Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 12),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 16),
-                                decoration: BoxDecoration(
-                                  color: cardBg,
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                      color: AppTheme.primary.withOpacity(0.4)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AppTheme.primary.withOpacity(0.15),
-                                      blurRadius: 16,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: 44,
-                                          height: 44,
-                                          decoration: BoxDecoration(
-                                            gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xFFFA5A3A),
-                                                Color(0xFFF25C40)
-                                              ],
-                                              begin: Alignment.topLeft,
-                                              end: Alignment.bottomRight,
-                                            ),
-                                            borderRadius: BorderRadius.circular(14),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: const Color(0xFFF25C40)
-                                                    .withOpacity(0.4),
-                                                blurRadius: 10,
-                                              )
-                                            ],
-                                          ),
-                                          child: const Center(
-                                            child: Text('🚀',
-                                                style: TextStyle(fontSize: 22)),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 14),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                padding: const EdgeInsets.symmetric(
-                                                    horizontal: 8, vertical: 3),
-                                                decoration: BoxDecoration(
-                                                  color: AppTheme.primary
-                                                      .withOpacity(0.15),
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
-                                                ),
-                                                child: Text(
-                                                  '✨ MORE TRACKS COMING SOON',
-                                                  style: GoogleFonts.inter(
-                                                    color: AppTheme.primary,
-                                                    fontSize: 9.5,
-                                                    fontWeight: FontWeight.w900,
-                                                    letterSpacing: 0.5,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 4),
-                                              Text(
-                                                'Your voice is your superpower 🌟',
-                                                style: GoogleFonts.outfit(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: headingColor,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 40),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
           ),
         ],
       ),
@@ -537,6 +402,22 @@ class _ContinuousPathWidget extends StatelessWidget {
     required this.dayState,
   });
 
+  String _formatStageTitle(String title) {
+    if (title.toUpperCase().startsWith('STAGE ')) {
+      final parts = title.split(':');
+      if (parts.length == 2) {
+        final stageNum = parts[0].trim().replaceAll('STAGE ', 'Stage ');
+        final stageName = parts[1].trim();
+        final words = stageName.split(' ').map((w) {
+          if (w.isEmpty) return w;
+          return w[0].toUpperCase() + w.substring(1).toLowerCase();
+        }).join(' ');
+        return '$stageNum · $words';
+      }
+    }
+    return title;
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -544,7 +425,6 @@ class _ContinuousPathWidget extends StatelessWidget {
     final totalHeight = days.length * nodeRowHeight;
     const xFractions = [0.22, 0.52, 0.78, 0.52];
 
-    // Calculate (X, Y) center coordinates for ALL nodes continuously
     final List<Offset> points = [];
     for (int i = 0; i < days.length; i++) {
       final xFrac = xFractions[i % xFractions.length];
@@ -558,7 +438,6 @@ class _ContinuousPathWidget extends StatelessWidget {
       width: double.infinity,
       child: Stack(
         children: [
-          // 1. Continuous Dashed Curve Line Painter connecting ALL nodes from 1 to 30
           Positioned.fill(
             child: CustomPaint(
               painter: _WindingPathDashedPainter(
@@ -567,8 +446,6 @@ class _ContinuousPathWidget extends StatelessWidget {
               ),
             ),
           ),
-
-          // 2. Nodes & Stage Header Badges
           ...days.asMap().entries.map((entry) {
             final i = entry.key;
             final day = entry.value;
@@ -594,41 +471,58 @@ class _ContinuousPathWidget extends StatelessWidget {
                   // Stage Header Badge above starting node of a Stage
                   if (stageTitle != null)
                     Positioned(
-                      top: -12,
+                      top: -16,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                         decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF1E293B) : const Color(0xFFEFF6FF),
+                          color: isDark
+                              ? const Color(0xFF1E293B).withOpacity(0.92)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(100),
                           border: Border.all(
-                            color: const Color(0xFFFA5A3A).withOpacity(0.5),
+                            color: const Color(0xFFFA5A3A).withOpacity(0.4),
+                            width: 1.2,
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 8,
-                            )
+                              color: Colors.black.withOpacity(0.12),
+                              blurRadius: 10,
+                              offset: const Offset(0, 3),
+                            ),
                           ],
                         ),
-                        child: Text(
-                          stageTitle.toUpperCase(),
-                          style: GoogleFonts.inter(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFFFA5A3A),
-                            letterSpacing: 0.5,
-                          ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 7,
+                              height: 7,
+                              decoration: const BoxDecoration(
+                                color: Color(0xFFFA5A3A),
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              _formatStageTitle(stageTitle),
+                              style: GoogleFonts.outfit(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: isDark ? Colors.white : const Color(0xFF0F172A),
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
 
                   // Node Circle Container
                   Padding(
-                    padding: EdgeInsets.only(top: stageTitle != null ? 22.0 : 0.0),
-                    child: Positioned(
-                      child: Align(
-                        alignment: Alignment( (xFrac * 2) - 1.0, 0 ),
-                        child: GestureDetector(
+                    padding: EdgeInsets.only(top: stageTitle != null ? 30.0 : 0.0),
+                    child: Align(
+                      alignment: Alignment( (xFrac * 2) - 1.0, 0 ),
+                      child: GestureDetector(
                           onTap: () {
                             if (isLocked) {
                               onShowToast(
@@ -771,10 +665,9 @@ class _ContinuousPathWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
+                  ],
+                ),
+              );
           }),
         ],
       ),

@@ -62,11 +62,16 @@ class FluencyTrack(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
+    slug: Mapped[str] = mapped_column(String(100), nullable=False, default="track")
     type: Mapped[FluencyTrackType] = mapped_column(
         Enum(FluencyTrackType, name="fluency_track_type_enum", schema="fluency"),
         nullable=False,
         default=FluencyTrackType.UNFREEZE,
     )
+    description: Mapped[str] = mapped_column(String, nullable=False, default="")
+    cefr_min: Mapped[str] = mapped_column(String(10), nullable=False, default="A1")
+    cefr_max: Mapped[str] = mapped_column(String(10), nullable=False, default="C2")
+    sequence: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
@@ -90,6 +95,11 @@ class Stage(Base):
         index=True,
     )
     name: Mapped[str] = mapped_column(String(255), nullable=False)
+    slug: Mapped[str] = mapped_column(String(100), nullable=False, default="stage")
+    description: Mapped[str] = mapped_column(String, nullable=False, default="")
+    cefr_min: Mapped[str] = mapped_column(String(10), nullable=False, default="A1")
+    cefr_max: Mapped[str] = mapped_column(String(10), nullable=False, default="C2")
+    primary_goals: Mapped[list] = mapped_column(JSONB, nullable=False, default=list)
     sequence: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -114,6 +124,14 @@ class StageNode(Base):
         nullable=False,
         index=True,
     )
+    name: Mapped[str] = mapped_column(String(150), nullable=False, default="")
+    slug: Mapped[str] = mapped_column(String(150), nullable=False, default="node")
+    description: Mapped[str] = mapped_column(String, nullable=False, default="")
+    cefr_min: Mapped[str] = mapped_column(String(10), nullable=False, default="A1")
+    cefr_max: Mapped[str] = mapped_column(String(10), nullable=False, default="C2")
+    learning_goal: Mapped[str] = mapped_column(String, nullable=False, default="")
+    primary_skill: Mapped[str] = mapped_column(String(100), nullable=False, default="")
+    estimated_minutes: Mapped[int] = mapped_column(Integer, nullable=False, default=10)
     sequence: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -123,7 +141,7 @@ class StageNode(Base):
 
     stage: Mapped["Stage"] = relationship(back_populates="nodes")
     activities: Mapped[list["NodeActivity"]] = relationship(
-        back_populates="stage_node", cascade="all, delete-orphan"
+        back_populates="stage_node", cascade="all, delete-orphan", order_by="NodeActivity.sequence"
     )
 
 
@@ -138,11 +156,14 @@ class NodeActivity(Base):
         nullable=False,
         index=True,
     )
+    sequence: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    title: Mapped[str] = mapped_column(String(150), nullable=False, default="")
     activity_type: Mapped[ActivityType] = mapped_column(
         Enum(ActivityType, name="activity_type_enum", schema="fluency"),
         nullable=False,
     )
     config: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
+    is_required: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
@@ -181,8 +202,11 @@ class UserActivityProgress(Base):
         default=ActivityStatus.not_started,
     )
     score: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
+    attempt_count: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
     response_data: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_attempted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()

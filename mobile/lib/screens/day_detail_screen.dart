@@ -5,8 +5,10 @@ import 'package:fluentsoul_mobile/config/theme.dart';
 import 'package:fluentsoul_mobile/models/curriculum.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
 
+typedef NodeDetailScreen = DayDetailScreen;
+
 class DayDetailScreen extends StatefulWidget {
-  final CurriculumDay day;
+  final TrackNode day;
 
   const DayDetailScreen({super.key, required this.day});
 

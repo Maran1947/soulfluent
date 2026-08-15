@@ -34,8 +34,12 @@ class PersonaInfo {
   }
 }
 
-class CurriculumDay {
-  final int d;
+typedef CurriculumDay = TrackNode;
+typedef CurriculumWeek = RoadmapStage;
+typedef CurriculumProgress = TrackProgress;
+
+class TrackNode {
+  final int d; // Sequence number / Unit number
   final String theme;
   final String persona;
   final String
@@ -54,7 +58,7 @@ class CurriculumDay {
   final bool milestoneReport;
   final bool graduatesToTrackA;
 
-  const CurriculumDay({
+  const TrackNode({
     required this.d,
     required this.theme,
     required this.persona,
@@ -73,6 +77,8 @@ class CurriculumDay {
     this.milestoneReport = false,
     this.graduatesToTrackA = false,
   });
+
+  int get unit => d;
 
   String get shortHook {
     final cleanAi = aiLine.trim();
@@ -106,7 +112,7 @@ class CurriculumDay {
     return [wpmStr, fillerStr, rescueStr];
   }
 
-  factory CurriculumDay.fromJson(Map<String, dynamic> json) {
+  factory TrackNode.fromJson(Map<String, dynamic> json) {
     List<String> parseList(dynamic val) {
       if (val == null) return [];
       if (val is List) {
@@ -118,8 +124,8 @@ class CurriculumDay {
       return [];
     }
 
-    return CurriculumDay(
-      d: json['d'] ?? 1,
+    return TrackNode(
+      d: json['d'] ?? json['unit'] ?? 1,
       theme: json['theme'] ?? '',
       persona: json['persona'] ?? 'riya',
       mode: json['mode'] ?? 'foundation',
@@ -142,6 +148,7 @@ class CurriculumDay {
   Map<String, dynamic> toJson() {
     return {
       'd': d,
+      'unit': d,
       'theme': theme,
       'persona': persona,
       'mode': mode,
@@ -162,53 +169,60 @@ class CurriculumDay {
   }
 }
 
-class CurriculumWeek {
+class RoadmapStage {
   final String title;
   final String range;
-  final List<CurriculumDay> days;
+  final List<TrackNode> nodes;
+  List<TrackNode> get days => nodes;
 
-  const CurriculumWeek({
+  const RoadmapStage({
     required this.title,
     required this.range,
-    required this.days,
+    required this.nodes,
   });
 
-  factory CurriculumWeek.fromJson(Map<String, dynamic> json) {
-    return CurriculumWeek(
+  factory RoadmapStage.fromJson(Map<String, dynamic> json) {
+    final rawNodes = json['nodes'] as List? ?? json['days'] as List? ?? [];
+    return RoadmapStage(
       title: json['title'] ?? '',
       range: json['range'] ?? '',
-      days: (json['days'] as List? ?? [])
-          .map((d) => CurriculumDay.fromJson(d as Map<String, dynamic>))
+      nodes: rawNodes
+          .map((d) => TrackNode.fromJson(d as Map<String, dynamic>))
           .toList(),
     );
   }
 }
 
-class CurriculumProgress {
+class TrackProgress {
   final int currentDay;
   final int streakDays;
-  final String activeTrack; // 'A' or 'B'
+  final String activeTrack; // 'UNFREEZE' or 'SCRATCH'
   final bool reviewMode;
   final List<int> completedDays;
 
-  const CurriculumProgress({
+  int get currentNode => currentDay;
+  List<int> get completedNodes => completedDays;
+
+  const TrackProgress({
     this.currentDay = 1,
     this.streakDays = 0,
-    this.activeTrack = 'A',
+    this.activeTrack = 'UNFREEZE',
     this.reviewMode = false,
     this.completedDays = const [],
   });
 
-  factory CurriculumProgress.fromJson(Map<String, dynamic> json) {
-    return CurriculumProgress(
-      currentDay: json['current_day'] ?? 1,
+  factory TrackProgress.fromJson(Map<String, dynamic> json) {
+    return TrackProgress(
+      currentDay: json['current_day'] ?? json['current_node'] ?? 1,
       streakDays: json['streak_days'] ?? 0,
-      activeTrack: json['active_track'] ?? 'A',
+      activeTrack: json['active_track'] ?? 'UNFREEZE',
       reviewMode: json['review_mode'] ?? false,
-      completedDays: List<int>.from(json['completed_days'] ?? []),
+      completedDays: List<int>.from(json['completed_days'] ?? json['completed_nodes'] ?? []),
     );
   }
 }
+
+final List<Map<String, dynamic>> ROADMAP_STAGES_DATA = WEEKS_DATA;
 
 final List<Map<String, dynamic>> WEEKS_DATA = [
   {

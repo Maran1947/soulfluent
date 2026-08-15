@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/providers/gd_provider.dart';
 import 'package:fluentsoul_mobile/l10n/app_localizations.dart';
 import 'package:fluentsoul_mobile/providers/auth_provider.dart';
 import 'package:fluentsoul_mobile/screens/profile_screen.dart';
@@ -94,6 +96,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final auth = context.watch<AuthProvider>();
+    final gd = context.watch<GDProvider>();
     final user = auth.currentUser;
 
     final isDefaultGreeting = (title.isEmpty || title == 'FluentSoul');
@@ -136,7 +139,34 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   ),
           ),
-          const Spacer(),
+
+          // Streak Badge
+          Container(
+            margin: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppTheme.primary.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(
+                color: AppTheme.primary.withOpacity(0.3),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('🔥', style: TextStyle(fontSize: 12)),
+                const SizedBox(width: 4),
+                Text(
+                  '${gd.streakDays}d streak',
+                  style: GoogleFonts.outfit(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
 
           // Action or User Avatar
           if (action != null)

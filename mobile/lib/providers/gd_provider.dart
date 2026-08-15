@@ -62,7 +62,12 @@ class GDProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   AudioService get audioService => _audioService;
 
-  GDProvider(this._apiService);
+  GDProvider(this._apiService) {
+    _weeks = WEEKS_DATA
+        .map((w) => CurriculumWeek.fromJson(w))
+        .toList();
+    fetchCurriculum();
+  }
 
   void clearError() {
     _errorMessage = null;
@@ -75,18 +80,31 @@ class GDProvider extends ChangeNotifier {
     notifyListeners();
     try {
       final data = await _apiService.getCurriculum(track: trackToFetch);
-      final rawWeeks = data['weeks'] as List? ?? [];
-      _weeks = rawWeeks
-          .map((w) => CurriculumWeek.fromJson(w as Map<String, dynamic>))
-          .toList();
+      final rawWeeks = data['weeks'] as List?;
+      if (rawWeeks != null && rawWeeks.isNotEmpty) {
+        _weeks = rawWeeks
+            .map((w) => CurriculumWeek.fromJson(w as Map<String, dynamic>))
+            .toList();
+      } else if (_weeks.isEmpty) {
+        _weeks = WEEKS_DATA
+            .map((w) => CurriculumWeek.fromJson(w))
+            .toList();
+      }
 
       final rawPersonas = data['personas'] as Map<String, dynamic>? ?? {};
-      _personas = rawPersonas.map((k, v) => MapEntry(
-            k,
-            PersonaInfo.fromJson(k, v as Map<String, dynamic>),
-          ));
+      if (rawPersonas.isNotEmpty) {
+        _personas = rawPersonas.map((k, v) => MapEntry(
+              k,
+              PersonaInfo.fromJson(k, v as Map<String, dynamic>),
+            ));
+      }
     } catch (e) {
       debugPrint('Error fetching curriculum: $e');
+      if (_weeks.isEmpty) {
+        _weeks = WEEKS_DATA
+            .map((w) => CurriculumWeek.fromJson(w))
+            .toList();
+      }
     } finally {
       _isLoadingCurriculum = false;
       notifyListeners();

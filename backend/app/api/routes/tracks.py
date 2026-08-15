@@ -10,6 +10,7 @@ from app.api.deps import get_current_user, get_current_user_optional, get_db
 from app.models.fluency_track import (
     ActivityStatus,
     FluencyTrack,
+    FluencyTrackType,
     NodeActivity,
     Stage,
     StageNode,
@@ -37,6 +38,7 @@ async def get_tracks(
     query = (
         select(FluencyTrack)
         .where(FluencyTrack.is_active.is_(True))
+        .order_by(FluencyTrack.sequence)
         .options(
             selectinload(FluencyTrack.stages)
             .selectinload(Stage.nodes)
@@ -63,55 +65,126 @@ async def get_tracks(
     tracks_out: list[FluencyTrackOut] = []
     for track in tracks:
         stages_out: list[StageOut] = []
+        track_total_nodes = 0
+        track_completed_nodes = 0
+
         for stage in track.stages:
             if not stage.is_active:
                 continue
             nodes_out: list[StageNodeOut] = []
+            stage_total_activities = 0
+            stage_completed_activities = 0
+
             for node in stage.nodes:
                 if not node.is_active:
                     continue
+                track_total_nodes += 1
                 activities_out: list[NodeActivityOut] = []
+                node_total_act = 0
+                node_comp_act = 0
+
                 for act in node.activities:
                     if not act.is_active:
                         continue
+                    node_total_act += 1
                     p_out = None
                     if act.id in user_progress_map:
-                        p_out = UserActivityProgressOut.model_validate(user_progress_map[act.id])
+                        p_obj = user_progress_map[act.id]
+                        p_out = UserActivityProgressOut.model_validate(p_obj)
+                        if p_obj.status == ActivityStatus.completed:
+                            node_comp_act += 1
+
                     activities_out.append(
                         NodeActivityOut(
                             id=act.id,
                             stage_node_id=act.stage_node_id,
+                            sequence=act.sequence,
+                            title=act.title or "",
                             activity_type=act.activity_type,
                             config=act.config,
+                            is_required=act.is_required,
                             is_active=act.is_active,
                             progress=p_out,
                         )
                     )
+
+                stage_total_activities += node_total_act
+                stage_completed_activities += node_comp_act
+
+                node_status = "AVAILABLE"
+                if node_total_act > 0:
+                    if node_comp_act == node_total_act:
+                        node_status = "COMPLETED"
+                        track_completed_nodes += 1
+                    elif node_comp_act > 0:
+                        node_status = "IN_PROGRESS"
+
                 nodes_out.append(
                     StageNodeOut(
                         id=node.id,
                         stage_id=node.stage_id,
                         sequence=node.sequence,
+                        name=node.name or f"Node {node.sequence}",
+                        slug=node.slug or f"node-{node.sequence}",
+                        description=node.description or "",
+                        cefr_min=node.cefr_min or "A1",
+                        cefr_max=node.cefr_max or "C2",
+                        learning_goal=node.learning_goal or "",
+                        primary_skill=node.primary_skill or "",
+                        estimated_minutes=node.estimated_minutes,
                         is_active=node.is_active,
+                        status=node_status,
+                        completed_activities=node_comp_act,
+                        total_activities=node_total_act,
                         activities=activities_out,
                     )
                 )
+
+            stage_pct = (
+                round((stage_completed_activities / stage_total_activities) * 100.0, 2)
+                if stage_total_activities > 0
+                else 0.0
+            )
+
             stages_out.append(
                 StageOut(
                     id=stage.id,
                     fluency_track_id=stage.fluency_track_id,
                     name=stage.name,
+                    slug=stage.slug or f"stage-{stage.sequence}",
+                    description=stage.description or "",
+                    cefr_min=stage.cefr_min or "A1",
+                    cefr_max=stage.cefr_max or "C2",
+                    primary_goals=stage.primary_goals or [],
                     sequence=stage.sequence,
                     is_active=stage.is_active,
+                    completed_activities=stage_completed_activities,
+                    total_activities=stage_total_activities,
+                    percentage=stage_pct,
                     nodes=nodes_out,
                 )
             )
+
+        track_pct = (
+            round((track_completed_nodes / track_total_nodes) * 100.0, 2)
+            if track_total_nodes > 0
+            else 0.0
+        )
+
         tracks_out.append(
             FluencyTrackOut(
                 id=track.id,
                 name=track.name,
+                slug=track.slug or "track",
                 type=track.type,
+                description=track.description or "",
+                cefr_min=track.cefr_min or "A1",
+                cefr_max=track.cefr_max or "C2",
+                sequence=track.sequence,
                 is_active=track.is_active,
+                completed_nodes=track_completed_nodes,
+                total_nodes=track_total_nodes,
+                percentage=track_pct,
                 stages=stages_out,
             )
         )
@@ -152,26 +225,57 @@ async def get_node_details(
                 user_progress_map[p.node_activity_id] = p
 
     activities_out = []
+    node_total_act = 0
+    node_comp_act = 0
+
     for act in node.activities:
+        if not act.is_active:
+            continue
+        node_total_act += 1
         p_out = None
         if act.id in user_progress_map:
-            p_out = UserActivityProgressOut.model_validate(user_progress_map[act.id])
+            p_obj = user_progress_map[act.id]
+            p_out = UserActivityProgressOut.model_validate(p_obj)
+            if p_obj.status == ActivityStatus.completed:
+                node_comp_act += 1
+
         activities_out.append(
             NodeActivityOut(
                 id=act.id,
                 stage_node_id=act.stage_node_id,
+                sequence=act.sequence,
+                title=act.title or "",
                 activity_type=act.activity_type,
                 config=act.config,
+                is_required=act.is_required,
                 is_active=act.is_active,
                 progress=p_out,
             )
         )
 
+    node_status = "AVAILABLE"
+    if node_total_act > 0:
+        if node_comp_act == node_total_act:
+            node_status = "COMPLETED"
+        elif node_comp_act > 0:
+            node_status = "IN_PROGRESS"
+
     return StageNodeOut(
         id=node.id,
         stage_id=node.stage_id,
         sequence=node.sequence,
+        name=node.name or f"Node {node.sequence}",
+        slug=node.slug or f"node-{node.sequence}",
+        description=node.description or "",
+        cefr_min=node.cefr_min or "A1",
+        cefr_max=node.cefr_max or "C2",
+        learning_goal=node.learning_goal or "",
+        primary_skill=node.primary_skill or "",
+        estimated_minutes=node.estimated_minutes,
         is_active=node.is_active,
+        status=node_status,
+        completed_activities=node_comp_act,
+        total_activities=node_total_act,
         activities=activities_out,
     )
 
@@ -196,22 +300,28 @@ async def submit_activity_progress(
     prog_res = await db.execute(prog_query)
     progress = prog_res.scalar_one_or_none()
 
+    now = datetime.utcnow()
     if not progress:
         progress = UserActivityProgress(
             user_id=current_user.id,
             node_activity_id=activity_id,
             status=payload.status,
             score=payload.score,
+            attempt_count=1,
             response_data=payload.response_data,
-            completed_at=datetime.utcnow() if payload.status == ActivityStatus.completed else None,
+            started_at=now,
+            completed_at=now if payload.status == ActivityStatus.completed else None,
+            last_attempted_at=now,
         )
         db.add(progress)
     else:
+        progress.attempt_count += 1
         progress.status = payload.status
         progress.score = payload.score
         progress.response_data = payload.response_data
+        progress.last_attempted_at = now
         if payload.status == ActivityStatus.completed and not progress.completed_at:
-            progress.completed_at = datetime.utcnow()
+            progress.completed_at = now
 
     await db.commit()
     await db.refresh(progress)
@@ -228,3 +338,125 @@ async def get_user_progress(
     res = await db.execute(query)
     progresses = res.scalars().all()
     return [UserActivityProgressOut.model_validate(p) for p in progresses]
+
+
+# Compatibility routes for legacy /curriculum endpoint calls
+curriculum_router = APIRouter(prefix="/curriculum", tags=["curriculum"])
+
+
+@curriculum_router.get("", include_in_schema=False)
+@curriculum_router.get("/", include_in_schema=False)
+async def get_curriculum_legacy(
+    track: str | None = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: User | None = Depends(get_current_user_optional),
+):
+    tracks_out = await get_tracks(db=db, current_user=current_user)
+    res_dict = tracks_out.model_dump()
+
+    target_track = None
+    for t in tracks_out.tracks:
+        if t.type == FluencyTrackType.UNFREEZE:
+            target_track = t
+            break
+    if not target_track and tracks_out.tracks:
+        target_track = tracks_out.tracks[0]
+
+    weeks = []
+    global_day_counter = 1
+    personas_map = {
+        "riya": {
+            "name": "Riya",
+            "initial": "R",
+            "color": "#FF8B5E",
+            "sub": "Fluency Coach",
+            "flag": "🇮🇳",
+        },
+        "rohan": {
+            "name": "Rohan",
+            "initial": "R",
+            "color": "#4A90E2",
+            "sub": "Structure Coach",
+            "flag": "🇮🇳",
+        },
+        "emily": {
+            "name": "Emily",
+            "initial": "E",
+            "color": "#50E3C2",
+            "sub": "Spontaneity Coach",
+            "flag": "🇬🇧",
+        },
+        "alex": {
+            "name": "Alex",
+            "initial": "A",
+            "color": "#B8E986",
+            "sub": "Debate Coach",
+            "flag": "🇺🇸",
+        },
+    }
+
+    if target_track:
+        for stage in target_track.stages:
+            days = []
+            for node in stage.nodes:
+                persona_key = "riya"
+                if stage.sequence in [3, 4]:
+                    persona_key = "rohan"
+                elif stage.sequence in [5, 6, 7, 8]:
+                    persona_key = "emily"
+                elif stage.sequence in [9, 10, 11, 12]:
+                    persona_key = "alex"
+
+                days.append(
+                    {
+                        "d": global_day_counter,
+                        "theme": node.name or f"Node {node.sequence}",
+                        "persona": persona_key,
+                        "mode": "foundation",
+                        "aiLine": f"Let's practice {node.name}. Focus on flow and speed.",
+                        "instruction": node.learning_goal or node.description or f"Complete activities for {node.name}.",
+                        "phrasesA": ["In my opinion...", "I think..."],
+                        "phrasesB": ["I feel...", "My perspective is..."],
+                        "rescuePhrases": ["Let me think...", "That's an interesting question..."],
+                        "script": [f"Coach: Ready to practice {node.name}?"],
+                        "wpm": 90 + (stage.sequence * 3),
+                        "filler": "≤5/min",
+                        "milestoneReport": (node.sequence == len(stage.nodes)),
+                        "graduatesToTrackA": False,
+                    }
+                )
+                global_day_counter += 1
+
+            weeks.append(
+                {
+                    "title": stage.name,
+                    "range": f"Nodes 1–{len(stage.nodes)}",
+                    "days": days,
+                }
+            )
+
+    res_dict["weeks"] = weeks
+    res_dict["personas"] = personas_map
+    return res_dict
+
+
+@curriculum_router.get("/progress", include_in_schema=False)
+async def get_curriculum_progress_legacy():
+    return {
+        "current_day": 1,
+        "streak_days": 0,
+        "active_track": "UNFREEZE",
+        "review_mode": False,
+        "completed_days": [],
+    }
+
+
+@curriculum_router.post("/progress", include_in_schema=False)
+async def update_curriculum_progress_legacy():
+    return {
+        "current_day": 1,
+        "streak_days": 0,
+        "active_track": "UNFREEZE",
+        "review_mode": False,
+        "completed_days": [],
+    }
