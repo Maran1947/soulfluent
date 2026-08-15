@@ -26,6 +26,9 @@ class GDProvider extends ChangeNotifier {
   List<int> _completedPathDays = [];
   CurriculumDay? _activePathDay;
   List<String> _activeScaffoldPhrases = [];
+  List<CurriculumWeek> _weeks = [];
+  Map<String, PersonaInfo> _personas = {};
+  bool _isLoadingCurriculum = false;
 
   bool _isLoading = false;
   bool _isRecording = false;
@@ -47,6 +50,9 @@ class GDProvider extends ChangeNotifier {
   List<int> get completedPathDays => _completedPathDays;
   CurriculumDay? get activePathDay => _activePathDay;
   List<String> get activeScaffoldPhrases => _activeScaffoldPhrases;
+  List<CurriculumWeek> get weeks => _weeks;
+  Map<String, PersonaInfo> get personas => _personas;
+  bool get isLoadingCurriculum => _isLoadingCurriculum;
 
   bool get isLoading => _isLoading;
   bool get isRecording => _isRecording;
@@ -61,6 +67,64 @@ class GDProvider extends ChangeNotifier {
   void clearError() {
     _errorMessage = null;
     notifyListeners();
+  }
+
+  Future<void> fetchCurriculum({String? track}) async {
+    final trackToFetch = track ?? _activeTrack;
+    _isLoadingCurriculum = true;
+    notifyListeners();
+    try {
+      final data = await _apiService.getCurriculum(track: trackToFetch);
+      final rawWeeks = data['weeks'] as List? ?? [];
+      _weeks = rawWeeks
+          .map((w) => CurriculumWeek.fromJson(w as Map<String, dynamic>))
+          .toList();
+
+      final rawPersonas = data['personas'] as Map<String, dynamic>? ?? {};
+      _personas = rawPersonas.map((k, v) => MapEntry(
+            k,
+            PersonaInfo.fromJson(k, v as Map<String, dynamic>),
+          ));
+    } catch (e) {
+      debugPrint('Error fetching curriculum: $e');
+    } finally {
+      _isLoadingCurriculum = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchCurriculumProgress() async {
+    try {
+      final res = await _apiService.getCurriculumProgress();
+      final prog = CurriculumProgress.fromJson(res);
+      _currentPathDay = prog.currentDay;
+      _streakDays = prog.streakDays;
+      _activeTrack = prog.activeTrack;
+      _reviewMode = prog.reviewMode;
+      _completedPathDays = prog.completedDays;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error fetching curriculum progress: $e');
+    }
+  }
+
+  Future<void> completeDay(int dayNumber) async {
+    if (!_completedPathDays.contains(dayNumber)) {
+      _completedPathDays.add(dayNumber);
+      _completedPathDays.sort();
+    }
+    if (_currentPathDay <= dayNumber) {
+      _currentPathDay = dayNumber + 1;
+    }
+    notifyListeners();
+    try {
+      await _apiService.updateCurriculumProgress(
+        completedDay: dayNumber,
+        currentDay: _currentPathDay,
+      );
+    } catch (e) {
+      debugPrint('Error updating curriculum progress: $e');
+    }
   }
 
   Future<void> resetToDay1() async {
@@ -78,11 +142,13 @@ class GDProvider extends ChangeNotifier {
   void setActiveTrack(String track) {
     _activeTrack = track;
     notifyListeners();
+    fetchCurriculum(track: track);
   }
 
   void setReviewMode(bool mode) {
     _reviewMode = mode;
     notifyListeners();
+    _apiService.updateCurriculumProgress(reviewMode: mode);
   }
 
   Future<bool> startPathDaySession({
