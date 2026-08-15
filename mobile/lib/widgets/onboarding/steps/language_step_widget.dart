@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/providers/language_provider.dart';
+import 'package:fluentsoul_mobile/providers/locale_provider.dart';
 import 'package:fluentsoul_mobile/providers/onboarding_provider.dart';
 
 class LanguageStepWidget extends StatelessWidget {
@@ -41,7 +43,12 @@ class LanguageStepWidget extends StatelessWidget {
           return Container(
             margin: const EdgeInsets.only(bottom: 14),
             child: InkWell(
-              onTap: () => provider.setLanguage(lang['id'] as String),
+              onTap: () {
+                final selected = lang['id'] as String;
+                provider.setLanguage(selected);
+                context.read<LanguageProvider>().setLanguage(selected);
+                context.read<LocaleProvider>().setLanguageString(selected);
+              },
               borderRadius: BorderRadius.circular(18),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),

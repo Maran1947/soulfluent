@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/l10n/app_localizations.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/providers/locale_provider.dart';
 import 'package:fluentsoul_mobile/widgets/persona_card.dart';
 import 'package:fluentsoul_mobile/widgets/transcript_drawer.dart';
 import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
@@ -26,6 +28,8 @@ class _GDArenaScreenState extends State<GDArenaScreen> {
   @override
   Widget build(BuildContext context) {
     final gd = context.watch<GDProvider>();
+    final localeProvider = context.watch<LocaleProvider>();
+    final l10n = AppLocalizations.of(context);
     final session = gd.currentSession;
 
     if (gd.errorMessage != null) {

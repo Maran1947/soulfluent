@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/l10n/app_localizations.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/providers/locale_provider.dart';
 import 'package:fluentsoul_mobile/widgets/app_header.dart';
 import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 import 'package:fluentsoul_mobile/widgets/skeleton_loader.dart';
@@ -31,6 +33,8 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
   @override
   Widget build(BuildContext context) {
     final gd = context.watch<GDProvider>();
+    final localeProvider = context.watch<LocaleProvider>();
+    final l10n = AppLocalizations.of(context);
     final report = gd.currentReport;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 

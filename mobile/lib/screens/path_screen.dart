@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/l10n/app_localizations.dart';
 import 'package:fluentsoul_mobile/models/curriculum.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/providers/locale_provider.dart';
 import 'package:fluentsoul_mobile/screens/day_detail_screen.dart';
 import 'package:fluentsoul_mobile/widgets/app_header.dart';
 import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
@@ -98,6 +100,8 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final gd = context.watch<GDProvider>();
+    final localeProvider = context.watch<LocaleProvider>();
+    final l10n = AppLocalizations.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final cardBg = isDark ? AppTheme.cardDark : AppTheme.cardLight;

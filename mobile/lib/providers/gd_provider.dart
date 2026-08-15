@@ -135,9 +135,9 @@ class GDProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchTopics() async {
+  Future<void> fetchTopics({String language = 'English'}) async {
     try {
-      final res = await _apiService.getTopics();
+      final res = await _apiService.getTopics(language: language);
       _topics = res['categories'] as Map<String, dynamic>? ?? {};
       notifyListeners();
     } catch (e) {

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/l10n/app_localizations.dart';
 import 'package:fluentsoul_mobile/providers/auth_provider.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/providers/locale_provider.dart';
 import 'package:fluentsoul_mobile/screens/challenges_screen.dart';
 import 'package:fluentsoul_mobile/screens/path_screen.dart';
 import 'package:fluentsoul_mobile/widgets/app_header.dart';
@@ -93,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<GDProvider>().fetchTopics();
+      final lang = context.read<LocaleProvider>().languageString;
+      context.read<GDProvider>().fetchTopics(language: lang);
       _scrollToStep(currentStep);
     });
   }
@@ -190,6 +193,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
     final gd = context.watch<GDProvider>();
+    final localeProvider = context.watch<LocaleProvider>();
+    final l10n = AppLocalizations.of(context);
     final user = auth.currentUser;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -205,192 +210,165 @@ class _HomeScreenState extends State<HomeScreen> {
         index: _activeTab,
         children: [
           const PathScreen(),
-          Stack(
-            children: [
-              // Ambient Waves Background
-              Positioned.fill(
-                child: CustomPaint(
-                  painter: BackgroundWavesPainter(
-                    color: AppTheme.primary,
-                    isDark: isDark,
-                  ),
+          SafeArea(
+            child: Column(
+              children: [
+                // Top Stepper Navigation Header
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
+                  child: _buildStepperHeader(isDark, cardBg, borderColor,
+                      headingColor, subtitleColor, l10n),
                 ),
-              ),
 
-              SafeArea(
-                child: Column(
-                  children: [
-                    // Top Welcome & Stepper Bar
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                      child: Column(
-                        children: [
-                          // User Greeting Subtitle
-                          Row(
-                            children: [
-                              Text(
-                                'Welcome, ${user?.name ?? 'Practitioner'} 👋',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: headingColor,
+                // Step Content Body
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Dynamic Step Body
+                        if (currentStep == 1)
+                          _buildStep1PracticeMode(isDark, headingColor,
+                              subtitleColor, borderColor, l10n)
+                        else if (currentStep == 2)
+                          _buildStep2Topic(isDark, headingColor,
+                              subtitleColor, borderColor, cardBg, gd, l10n)
+                        else if (currentStep == 3)
+                          _buildStep3VoicePartners(isDark, headingColor,
+                              subtitleColor, borderColor, cardBg, l10n)
+                        else
+                          _buildStep4Launch(isDark, headingColor,
+                              subtitleColor, borderColor, cardBg, l10n),
+
+                        const SizedBox(height: 20),
+
+                        // Navigation Buttons Footer (Back / Continue)
+                        if (currentStep == 1)
+                          Container(
+                            width: double.infinity,
+                            height: 52,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFFA5A3A), Color(0xFFFF4B72)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFFFA5A3A).withOpacity(0.3),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
                                 ),
+                              ],
+                            ),
+                            child: ElevatedButton(
+                              onPressed: gd.isLoading ? null : _nextStep,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16)),
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-
-                          // Stepper Navigation Header Card (1 Practice Mode | 2 Topic / Prompt | 3 AI Voice Partners | 4 Setup & Launch)
-                          _buildStepperHeader(isDark, cardBg, borderColor,
-                              headingColor, subtitleColor),
-                        ],
-                      ),
-                    ),
-
-                    // Step Content Card
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
-                        child: Container(
-                          constraints: const BoxConstraints(maxWidth: 520),
-                          decoration: BoxDecoration(
-                            color: cardBg,
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(color: borderColor),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black
-                                    .withOpacity(isDark ? 0.3 : 0.06),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
-                          ),
-                          padding: const EdgeInsets.all(22),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              // Step Indicator Badge ("✨ Step X of 4")
-                              Center(
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 14, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFEBE5),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '✨ Step $currentStep of 4',
-                                    style: GoogleFonts.inter(
-                                      color: AppTheme.primary,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 18),
-
-                              // Dynamic Step Body
-                              if (currentStep == 1)
-                                _buildStep1PracticeMode(isDark, headingColor,
-                                    subtitleColor, borderColor)
-                              else if (currentStep == 2)
-                                _buildStep2Topic(isDark, headingColor,
-                                    subtitleColor, borderColor, cardBg, gd)
-                              else if (currentStep == 3)
-                                _buildStep3VoicePartners(isDark, headingColor,
-                                    subtitleColor, borderColor, cardBg)
-                              else
-                                _buildStep4Launch(isDark, headingColor,
-                                    subtitleColor, borderColor, cardBg),
-
-                              const SizedBox(height: 24),
-
-                              // Navigation Buttons Footer (Back / Continue)
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  if (currentStep > 1)
-                                    OutlinedButton.icon(
-                                      onPressed: _prevStep,
-                                      icon: const Icon(Icons.arrow_back_rounded,
-                                          size: 16),
-                                      label: Text(
-                                        'Back',
-                                        style: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      style: OutlinedButton.styleFrom(
-                                        foregroundColor: headingColor,
-                                        side: BorderSide(color: borderColor),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 18, vertical: 12),
-                                      ),
-                                    )
-                                  else
-                                    const SizedBox.shrink(),
-                                  ElevatedButton(
-                                    onPressed: gd.isLoading ? null : _nextStep,
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppTheme.primary,
-                                      foregroundColor: Colors.white,
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 24, vertical: 14),
+                                  Text(
+                                    l10n?.next ?? "Continue",
+                                    style: GoogleFonts.outfit(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
                                     ),
-                                    child: gd.isLoading
-                                        ? const SizedBox(
-                                            width: 20,
-                                            height: 20,
-                                            child: CircularProgressIndicator(
-                                              color: Colors.white,
-                                              strokeWidth: 2,
-                                            ),
-                                          )
-                                        : Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                currentStep == 4
-                                                    ? 'Start Session'
-                                                    : 'Continue',
-                                                style: GoogleFonts.inter(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              const SizedBox(width: 6),
-                                              Icon(
-                                                currentStep == 4
-                                                    ? Icons
-                                                        .rocket_launch_rounded
-                                                    : Icons
-                                                        .arrow_forward_rounded,
-                                                size: 18,
-                                              ),
-                                            ],
-                                          ),
                                   ),
+                                  const SizedBox(width: 8),
+                                  const Icon(Icons.arrow_forward_rounded,
+                                      size: 18, color: Colors.white),
                                 ],
                               ),
+                            ),
+                          )
+                        else
+                          Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            children: [
+                              OutlinedButton.icon(
+                                onPressed: _prevStep,
+                                icon: const Icon(Icons.arrow_back_rounded,
+                                    size: 16),
+                                label: Text(
+                                  l10n?.back ?? 'Back',
+                                  style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: headingColor,
+                                  side: BorderSide(color: borderColor),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(12),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 18, vertical: 12),
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: gd.isLoading ? null : _nextStep,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppTheme.primary,
+                                  foregroundColor: Colors.white,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 14),
+                                ),
+                                child: gd.isLoading
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            currentStep == 4
+                                                ? (selectedMode == 'debate'
+                                                    ? (l10n?.start_debate ?? 'Start 1:1 Debate')
+                                                    : (l10n?.start_discussion ?? 'Start Group Discussion'))
+                                                : (l10n?.next ?? 'Continue'),
+                                            style: GoogleFonts.inter(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Icon(
+                                            currentStep == 4
+                                                ? Icons
+                                                    .rocket_launch_rounded
+                                                : Icons
+                                                    .arrow_forward_rounded,
+                                            size: 18,
+                                          ),
+                                        ],
+                                      ),
+                              ),
                             ],
                           ),
-                        ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const ChallengesScreen(),
         ],
@@ -410,303 +388,397 @@ class _HomeScreenState extends State<HomeScreen> {
             _activeTab = index;
           });
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.alt_route_rounded),
-            label: 'Fluency Track',
+            icon: const Icon(Icons.alt_route_rounded),
+            label: l10n?.tab_path ?? 'Fluency Track',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.stadium_rounded),
-            label: 'Arena',
+            icon: const Icon(Icons.stadium_rounded),
+            label: l10n?.tab_practice ?? 'Arena',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bolt_rounded),
-            label: 'Challenges',
+            icon: const Icon(Icons.bolt_rounded),
+            label: l10n?.tab_challenges ?? 'Challenges',
           ),
         ],
       ),
     );
   }
 
-  /// 1. Stepper Header Progress Bar matching reference design
+  /// 1. Stepper Header Progress Bar
   Widget _buildStepperHeader(
     bool isDark,
     Color cardBg,
     Color borderColor,
     Color headingColor,
     Color subtitleColor,
+    AppLocalizations? l10n,
   ) {
     final steps = [
-      {'num': 1, 'title': 'Practice Mode'},
-      {'num': 2, 'title': 'Topic / Prompt'},
-      {'num': 3, 'title': 'AI Voice Partners'},
-      {'num': 4, 'title': 'Setup & Launch'},
+      {'num': 1, 'title': 'Mode'},
+      {'num': 2, 'title': 'Topic'},
+      {'num': 3, 'title': 'AI Setup'},
+      {'num': 4, 'title': 'Ready'},
     ];
 
     return Container(
       key: _stepperContainerKey,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: borderColor),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: SingleChildScrollView(
-        controller: _stepperScrollController,
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: steps.map((s) {
-            final stepNum = s['num'] as int;
-            final isActive = currentStep == stepNum;
-            final isCompleted = currentStep > stepNum;
-
-            return GestureDetector(
-              onTap: () => _setStep(stepNum),
-              child: AnimatedContainer(
-                key: _stepKeys[stepNum - 1],
-                duration: const Duration(milliseconds: 200),
-                margin: const EdgeInsets.only(right: 6),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isActive
-                      ? AppTheme.primary
-                      : (isCompleted
-                          ? AppTheme.primary.withOpacity(0.12)
-                          : Colors.transparent),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 22,
-                      height: 22,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isActive
-                            ? Colors.white
-                            : (isCompleted
-                                ? AppTheme.primary
-                                : subtitleColor.withOpacity(0.2)),
-                      ),
-                      child: Center(
-                        child: isCompleted
-                            ? const Icon(Icons.check,
-                                size: 14, color: Colors.white)
-                            : Text(
-                                '$stepNum',
-                                style: GoogleFonts.inter(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                  color: isActive
-                                      ? AppTheme.primary
-                                      : subtitleColor,
-                                ),
-                              ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      s['title'] as String,
-                      style: GoogleFonts.inter(
-                        fontSize: 13,
-                        fontWeight:
-                            isActive ? FontWeight.bold : FontWeight.w500,
-                        color: isActive
-                            ? Colors.white
-                            : (isCompleted ? AppTheme.primary : subtitleColor),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
+        color: isDark ? AppTheme.cardDark : cardBg,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDark ? AppTheme.borderDark : borderColor,
         ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: steps.map((s) {
+          final stepNum = s['num'] as int;
+          final isActive = currentStep == stepNum;
+          final isCompleted = currentStep > stepNum;
+
+          return GestureDetector(
+            key: _stepKeys[stepNum - 1],
+            onTap: () => _setStep(stepNum),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: isActive
+                    ? const Color(0xFFFA5A3A).withOpacity(0.14)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 22,
+                    height: 22,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isActive
+                          ? const Color(0xFFFA5A3A)
+                          : (isCompleted
+                              ? const Color(0xFFFA5A3A)
+                              : (isDark ? const Color(0xFF231B3D) : const Color(0xFFE2E8F0))),
+                    ),
+                    child: Center(
+                      child: isCompleted
+                          ? const Icon(Icons.check, size: 12, color: Colors.white)
+                          : Text(
+                              '$stepNum',
+                              style: GoogleFonts.inter(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: isActive
+                                    ? Colors.white
+                                    : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
+                              ),
+                            ),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    s['title'] as String,
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+                      color: isActive
+                          ? (isDark ? Colors.white : const Color(0xFF0F172A))
+                          : (isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
 
-  /// STEP 1: Select Your Practice Mode (Group Discussion vs 1:1 Debate)
+  /// STEP 1: Select Your Practice Mode
   Widget _buildStep1PracticeMode(
     bool isDark,
     Color headingColor,
     Color subtitleColor,
     Color borderColor,
+    AppLocalizations? l10n,
   ) {
     return Column(
       key: const ValueKey(1),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        const SizedBox(height: 8),
         Text(
-          'Select Your Practice Mode',
+          l10n?.step_mode_title ?? 'How would you like to practice?',
           textAlign: TextAlign.center,
           style: GoogleFonts.outfit(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: headingColor,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
           ),
         ),
         const SizedBox(height: 6),
         Text(
-          'Choose between group discussion with multiple AI peers or sharp 1:1 debate',
+          l10n?.onboarding_lang_subtitle ?? 'Select an arena to start training your speaking skills',
           textAlign: TextAlign.center,
           style: GoogleFonts.inter(
             fontSize: 13,
-            color: subtitleColor,
-            height: 1.4,
+            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 20),
 
-        // Group Discussion Card (Selected State in Screenshot)
-        _buildModeOptionCard(
-          keyName: 'gd',
-          title: 'Group Discussion',
-          description:
-              'Multi-persona room with AI peers & moderator. Practice natural turn-taking & group dynamics.',
-          icon: Icons.groups_rounded,
-          iconBgColor: const Color(0xFFFFEBE5),
-          iconColor: AppTheme.primary,
-          isDark: isDark,
-          borderColor: borderColor,
-        ),
+        // Group Discussion Card
+        _buildGroupDiscussionCard(isDark, l10n),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
 
         // 1:1 Debate Card
-        _buildModeOptionCard(
-          keyName: 'debate',
-          title: '1:1 Debate',
-          description:
-              'Direct argument & counter-rebuttal challenge with 1 AI opponent. Sharpen logic under pressure.',
-          icon: Icons.record_voice_over_rounded,
-          iconBgColor: const Color(0xFFEEF2FF),
-          iconColor: const Color(0xFF6366F1),
-          isDark: isDark,
-          borderColor: borderColor,
-        ),
+        _buildDebateCard(isDark, l10n),
       ],
     );
   }
 
-  /// Card item for Step 1 Practice Mode
-  Widget _buildModeOptionCard({
-    required String keyName,
-    required String title,
-    required String description,
-    required IconData icon,
-    required Color iconBgColor,
-    required Color iconColor,
-    required bool isDark,
-    required Color borderColor,
-  }) {
-    final isSelected = selectedMode == keyName;
+  /// Card 1: GROUP DISCUSSION
+  Widget _buildGroupDiscussionCard(bool isDark, AppLocalizations? l10n) {
+    final isSelected = selectedMode == 'gd';
 
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedMode = keyName;
-        });
-      },
+      onTap: () => setState(() => selectedMode = 'gd'),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: isSelected
-              ? (isDark
-                  ? AppTheme.primary.withOpacity(0.15)
-                  : const Color(0xFFFFF7F5))
-              : (isDark ? const Color(0xFF0F172A) : const Color(0xFFFAFAFA)),
+          color: isDark ? AppTheme.cardDark : Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? AppTheme.primary : borderColor,
+            color: isSelected
+                ? const Color(0xFFFA5A3A)
+                : (isDark ? AppTheme.borderDark : const Color(0xFFE2E8F0)),
             width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: AppTheme.primary.withOpacity(0.12),
-                    blurRadius: 12,
+                    color: const Color(0xFFFA5A3A).withOpacity(0.15),
+                    blurRadius: 16,
                     offset: const Offset(0, 4),
                   ),
                 ]
-              : [],
+              : null,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Squircle Icon
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: iconBgColor,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Icon(icon, color: iconColor, size: 22),
+            // Left Icon Badge
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                gradient: LinearGradient(
+                  colors: isSelected
+                      ? [const Color(0xFFFA5A3A), const Color(0xFFFF4B72)]
+                      : [
+                          isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                          isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
+                        ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-
-                // Selected Pill Badge
-                if (isSelected)
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primary,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.check, size: 13, color: Colors.white),
-                        const SizedBox(width: 4),
-                        Text(
-                          'Selected',
-                          style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontSize: 12,
+              ),
+              child: Icon(
+                Icons.groups_rounded,
+                color: isSelected ? Colors.white : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
+                size: 26,
+              ),
+            ),
+            const SizedBox(width: 14),
+            // Middle Info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          l10n?.mode_gd ?? 'Group Discussion',
+                          style: GoogleFonts.outfit(
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            color: isDark ? Colors.white : const Color(0xFF0F172A),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFA5A3A).withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          'POPULAR',
+                          style: GoogleFonts.inter(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFFFA5A3A),
+                            letterSpacing: 0.5,
                           ),
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n?.mode_gd_desc ?? 'Talk, share ideas, and grow with AI peers.',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
                     ),
                   ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              title,
-              style: GoogleFonts.outfit(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : const Color(0xFF0F172A),
+                ],
               ),
             ),
-            const SizedBox(height: 6),
-            Text(
-              description,
-              style: GoogleFonts.inter(
-                fontSize: 13,
-                color: isDark ? AppTheme.textMuted : AppTheme.textMutedLight,
-                height: 1.4,
+            const SizedBox(width: 10),
+            // Right Selection Radio Circle
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isSelected ? const Color(0xFFFA5A3A) : Colors.transparent,
+                border: Border.all(
+                  color: isSelected
+                      ? const Color(0xFFFA5A3A)
+                      : (isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                  width: 2,
+                ),
               ),
+              child: isSelected
+                  ? const Icon(Icons.check, size: 14, color: Colors.white)
+                  : null,
             ),
           ],
         ),
       ),
     );
   }
+
+  /// Card 2: 1:1 DEBATE
+  Widget _buildDebateCard(bool isDark, AppLocalizations? l10n) {
+    final isSelected = selectedMode == 'debate';
+
+    return GestureDetector(
+      onTap: () => setState(() => selectedMode = 'debate'),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: isDark ? AppTheme.cardDark : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected
+                ? const Color(0xFFFA5A3A)
+                : (isDark ? AppTheme.borderDark : const Color(0xFFE2E8F0)),
+            width: isSelected ? 2 : 1,
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFFFA5A3A).withOpacity(0.15),
+                    blurRadius: 16,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
+        ),
+        child: Row(
+          children: [
+            // Left Icon Badge
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                gradient: LinearGradient(
+                  colors: isSelected
+                      ? [const Color(0xFFFA5A3A), const Color(0xFFFF4B72)]
+                      : [
+                          isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                          isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
+                        ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: Icon(
+                Icons.record_voice_over_rounded,
+                color: isSelected ? Colors.white : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
+                size: 26,
+              ),
+            ),
+            const SizedBox(width: 14),
+            // Middle Info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n?.mode_debate ?? '1:1 Debate',
+                    style: GoogleFonts.outfit(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : const Color(0xFF0F172A),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n?.mode_debate_desc ?? 'Challenge an AI opponent and sharpen arguments.',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            // Right Selection Radio Circle
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isSelected ? const Color(0xFFFA5A3A) : Colors.transparent,
+                border: Border.all(
+                  color: isSelected
+                      ? const Color(0xFFFA5A3A)
+                      : (isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                  width: 2,
+                ),
+              ),
+              child: isSelected
+                  ? const Icon(Icons.check, size: 14, color: Colors.white)
+                  : null,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 
   /// STEP 2: Choose Topic / Prompt
   Widget _buildStep2Topic(
@@ -716,6 +788,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Color borderColor,
     Color cardBg,
     GDProvider gd,
+    AppLocalizations? l10n,
   ) {
     final topicsMap = gd.topics;
     final categoryList = topicsMap[selectedCategory] as List<dynamic>? ?? [];
@@ -856,6 +929,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Color subtitleColor,
     Color borderColor,
     Color cardBg,
+    AppLocalizations? l10n,
   ) {
     return Column(
       key: const ValueKey(3),
@@ -1071,6 +1145,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Color subtitleColor,
     Color borderColor,
     Color cardBg,
+    AppLocalizations? l10n,
   ) {
     final finalTopic = _customTopicController.text.trim().isNotEmpty
         ? _customTopicController.text.trim()

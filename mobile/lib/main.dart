@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fluentsoul_mobile/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
 import 'package:fluentsoul_mobile/providers/auth_provider.dart';
 import 'package:fluentsoul_mobile/providers/challenges_provider.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/providers/language_provider.dart';
+import 'package:fluentsoul_mobile/providers/locale_provider.dart';
 import 'package:fluentsoul_mobile/providers/onboarding_provider.dart';
 import 'package:fluentsoul_mobile/providers/theme_provider.dart';
 import 'package:fluentsoul_mobile/screens/auth_screen.dart';
@@ -29,19 +32,24 @@ class FluentSoulApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider(apiService)),
         ChangeNotifierProvider(create: (_) => GDProvider(apiService)),
         ChangeNotifierProvider(create: (_) => ChallengesProvider()),
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
       ],
-      child: Consumer3<AuthProvider, ThemeProvider, OnboardingProvider>(
-        builder: (context, auth, themeProvider, onboarding, _) {
+      child: Consumer5<AuthProvider, ThemeProvider, OnboardingProvider, LanguageProvider, LocaleProvider>(
+        builder: (context, auth, themeProvider, onboarding, langProvider, localeProvider, _) {
           return MaterialApp(
             title: 'FluentSoul: Speak English Fluently & Confidently',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: themeProvider.themeMode,
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: auth.isAuthenticated
                 ? (onboarding.isOnboarded
                     ? const HomeScreen()

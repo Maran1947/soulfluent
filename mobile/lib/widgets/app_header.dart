@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:fluentsoul_mobile/l10n/app_localizations.dart';
 import 'package:fluentsoul_mobile/providers/auth_provider.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
+import 'package:fluentsoul_mobile/providers/language_provider.dart';
+import 'package:fluentsoul_mobile/providers/locale_provider.dart';
 import 'package:fluentsoul_mobile/providers/theme_provider.dart';
+import 'package:fluentsoul_mobile/utils/app_strings.dart';
 import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -29,6 +33,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
 
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) {
         return StatefulBuilder(
@@ -37,6 +42,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
 
             return Container(
               padding: const EdgeInsets.all(24),
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.85,
+              ),
               decoration: BoxDecoration(
                 color: currentIsDark ? const Color(0xFF1E293B) : Colors.white,
                 borderRadius:
@@ -47,9 +55,10 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                       : const Color(0xFFE2E8F0),
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                   // Handle bar
                   Container(
                     width: 36,
@@ -218,6 +227,91 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                     },
                   ),
 
+                  // App Content Language Setting Dropdown
+                  Consumer<LanguageProvider>(
+                    builder: (context, langProvider, _) {
+                      final currentLang = langProvider.currentLanguage;
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: currentIsDark
+                              ? const Color(0xFF0F172A)
+                              : const Color(0xFFF1F5F9),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: currentIsDark
+                                ? const Color(0xFF334155)
+                                : const Color(0xFFE2E8F0),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(Icons.language, size: 16, color: Color(0xFFF25C40)),
+                                const SizedBox(width: 6),
+                                Text(
+                                  AppStrings.get('app_language', currentLang).toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 10.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: currentIsDark
+                                        ? const Color(0xFF94A3B8)
+                                        : const Color(0xFF64748B),
+                                    letterSpacing: 0.05,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: currentLang,
+                                isExpanded: true,
+                                dropdownColor: currentIsDark
+                                    ? const Color(0xFF1E293B)
+                                    : Colors.white,
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    color: Color(0xFFF25C40)),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: currentIsDark
+                                      ? Colors.white
+                                      : const Color(0xFF0F172A),
+                                ),
+                                onChanged: (String? val) {
+                                  if (val != null) {
+                                    langProvider.setLanguage(val);
+                                    context.read<LocaleProvider>().setLanguageString(val);
+                                  }
+                                },
+                                items: const [
+                                  DropdownMenuItem(
+                                    value: 'English',
+                                    child: Text('English 🌐'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'Hindi',
+                                    child: Text('Hindi (हिंदी) 🇮🇳'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'Hinglish',
+                                    child: Text('Hinglish 🇮🇳'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+
                   // Theme Toggle Switch
                   Material(
                     color: Colors.transparent,
@@ -293,21 +387,23 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                   const SizedBox(height: 12),
                 ],
               ),
-            );
-          },
+            ),
+          );
+        },
         );
       },
     );
   }
 
-  Widget _buildGreetingHeaderWidget(String? userName) {
+  Widget _buildGreetingHeaderWidget(BuildContext context, String? userName) {
+    final l10n = AppLocalizations.of(context);
     final hour = DateTime.now().hour;
     final firstName = (userName != null && userName.trim().isNotEmpty)
         ? userName.trim().split(' ')[0]
         : 'Practitioner';
     final timeGreeting = hour < 12
-        ? 'Good Morning'
-        : (hour < 17 ? 'Good Afternoon' : 'Good Evening');
+        ? (l10n?.good_morning ?? 'Good Morning')
+        : (hour < 17 ? (l10n?.good_afternoon ?? 'Good Afternoon') : (l10n?.good_evening ?? 'Good Evening'));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,7 +441,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
         ),
         const SizedBox(height: 1),
         Text(
-          "Keep showing up",
+          l10n?.keep_showing_up ?? "Keep showing up",
           style: GoogleFonts.inter(
             fontSize: 11,
             color: const Color(0xFF94A3B8),
@@ -383,7 +479,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           const SizedBox(width: 10),
           Expanded(
             child: isDefaultGreeting
-                ? _buildGreetingHeaderWidget(user?.name)
+                ? _buildGreetingHeaderWidget(context, user?.name)
                 : FittedBox(
                     fit: BoxFit.scaleDown,
                     alignment: Alignment.centerLeft,
@@ -422,13 +518,13 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                     color: isDark
                         ? const Color(0xFF334155)
                         : const Color(0xFFE2E8F0),
-                    width: 2,
+                    width: 1.5,
                   ),
                 ),
                 child: Center(
                   child: Text(
-                    user.name.isNotEmpty ? user.name[0].toUpperCase() : 'U',
-                    style: const TextStyle(
+                    user.name.isNotEmpty ? user.name[0].toUpperCase() : 'P',
+                    style: GoogleFonts.outfit(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 15,

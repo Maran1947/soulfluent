@@ -91,8 +91,8 @@ async def _get_owned_session(
 
 
 @router.get("/topics", response_model=TopicLibraryOut)
-async def get_topics():
-    return TopicLibraryOut(categories=list_topics())
+async def get_topics(language: str = "English"):
+    return TopicLibraryOut(categories=list_topics(language=language))
 
 
 @router.post("/sessions", response_model=SessionOut, status_code=status.HTTP_201_CREATED)

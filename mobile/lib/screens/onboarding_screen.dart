@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/l10n/app_localizations.dart';
+import 'package:fluentsoul_mobile/providers/locale_provider.dart';
 import 'package:fluentsoul_mobile/providers/onboarding_provider.dart';
 import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 
@@ -55,6 +57,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final provider = context.watch<OnboardingProvider>();
+    final localeProvider = context.watch<LocaleProvider>();
+    final l10n = AppLocalizations.of(context);
     final currentStep = provider.currentStep;
     final isLastStep = provider.isLastStep;
     final isValid = currentStep.isValid(provider.data);

@@ -90,9 +90,9 @@ class ApiService {
   }
 
   // GD Topic & Session APIs
-  Future<Map<String, dynamic>> getTopics() async {
+  Future<Map<String, dynamic>> getTopics({String language = 'English'}) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/gd/topics'),
+      Uri.parse('$baseUrl/gd/topics?language=$language'),
       headers: _headers,
     );
 
@@ -303,5 +303,16 @@ class ApiService {
     }
 
     return jsonDecode(response.body) as Map<String, dynamic>;
+  }
+
+  // User Preferences
+  Future<void> updateUserPreferences(Map<String, dynamic> prefs) async {
+    try {
+      await http.put(
+        Uri.parse('$baseUrl/users/me/preferences'),
+        headers: _headers,
+        body: jsonEncode(prefs),
+      );
+    } catch (_) {}
   }
 }

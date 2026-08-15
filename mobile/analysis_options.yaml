@@ -2,6 +2,14 @@ analyzer:
   errors:
     deprecated_member_use: ignore
     include_file_not_found: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 linter:
   rules:
