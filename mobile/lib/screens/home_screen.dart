@@ -6,10 +6,9 @@ import 'package:fluentsoul_mobile/l10n/app_localizations.dart';
 import 'package:fluentsoul_mobile/providers/auth_provider.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
 import 'package:fluentsoul_mobile/providers/locale_provider.dart';
-import 'package:fluentsoul_mobile/screens/challenges_screen.dart';
+import 'package:fluentsoul_mobile/screens/daily_speak_screen.dart';
 import 'package:fluentsoul_mobile/screens/path_screen.dart';
 import 'package:fluentsoul_mobile/widgets/app_header.dart';
-import 'package:fluentsoul_mobile/widgets/logo_widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -204,9 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final subtitleColor = isDark ? AppTheme.textMuted : AppTheme.textMutedLight;
 
     return Scaffold(
-      appBar: (_activeTab == 1 || _activeTab == 2)
-          ? const AppHeader(title: 'FluentSoul')
-          : null,
+      appBar: _activeTab == 1 ? const AppHeader(title: 'FluentSoul') : null,
       backgroundColor: isDark ? AppTheme.background : AppTheme.lightBackground,
       body: IndexedStack(
         index: _activeTab,
@@ -371,7 +368,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          const ChallengesScreen(),
+          const DailySpeakScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -399,8 +396,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: l10n?.tab_practice ?? 'Arena',
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.bolt_rounded),
-            label: l10n?.tab_challenges ?? 'Challenges',
+            icon: const Icon(Icons.mic_rounded),
+            label: 'Daily Speak',
           ),
         ],
       ),
@@ -520,32 +517,42 @@ class _HomeScreenState extends State<HomeScreen> {
       key: const ValueKey(1),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         Text(
-          l10n?.step_mode_title ?? 'How would you like to practice?',
+          'Practice Mode',
           textAlign: TextAlign.center,
           style: GoogleFonts.outfit(
-            fontSize: 22,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             color: isDark ? Colors.white : const Color(0xFF0F172A),
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 4),
         Text(
-          l10n?.onboarding_lang_subtitle ??
-              'Select an arena to start training your speaking skills',
+          'Select your preferred practice mode',
           textAlign: TextAlign.center,
           style: GoogleFonts.inter(
-            fontSize: 13,
+            fontSize: 14,
             color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
+        Center(
+          child: Container(
+            width: 36,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppTheme.primary,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
 
         // Group Discussion Card
         _buildGroupDiscussionCard(isDark, l10n),
 
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
 
         // 1:1 Debate Card
         _buildDebateCard(isDark, l10n),
@@ -561,106 +568,74 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: () => setState(() => selectedMode = 'gd'),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isDark ? AppTheme.cardDark : Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: isSelected
-                ? const Color(0xFFFA5A3A)
+                ? AppTheme.primary
                 : (isDark ? AppTheme.borderDark : const Color(0xFFE2E8F0)),
-            width: isSelected ? 2 : 1,
+            width: isSelected ? 2.5 : 1,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: const Color(0xFFFA5A3A).withOpacity(0.15),
+                    color: AppTheme.primary.withOpacity(0.18),
                     blurRadius: 16,
                     offset: const Offset(0, 4),
                   ),
                 ]
-              : null,
+              : [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
         ),
         child: Row(
           children: [
-            // Left Icon Badge
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                gradient: LinearGradient(
-                  colors: isSelected
-                      ? [const Color(0xFFFA5A3A), const Color(0xFFFF4B72)]
-                      : [
-                          isDark
-                              ? const Color(0xFF334155)
-                              : const Color(0xFFF1F5F9),
-                          isDark
-                              ? const Color(0xFF1E293B)
-                              : const Color(0xFFE2E8F0),
-                        ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            // Left Illustration Image (group_discussion.png)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                'assets/images/group_discussion.png',
+                width: 120,
+                height: 105,
+                fit: BoxFit.contain,
+                errorBuilder: (_, __, ___) => Container(
+                  width: 120,
+                  height: 105,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(Icons.groups_rounded,
+                      size: 48, color: AppTheme.primary),
                 ),
-              ),
-              child: Icon(
-                Icons.groups_rounded,
-                color: isSelected
-                    ? Colors.white
-                    : (isDark
-                        ? const Color(0xFF94A3B8)
-                        : const Color(0xFF64748B)),
-                size: 26,
               ),
             ),
             const SizedBox(width: 14),
-            // Middle Info
+            // Middle Info Text
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          l10n?.mode_gd ?? 'Group Discussion',
-                          style: GoogleFonts.outfit(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color:
-                                isDark ? Colors.white : const Color(0xFF0F172A),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFA5A3A).withOpacity(0.15),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          'POPULAR',
-                          style: GoogleFonts.inter(
-                            fontSize: 9,
-                            fontWeight: FontWeight.w800,
-                            color: const Color(0xFFFA5A3A),
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
                   Text(
-                    l10n?.mode_gd_desc ??
-                        'Talk, share ideas, and grow with AI peers.',
+                    'Group Discussion',
+                    style: GoogleFonts.outfit(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : const Color(0xFF0F172A),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Practice with 2–4 AI participants in a realistic GD environment',
                     style: GoogleFonts.inter(
-                      fontSize: 12,
+                      fontSize: 13,
+                      height: 1.35,
                       color: isDark
                           ? const Color(0xFF94A3B8)
                           : const Color(0xFF64748B),
@@ -669,19 +644,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            const SizedBox(width: 10),
-            // Right Selection Radio Circle
+            const SizedBox(width: 12),
+            // Right Radio Circle Checkmark
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              width: 22,
-              height: 22,
+              width: 24,
+              height: 24,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color:
-                    isSelected ? const Color(0xFFFA5A3A) : Colors.transparent,
+                color: isSelected ? AppTheme.primary : Colors.transparent,
                 border: Border.all(
                   color: isSelected
-                      ? const Color(0xFFFA5A3A)
+                      ? AppTheme.primary
                       : (isDark
                           ? const Color(0xFF475569)
                           : const Color(0xFFCBD5E1)),
@@ -689,7 +663,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               child: isSelected
-                  ? const Icon(Icons.check, size: 14, color: Colors.white)
+                  ? const Icon(Icons.check_rounded,
+                      size: 16, color: Colors.white)
                   : null,
             ),
           ],
@@ -706,81 +681,74 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: () => setState(() => selectedMode = 'debate'),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isDark ? AppTheme.cardDark : Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: isSelected
-                ? const Color(0xFFFA5A3A)
+                ? AppTheme.primary
                 : (isDark ? AppTheme.borderDark : const Color(0xFFE2E8F0)),
-            width: isSelected ? 2 : 1,
+            width: isSelected ? 2.5 : 1,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: const Color(0xFFFA5A3A).withOpacity(0.15),
+                    color: AppTheme.primary.withOpacity(0.18),
                     blurRadius: 16,
                     offset: const Offset(0, 4),
                   ),
                 ]
-              : null,
+              : [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
         ),
         child: Row(
           children: [
-            // Left Icon Badge
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                gradient: LinearGradient(
-                  colors: isSelected
-                      ? [const Color(0xFFFA5A3A), const Color(0xFFFF4B72)]
-                      : [
-                          isDark
-                              ? const Color(0xFF334155)
-                              : const Color(0xFFF1F5F9),
-                          isDark
-                              ? const Color(0xFF1E293B)
-                              : const Color(0xFFE2E8F0),
-                        ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            // Left Illustration Image (debate.png)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                'assets/images/debate.png',
+                width: 120,
+                height: 105,
+                fit: BoxFit.contain,
+                errorBuilder: (_, __, ___) => Container(
+                  width: 120,
+                  height: 105,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(Icons.record_voice_over_rounded,
+                      size: 48, color: AppTheme.primary),
                 ),
-              ),
-              child: Icon(
-                Icons.record_voice_over_rounded,
-                color: isSelected
-                    ? Colors.white
-                    : (isDark
-                        ? const Color(0xFF94A3B8)
-                        : const Color(0xFF64748B)),
-                size: 26,
               ),
             ),
             const SizedBox(width: 14),
-            // Middle Info
+            // Middle Info Text
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    l10n?.mode_debate ?? '1:1 Debate',
+                    '1:1 Debate',
                     style: GoogleFonts.outfit(
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: isDark ? Colors.white : const Color(0xFF0F172A),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Text(
-                    l10n?.mode_debate_desc ??
-                        'Challenge an AI opponent and sharpen arguments.',
+                    'Face a dedicated opponent who challenges your arguments directly',
                     style: GoogleFonts.inter(
-                      fontSize: 12,
+                      fontSize: 13,
+                      height: 1.35,
                       color: isDark
                           ? const Color(0xFF94A3B8)
                           : const Color(0xFF64748B),
@@ -789,19 +757,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            const SizedBox(width: 10),
-            // Right Selection Radio Circle
+            const SizedBox(width: 12),
+            // Right Radio Circle Checkmark
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              width: 22,
-              height: 22,
+              width: 24,
+              height: 24,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color:
-                    isSelected ? const Color(0xFFFA5A3A) : Colors.transparent,
+                color: isSelected ? AppTheme.primary : Colors.transparent,
                 border: Border.all(
                   color: isSelected
-                      ? const Color(0xFFFA5A3A)
+                      ? AppTheme.primary
                       : (isDark
                           ? const Color(0xFF475569)
                           : const Color(0xFFCBD5E1)),
@@ -809,7 +776,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               child: isSelected
-                  ? const Icon(Icons.check, size: 14, color: Colors.white)
+                  ? const Icon(Icons.check_rounded,
+                      size: 16, color: Colors.white)
                   : null,
             ),
           ],

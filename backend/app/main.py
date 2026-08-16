@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import auth, gd, tracks
+from app.api.routes import auth, daily_speak, gd, tracks
 from app.config import get_settings
 from app.database import AsyncSessionLocal
 from app.seeds.seed_fluency_tracks import seed_fluency_tracks
@@ -20,6 +20,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.router, prefix=settings.api_prefix)
+app.include_router(daily_speak.router, prefix=settings.api_prefix)
 app.include_router(gd.router, prefix=settings.api_prefix)
 app.include_router(tracks.router, prefix=settings.api_prefix)
 app.include_router(tracks.curriculum_router, prefix=settings.api_prefix)

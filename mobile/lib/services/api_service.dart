@@ -342,4 +342,19 @@ class ApiService {
       );
     } catch (_) {}
   }
+
+  // Daily Speak API
+  Future<Map<String, dynamic>> getDailySpeakToday() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/daily-speak/today'),
+      headers: _headers,
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(_extractErrorMessage(
+          response, 'Failed to load today\'s daily speak topic'));
+    }
+
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  }
 }
