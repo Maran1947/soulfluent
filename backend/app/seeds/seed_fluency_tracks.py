@@ -280,9 +280,10 @@ async def seed_fluency_tracks(db: AsyncSession) -> None:
                 db.add(stage)
                 await db.flush()
             else:
-                stage.name = s_data["name"]
-                stage.slug = s_data.get("slug", stage.slug)
-                stage.description = s_data.get("description", s_data.get("goal", stage.description))
+                stage.name = str(s_data.get("name") or stage.name)
+                stage.slug = str(s_data.get("slug") or stage.slug)
+                desc = s_data.get("description") or s_data.get("goal") or stage.description or ""
+                stage.description = str(desc)
 
             nodes: list[dict[str, Any]] = s_data.get("nodes", [])
             for idx_n, n_data in enumerate(nodes, start=1):
@@ -311,9 +312,11 @@ async def seed_fluency_tracks(db: AsyncSession) -> None:
                     db.add(node)
                     await db.flush()
                 else:
-                    node.name = n_data.get("name", node.name)
-                    node.slug = n_data.get("slug", node.slug)
-                    node.estimated_minutes = n_data.get("estimated_minutes", node.estimated_minutes)
+                    node.name = str(n_data.get("name") or node.name)
+                    node.slug = str(n_data.get("slug") or node.slug)
+                    node.estimated_minutes = int(
+                        n_data.get("estimated_minutes") or node.estimated_minutes
+                    )
 
                 activities: list[dict[str, Any]] = n_data.get("activities", [])
                 for idx_a, a_data in enumerate(activities, start=1):
