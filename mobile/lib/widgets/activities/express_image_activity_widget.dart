@@ -29,12 +29,15 @@ class _ExpressImageActivityWidgetState
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardBg = isDark ? const Color(0xFF131C2E) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final borderColor =
+        isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
     final headingColor = isDark ? Colors.white : const Color(0xFF0F172A);
-    final subtitleColor = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+    final subtitleColor =
+        isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
 
-    final imgPrompt = widget.activity.config['image_generation_prompt']?.toString() ??
-        'A realistic educational scene representing ${widget.node.theme}.';
+    final imgPrompt =
+        widget.activity.config['image_generation_prompt']?.toString() ??
+            'A realistic educational scene representing ${widget.node.theme}.';
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -52,7 +55,8 @@ class _ExpressImageActivityWidgetState
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.image_rounded, size: 14, color: AppTheme.primary),
+                const Icon(Icons.image_rounded,
+                    size: 14, color: AppTheme.primary),
                 const SizedBox(width: 6),
                 Text(
                   'IMAGE EXPRESS',
@@ -144,7 +148,9 @@ class _ExpressImageActivityWidgetState
                     decoration: BoxDecoration(
                       color: _isRecording
                           ? Colors.redAccent
-                          : (_hasSpoken ? const Color(0xFF10B981) : AppTheme.primary),
+                          : (_hasSpoken
+                              ? const Color(0xFF10B981)
+                              : AppTheme.primary),
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
@@ -161,7 +167,9 @@ class _ExpressImageActivityWidgetState
                       child: Icon(
                         _isRecording
                             ? Icons.stop_rounded
-                            : (_hasSpoken ? Icons.check_rounded : Icons.mic_rounded),
+                            : (_hasSpoken
+                                ? Icons.check_rounded
+                                : Icons.mic_rounded),
                         color: Colors.white,
                         size: 32,
                       ),
@@ -172,13 +180,17 @@ class _ExpressImageActivityWidgetState
                 Text(
                   _isRecording
                       ? 'Listening... Speak about the image!'
-                      : (_hasSpoken ? 'Great expression recorded!' : 'Tap mic to describe scene'),
+                      : (_hasSpoken
+                          ? 'Great expression recorded!'
+                          : 'Tap mic to describe scene'),
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: _isRecording
                         ? Colors.redAccent
-                        : (_hasSpoken ? const Color(0xFF10B981) : subtitleColor),
+                        : (_hasSpoken
+                            ? const Color(0xFF10B981)
+                            : subtitleColor),
                   ),
                 ),
               ],

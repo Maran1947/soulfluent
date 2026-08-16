@@ -16,15 +16,15 @@ class RoleplayActivityWidget extends StatefulWidget {
   });
 
   @override
-  State<RoleplayActivityWidget> createState() =>
-      _RoleplayActivityWidgetState();
+  State<RoleplayActivityWidget> createState() => _RoleplayActivityWidgetState();
 }
 
 class _RoleplayActivityWidgetState extends State<RoleplayActivityWidget> {
   final List<Map<String, String>> _messages = [
     {
       'sender': 'coach',
-      'text': 'Hello there! Good morning, welcome to our session. How are you doing today?'
+      'text':
+          'Hello there! Good morning, welcome to our session. How are you doing today?'
     },
   ];
   bool _isRecording = false;
@@ -50,9 +50,11 @@ class _RoleplayActivityWidgetState extends State<RoleplayActivityWidget> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardBg = isDark ? const Color(0xFF131C2E) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final borderColor =
+        isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
     final headingColor = isDark ? Colors.white : const Color(0xFF0F172A);
-    final subtitleColor = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+    final subtitleColor =
+        isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
 
     final suggestions = widget.node.phrasesA.isNotEmpty
         ? widget.node.phrasesA
@@ -125,8 +127,9 @@ class _RoleplayActivityWidgetState extends State<RoleplayActivityWidget> {
                   margin: const EdgeInsets.only(bottom: 12),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment:
-                        isCoach ? MainAxisAlignment.start : MainAxisAlignment.end,
+                    mainAxisAlignment: isCoach
+                        ? MainAxisAlignment.start
+                        : MainAxisAlignment.end,
                     children: [
                       if (isCoach) ...[
                         Container(
@@ -161,9 +164,7 @@ class _RoleplayActivityWidgetState extends State<RoleplayActivityWidget> {
                             msg['text'] ?? '',
                             style: GoogleFonts.inter(
                               fontSize: 14.5,
-                              color: isCoach
-                                  ? headingColor
-                                  : Colors.white,
+                              color: isCoach ? headingColor : Colors.white,
                               height: 1.35,
                             ),
                           ),
@@ -197,9 +198,8 @@ class _RoleplayActivityWidgetState extends State<RoleplayActivityWidget> {
                   sug,
                   style: GoogleFonts.inter(fontSize: 13, color: headingColor),
                 ),
-                backgroundColor: isDark
-                    ? const Color(0xFF1E293B)
-                    : const Color(0xFFF1F5F9),
+                backgroundColor:
+                    isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100),
                   side: BorderSide(color: borderColor),
@@ -228,8 +228,9 @@ class _RoleplayActivityWidgetState extends State<RoleplayActivityWidget> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: (_isRecording ? Colors.redAccent : AppTheme.primary)
-                          .withOpacity(0.4),
+                      color:
+                          (_isRecording ? Colors.redAccent : AppTheme.primary)
+                              .withOpacity(0.4),
                       blurRadius: 16,
                       spreadRadius: 2,
                     ),

@@ -273,8 +273,7 @@ class _WordSearchGridWidgetState extends State<WordSearchGridWidget> {
     final headingColor = isDark ? AppTheme.textMain : AppTheme.textMainLight;
     final subtitleColor = isDark ? AppTheme.textMuted : AppTheme.textMutedLight;
 
-    final currentWordText =
-        _selectedPath.map((p) => _grid[p[0]][p[1]]).join();
+    final currentWordText = _selectedPath.map((p) => _grid[p[0]][p[1]]).join();
 
     return SingleChildScrollView(
       child: Column(
@@ -347,85 +346,85 @@ class _WordSearchGridWidgetState extends State<WordSearchGridWidget> {
               onPointerMove: _onPointerMove,
               onPointerUp: _onPointerUp,
               child: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xFF0F172A)
-                    : const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                    color: AppTheme.primary.withOpacity(0.3), width: 1.5),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.primary.withOpacity(0.1),
-                    blurRadius: 16,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: AspectRatio(
-                aspectRatio: 1.0,
-                child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: numRows * numCols,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: numCols,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                  ),
-                  itemBuilder: (context, index) {
-                    final row = index ~/ numCols;
-                    final col = index % numCols;
-                    final letter = _grid[row][col];
-                    final isSelected = _isCellSelected(row, col);
-                    final isFound = _isCellFound(row, col);
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? const Color(0xFF0F172A)
+                      : const Color(0xFFF1F5F9),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                      color: AppTheme.primary.withOpacity(0.3), width: 1.5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.primary.withOpacity(0.1),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: numRows * numCols,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: numCols,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                    ),
+                    itemBuilder: (context, index) {
+                      final row = index ~/ numCols;
+                      final col = index % numCols;
+                      final letter = _grid[row][col];
+                      final isSelected = _isCellSelected(row, col);
+                      final isFound = _isCellFound(row, col);
 
-                    Color cellBg = isDark
-                        ? const Color(0xFF1E293B)
-                        : Colors.white;
-                    Color borderCol = isDark
-                        ? const Color(0xFF334155)
-                        : const Color(0xFFCBD5E1);
-                    Color textColor = headingColor;
+                      Color cellBg =
+                          isDark ? const Color(0xFF1E293B) : Colors.white;
+                      Color borderCol = isDark
+                          ? const Color(0xFF334155)
+                          : const Color(0xFFCBD5E1);
+                      Color textColor = headingColor;
 
-                    if (isFound) {
-                      cellBg = Colors.green.withOpacity(0.25);
-                      borderCol = Colors.green;
-                      textColor = Colors.green;
-                    } else if (isSelected) {
-                      cellBg = AppTheme.primary.withOpacity(0.35);
-                      borderCol = AppTheme.primary;
-                      textColor = AppTheme.primary;
-                    }
+                      if (isFound) {
+                        cellBg = Colors.green.withOpacity(0.25);
+                        borderCol = Colors.green;
+                        textColor = Colors.green;
+                      } else if (isSelected) {
+                        cellBg = AppTheme.primary.withOpacity(0.35);
+                        borderCol = AppTheme.primary;
+                        textColor = AppTheme.primary;
+                      }
 
-                    return GestureDetector(
-                      onTap: () => _toggleCellTap(row, col),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 100),
-                        decoration: BoxDecoration(
-                          color: cellBg,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                              color: borderCol,
-                              width: isSelected || isFound ? 2 : 1),
-                        ),
-                        child: Center(
-                          child: Text(
-                            letter,
-                            style: GoogleFonts.outfit(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: textColor,
+                      return GestureDetector(
+                        onTap: () => _toggleCellTap(row, col),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 100),
+                          decoration: BoxDecoration(
+                            color: cellBg,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                                color: borderCol,
+                                width: isSelected || isFound ? 2 : 1),
+                          ),
+                          child: Center(
+                            child: Text(
+                              letter,
+                              style: GoogleFonts.outfit(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: textColor,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
           ),
 
           const SizedBox(height: 20),
@@ -447,15 +446,12 @@ class _WordSearchGridWidgetState extends State<WordSearchGridWidget> {
 
             return Container(
               margin: const EdgeInsets.only(bottom: 8),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
                 color: isDone ? Colors.green.withOpacity(0.12) : cardBg,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: isDone
-                      ? Colors.green.withOpacity(0.4)
-                      : borderColor,
+                  color: isDone ? Colors.green.withOpacity(0.4) : borderColor,
                 ),
               ),
               child: Row(

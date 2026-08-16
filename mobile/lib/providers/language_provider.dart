@@ -7,7 +7,8 @@ class LanguageProvider extends ChangeNotifier {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   final ApiService _apiService = ApiService();
 
-  String _currentLanguage = 'Hinglish'; // Default 'Hinglish', 'Hindi', or 'English'
+  String _currentLanguage =
+      'Hinglish'; // Default 'Hinglish', 'Hindi', or 'English'
 
   String get currentLanguage => _currentLanguage;
 

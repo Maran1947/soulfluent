@@ -73,9 +73,11 @@ class _FormingSentenceActivityWidgetState
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardBg = isDark ? const Color(0xFF131C2E) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final borderColor =
+        isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
     final headingColor = isDark ? Colors.white : const Color(0xFF0F172A);
-    final subtitleColor = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+    final subtitleColor =
+        isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -93,7 +95,8 @@ class _FormingSentenceActivityWidgetState
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.extension_rounded, size: 14, color: AppTheme.primary),
+                const Icon(Icons.extension_rounded,
+                    size: 14, color: AppTheme.primary),
                 const SizedBox(width: 6),
                 Text(
                   'SENTENCE BUILD',
@@ -199,10 +202,12 @@ class _FormingSentenceActivityWidgetState
               return GestureDetector(
                 onTap: () => _addTile(word),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                    color: isDark
+                        ? const Color(0xFF1E293B)
+                        : const Color(0xFFF1F5F9),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: borderColor),
                   ),
@@ -227,11 +232,13 @@ class _FormingSentenceActivityWidgetState
               decoration: BoxDecoration(
                 color: const Color(0xFF10B981).withOpacity(0.12),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF10B981).withOpacity(0.4)),
+                border:
+                    Border.all(color: const Color(0xFF10B981).withOpacity(0.4)),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.check_circle_rounded, color: Color(0xFF10B981)),
+                  const Icon(Icons.check_circle_rounded,
+                      color: Color(0xFF10B981)),
                   const SizedBox(width: 10),
                   Text(
                     'Perfect! Sentence built correctly.',

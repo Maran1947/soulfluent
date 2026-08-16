@@ -39,8 +39,10 @@ class FluentSoulApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ChallengesProvider()),
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
       ],
-      child: Consumer5<AuthProvider, ThemeProvider, OnboardingProvider, LanguageProvider, LocaleProvider>(
-        builder: (context, auth, themeProvider, onboarding, langProvider, localeProvider, _) {
+      child: Consumer5<AuthProvider, ThemeProvider, OnboardingProvider,
+          LanguageProvider, LocaleProvider>(
+        builder: (context, auth, themeProvider, onboarding, langProvider,
+            localeProvider, _) {
           return MaterialApp(
             title: 'FluentSoul: Speak English Fluently & Confidently',
             debugShowCheckedModeBanner: false,
@@ -52,7 +54,9 @@ class FluentSoulApp extends StatelessWidget {
             supportedLocales: AppLocalizations.supportedLocales,
             home: auth.isInitializing
                 ? Scaffold(
-                    backgroundColor: themeProvider.isDarkMode ? AppTheme.background : AppTheme.lightBackground,
+                    backgroundColor: themeProvider.isDarkMode
+                        ? AppTheme.background
+                        : AppTheme.lightBackground,
                     body: const Center(
                       child: CircularProgressIndicator(color: AppTheme.primary),
                     ),

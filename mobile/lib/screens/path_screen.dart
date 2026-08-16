@@ -128,7 +128,8 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
             child: gd.isLoadingCurriculum
                 ? const PathSkeletonLoader()
                 : weeksToRender.isEmpty
-                    ? _buildEmptyState(context, isDark, cardBg, borderColor, headingColor, subtitleColor, gd)
+                    ? _buildEmptyState(context, isDark, cardBg, borderColor,
+                        headingColor, subtitleColor, gd)
                     : SingleChildScrollView(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         child: Column(
@@ -154,7 +155,8 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
 
                             // Bottom Simple Card
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 24),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24),
                               child: Container(
                                 padding: const EdgeInsets.all(18),
                                 decoration: BoxDecoration(
@@ -171,7 +173,8 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
                                       width: 40,
                                       height: 40,
                                       decoration: BoxDecoration(
-                                        color: AppTheme.primary.withOpacity(0.1),
+                                        color:
+                                            AppTheme.primary.withOpacity(0.1),
                                         shape: BoxShape.circle,
                                       ),
                                       child: const Center(
@@ -297,7 +300,8 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primary,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
                   ),
@@ -442,7 +446,8 @@ class _ContinuousPathWidget extends StatelessWidget {
             child: CustomPaint(
               painter: _WindingPathDashedPainter(
                 points: points,
-                color: isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
+                color:
+                    isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
               ),
             ),
           ),
@@ -473,7 +478,8 @@ class _ContinuousPathWidget extends StatelessWidget {
                     Positioned(
                       top: -16,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18, vertical: 7),
                         decoration: BoxDecoration(
                           color: isDark
                               ? const Color(0xFF1E293B).withOpacity(0.92)
@@ -508,7 +514,9 @@ class _ContinuousPathWidget extends StatelessWidget {
                               style: GoogleFonts.outfit(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
-                                color: isDark ? Colors.white : const Color(0xFF0F172A),
+                                color: isDark
+                                    ? Colors.white
+                                    : const Color(0xFF0F172A),
                                 letterSpacing: 0.3,
                               ),
                             ),
@@ -519,155 +527,169 @@ class _ContinuousPathWidget extends StatelessWidget {
 
                   // Node Circle Container
                   Padding(
-                    padding: EdgeInsets.only(top: stageTitle != null ? 30.0 : 0.0),
+                    padding:
+                        EdgeInsets.only(top: stageTitle != null ? 30.0 : 0.0),
                     child: Align(
-                      alignment: Alignment( (xFrac * 2) - 1.0, 0 ),
+                      alignment: Alignment((xFrac * 2) - 1.0, 0),
                       child: GestureDetector(
-                          onTap: () {
-                            if (isLocked) {
-                              onShowToast(
-                                  'Complete Unit ${day.d - 1} to unlock Unit ${day.d}',
-                                  isDark);
-                              return;
-                            }
-                            onOpenSheet(day, activeTrack, isDark);
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Stack(
-                                clipBehavior: Clip.none,
-                                children: [
-                                  AnimatedBuilder(
-                                    animation: pulseAnimation,
-                                    builder: (context, child) {
-                                      return Container(
-                                        width: nodeSize,
-                                        height: nodeSize,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          gradient: isCurrent
-                                              ? const LinearGradient(
-                                                  colors: [
-                                                    Color(0xFFFA5A3A),
-                                                    Color(0xFFF25C40)
-                                                  ],
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
-                                                )
-                                              : null,
-                                          color: isDone
-                                              ? const Color(0xFF10B981)
-                                              : (isCurrent
-                                                  ? null
-                                                  : (isDark
-                                                      ? const Color(0xFF161E2E)
-                                                      : const Color(0xFFE2E8F0))),
-                                          border: Border.all(
-                                            color: isCurrent
-                                                ? const Color(0xFFFF8A75)
-                                                : (isDone
-                                                    ? const Color(0xFF34D399)
-                                                    : (isDark
-                                                        ? const Color(0xFF334155)
-                                                        : const Color(0xFFCBD5E1))),
-                                            width: isCurrent ? 3 : 2,
-                                          ),
-                                          boxShadow: isCurrent
-                                              ? [
-                                                  BoxShadow(
-                                                    color: const Color(0xFFFA5A3A)
-                                                        .withOpacity(0.4),
-                                                    blurRadius: 18 + pulseAnimation.value,
-                                                    spreadRadius: 2 + (pulseAnimation.value / 3),
-                                                  ),
-                                                ]
-                                              : [
-                                                  BoxShadow(
-                                                    color: Colors.black.withOpacity(0.12),
-                                                    blurRadius: 6,
-                                                    offset: const Offset(0, 3),
-                                                  )
+                        onTap: () {
+                          if (isLocked) {
+                            onShowToast(
+                                'Complete Unit ${day.d - 1} to unlock Unit ${day.d}',
+                                isDark);
+                            return;
+                          }
+                          onOpenSheet(day, activeTrack, isDark);
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                AnimatedBuilder(
+                                  animation: pulseAnimation,
+                                  builder: (context, child) {
+                                    return Container(
+                                      width: nodeSize,
+                                      height: nodeSize,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        gradient: isCurrent
+                                            ? const LinearGradient(
+                                                colors: [
+                                                  Color(0xFFFA5A3A),
+                                                  Color(0xFFF25C40)
                                                 ],
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                              )
+                                            : null,
+                                        color: isDone
+                                            ? const Color(0xFF10B981)
+                                            : (isCurrent
+                                                ? null
+                                                : (isDark
+                                                    ? const Color(0xFF161E2E)
+                                                    : const Color(0xFFE2E8F0))),
+                                        border: Border.all(
+                                          color: isCurrent
+                                              ? const Color(0xFFFF8A75)
+                                              : (isDone
+                                                  ? const Color(0xFF34D399)
+                                                  : (isDark
+                                                      ? const Color(0xFF334155)
+                                                      : const Color(
+                                                          0xFFCBD5E1))),
+                                          width: isCurrent ? 3 : 2,
                                         ),
-                                        child: Center(
-                                          child: isLocked
-                                              ? const Icon(Icons.lock_outline_rounded,
-                                                  color: Color(0xFF64748B), size: 22)
-                                              : (isMilestone
-                                                  ? const Text('🏆',
-                                                      style: TextStyle(fontSize: 24))
-                                                  : Text(
-                                                      '${day.d}',
-                                                      style: GoogleFonts.outfit(
-                                                        fontSize: 22,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: Colors.white,
-                                                      ),
-                                                    )),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                        boxShadow: isCurrent
+                                            ? [
+                                                BoxShadow(
+                                                  color: const Color(0xFFFA5A3A)
+                                                      .withOpacity(0.4),
+                                                  blurRadius:
+                                                      18 + pulseAnimation.value,
+                                                  spreadRadius: 2 +
+                                                      (pulseAnimation.value /
+                                                          3),
+                                                ),
+                                              ]
+                                            : [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.12),
+                                                  blurRadius: 6,
+                                                  offset: const Offset(0, 3),
+                                                )
+                                              ],
+                                      ),
+                                      child: Center(
+                                        child: isLocked
+                                            ? const Icon(
+                                                Icons.lock_outline_rounded,
+                                                color: Color(0xFF64748B),
+                                                size: 22)
+                                            : (isMilestone
+                                                ? const Text('🏆',
+                                                    style:
+                                                        TextStyle(fontSize: 24))
+                                                : Text(
+                                                    '${day.d}',
+                                                    style: GoogleFonts.outfit(
+                                                      fontSize: 22,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                  )),
+                                      ),
+                                    );
+                                  },
+                                ),
 
-                                  // Green Checkmark Badge
-                                  if (isDone)
-                                    Positioned(
-                                      top: -1,
-                                      right: -1,
-                                      child: Container(
-                                        width: 20,
-                                        height: 20,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: const Color(0xFF10B981),
-                                          border: Border.all(color: Colors.white, width: 1.5),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black.withOpacity(0.25),
-                                              blurRadius: 4,
-                                            )
-                                          ],
-                                        ),
-                                        child: const Center(
-                                          child: Icon(Icons.check_rounded,
-                                              color: Colors.white, size: 12),
-                                        ),
+                                // Green Checkmark Badge
+                                if (isDone)
+                                  Positioned(
+                                    top: -1,
+                                    right: -1,
+                                    child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: const Color(0xFF10B981),
+                                        border: Border.all(
+                                            color: Colors.white, width: 1.5),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.25),
+                                            blurRadius: 4,
+                                          )
+                                        ],
+                                      ),
+                                      child: const Center(
+                                        child: Icon(Icons.check_rounded,
+                                            color: Colors.white, size: 12),
                                       ),
                                     ),
-                                ],
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Unit ${day.d}',
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: isCurrent
+                                    ? const Color(0xFFFA5A3A)
+                                    : (isDone
+                                        ? const Color(0xFF10B981)
+                                        : subtitleColor),
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                'Unit ${day.d}',
-                                style: GoogleFonts.inter(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: isCurrent
-                                      ? const Color(0xFFFA5A3A)
-                                      : (isDone ? const Color(0xFF10B981) : subtitleColor),
-                                ),
+                            ),
+                            Text(
+                              isCurrent
+                                  ? "Let's begin!"
+                                  : (isDone ? "Completed" : "Locked"),
+                              style: GoogleFonts.inter(
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w500,
+                                color: isCurrent
+                                    ? const Color(0xFFFA5A3A).withOpacity(0.85)
+                                    : subtitleColor.withOpacity(0.7),
                               ),
-                              Text(
-                                isCurrent
-                                    ? "Let's begin!"
-                                    : (isDone ? "Completed" : "Locked"),
-                                style: GoogleFonts.inter(
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.w500,
-                                  color: isCurrent
-                                      ? const Color(0xFFFA5A3A).withOpacity(0.85)
-                                      : subtitleColor.withOpacity(0.7),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
-              );
+                  ),
+                ],
+              ),
+            );
           }),
         ],
       ),

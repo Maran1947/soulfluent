@@ -68,9 +68,11 @@ class AppStrings {
       'Hinglish': 'Group Discussion (GD)',
     },
     'mode_gd_desc': {
-      'English': 'Practice with 2-4 AI participants in a realistic GD environment',
+      'English':
+          'Practice with 2-4 AI participants in a realistic GD environment',
       'Hindi': '2-4 AI प्रतिभागियों के साथ वास्तविक वातावरण में अभ्यास करें',
-      'Hinglish': '2-4 AI participants ke saath realistic GD mein practice karein',
+      'Hinglish':
+          '2-4 AI participants ke saath realistic GD mein practice karein',
     },
     'mode_debate': {
       'English': '1:1 Debate',
@@ -78,9 +80,11 @@ class AppStrings {
       'Hinglish': '1:1 Debate',
     },
     'mode_debate_desc': {
-      'English': 'Face a dedicated opponent who challenges your arguments directly',
+      'English':
+          'Face a dedicated opponent who challenges your arguments directly',
       'Hindi': 'एक AI प्रतिद्वंद्वी से सीधे अपने तर्कों की चुनौती लें',
-      'Hinglish': 'AI opponent ke saath direct debate karein aur logic test karein',
+      'Hinglish':
+          'AI opponent ke saath direct debate karein aur logic test karein',
     },
 
     // Difficulty Labels

@@ -28,9 +28,11 @@ class _EchoActivityWidgetState extends State<EchoActivityWidget> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardBg = isDark ? const Color(0xFF131C2E) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final borderColor =
+        isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
     final headingColor = isDark ? Colors.white : const Color(0xFF0F172A);
-    final subtitleColor = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+    final subtitleColor =
+        isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
 
     final phraseToEcho = widget.node.phrasesA.isNotEmpty
         ? widget.node.phrasesA.first
@@ -52,7 +54,8 @@ class _EchoActivityWidgetState extends State<EchoActivityWidget> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.headphones_rounded, size: 14, color: AppTheme.primary),
+                const Icon(Icons.headphones_rounded,
+                    size: 14, color: AppTheme.primary),
                 const SizedBox(width: 6),
                 Text(
                   'LISTEN & ECHO',
@@ -115,7 +118,9 @@ class _EchoActivityWidgetState extends State<EchoActivityWidget> {
                         ),
                         child: Center(
                           child: Icon(
-                            _isPlayingAudio ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                            _isPlayingAudio
+                                ? Icons.pause_rounded
+                                : Icons.play_arrow_rounded,
                             color: Colors.white,
                             size: 26,
                           ),
@@ -137,7 +142,9 @@ class _EchoActivityWidgetState extends State<EchoActivityWidget> {
                           ),
                           const SizedBox(height: 3),
                           Text(
-                            _isPlayingAudio ? 'Playing audio...' : 'Tap to listen',
+                            _isPlayingAudio
+                                ? 'Playing audio...'
+                                : 'Tap to listen',
                             style: GoogleFonts.inter(
                               fontSize: 12.5,
                               color: subtitleColor,
@@ -152,7 +159,9 @@ class _EchoActivityWidgetState extends State<EchoActivityWidget> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC),
+                    color: isDark
+                        ? const Color(0xFF1E293B)
+                        : const Color(0xFFF8FAFC),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: borderColor),
                   ),
@@ -191,7 +200,9 @@ class _EchoActivityWidgetState extends State<EchoActivityWidget> {
                     decoration: BoxDecoration(
                       color: _isRecording
                           ? Colors.redAccent
-                          : (_hasRecorded ? const Color(0xFF10B981) : AppTheme.primary),
+                          : (_hasRecorded
+                              ? const Color(0xFF10B981)
+                              : AppTheme.primary),
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
@@ -208,7 +219,9 @@ class _EchoActivityWidgetState extends State<EchoActivityWidget> {
                       child: Icon(
                         _isRecording
                             ? Icons.stop_rounded
-                            : (_hasRecorded ? Icons.check_rounded : Icons.mic_rounded),
+                            : (_hasRecorded
+                                ? Icons.check_rounded
+                                : Icons.mic_rounded),
                         color: Colors.white,
                         size: 32,
                       ),
@@ -219,13 +232,17 @@ class _EchoActivityWidgetState extends State<EchoActivityWidget> {
                 Text(
                   _isRecording
                       ? 'Listening... Speak now!'
-                      : (_hasRecorded ? 'Great echo! 96% Match' : 'Tap mic to echo phrase'),
+                      : (_hasRecorded
+                          ? 'Great echo! 96% Match'
+                          : 'Tap mic to echo phrase'),
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: _isRecording
                         ? Colors.redAccent
-                        : (_hasRecorded ? const Color(0xFF10B981) : subtitleColor),
+                        : (_hasRecorded
+                            ? const Color(0xFF10B981)
+                            : subtitleColor),
                   ),
                 ),
               ],

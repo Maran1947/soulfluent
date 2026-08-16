@@ -63,9 +63,7 @@ class GDProvider extends ChangeNotifier {
   AudioService get audioService => _audioService;
 
   GDProvider(this._apiService) {
-    _weeks = WEEKS_DATA
-        .map((w) => CurriculumWeek.fromJson(w))
-        .toList();
+    _weeks = [];
     fetchCurriculum();
   }
 
@@ -85,10 +83,6 @@ class GDProvider extends ChangeNotifier {
         _weeks = rawWeeks
             .map((w) => CurriculumWeek.fromJson(w as Map<String, dynamic>))
             .toList();
-      } else if (_weeks.isEmpty) {
-        _weeks = WEEKS_DATA
-            .map((w) => CurriculumWeek.fromJson(w))
-            .toList();
       }
 
       final rawPersonas = data['personas'] as Map<String, dynamic>? ?? {};
@@ -100,11 +94,6 @@ class GDProvider extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint('Error fetching curriculum: $e');
-      if (_weeks.isEmpty) {
-        _weeks = WEEKS_DATA
-            .map((w) => CurriculumWeek.fromJson(w))
-            .toList();
-      }
     } finally {
       _isLoadingCurriculum = false;
       notifyListeners();

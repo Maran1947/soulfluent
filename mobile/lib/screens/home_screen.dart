@@ -204,7 +204,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final subtitleColor = isDark ? AppTheme.textMuted : AppTheme.textMutedLight;
 
     return Scaffold(
-      appBar: (_activeTab == 1 || _activeTab == 2) ? const AppHeader(title: 'FluentSoul') : null,
+      appBar: (_activeTab == 1 || _activeTab == 2)
+          ? const AppHeader(title: 'FluentSoul')
+          : null,
       backgroundColor: isDark ? AppTheme.background : AppTheme.lightBackground,
       body: IndexedStack(
         index: _activeTab,
@@ -232,14 +234,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           _buildStep1PracticeMode(isDark, headingColor,
                               subtitleColor, borderColor, l10n)
                         else if (currentStep == 2)
-                          _buildStep2Topic(isDark, headingColor,
-                              subtitleColor, borderColor, cardBg, gd, l10n)
+                          _buildStep2Topic(isDark, headingColor, subtitleColor,
+                              borderColor, cardBg, gd, l10n)
                         else if (currentStep == 3)
                           _buildStep3VoicePartners(isDark, headingColor,
                               subtitleColor, borderColor, cardBg, l10n)
                         else
-                          _buildStep4Launch(isDark, headingColor,
-                              subtitleColor, borderColor, cardBg, l10n),
+                          _buildStep4Launch(isDark, headingColor, subtitleColor,
+                              borderColor, cardBg, l10n),
 
                         const SizedBox(height: 20),
 
@@ -257,7 +259,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFFFA5A3A).withOpacity(0.3),
+                                  color:
+                                      const Color(0xFFFA5A3A).withOpacity(0.3),
                                   blurRadius: 12,
                                   offset: const Offset(0, 4),
                                 ),
@@ -291,8 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                         else
                           Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               OutlinedButton.icon(
                                 onPressed: _prevStep,
@@ -307,8 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   foregroundColor: headingColor,
                                   side: BorderSide(color: borderColor),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 18, vertical: 12),
@@ -341,8 +342,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Text(
                                             currentStep == 4
                                                 ? (selectedMode == 'debate'
-                                                    ? (l10n?.start_debate ?? 'Start Karein')
-                                                    : (l10n?.start_discussion ?? 'Start Karein'))
+                                                    ? (l10n?.start_debate ??
+                                                        'Start Karein')
+                                                    : (l10n?.start_discussion ??
+                                                        'Start Karein'))
                                                 : (l10n?.next ?? 'Continue'),
                                             style: GoogleFonts.inter(
                                               fontSize: 15,
@@ -352,10 +355,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           const SizedBox(width: 6),
                                           Icon(
                                             currentStep == 4
-                                                ? Icons
-                                                    .rocket_launch_rounded
-                                                : Icons
-                                                    .arrow_forward_rounded,
+                                                ? Icons.rocket_launch_rounded
+                                                : Icons.arrow_forward_rounded,
                                             size: 18,
                                           ),
                                         ],
@@ -463,11 +464,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? const Color(0xFFFA5A3A)
                           : (isCompleted
                               ? const Color(0xFFFA5A3A)
-                              : (isDark ? const Color(0xFF231B3D) : const Color(0xFFE2E8F0))),
+                              : (isDark
+                                  ? const Color(0xFF231B3D)
+                                  : const Color(0xFFE2E8F0))),
                     ),
                     child: Center(
                       child: isCompleted
-                          ? const Icon(Icons.check, size: 12, color: Colors.white)
+                          ? const Icon(Icons.check,
+                              size: 12, color: Colors.white)
                           : Text(
                               '$stepNum',
                               style: GoogleFonts.inter(
@@ -475,7 +479,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fontWeight: FontWeight.bold,
                                 color: isActive
                                     ? Colors.white
-                                    : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
+                                    : (isDark
+                                        ? const Color(0xFF94A3B8)
+                                        : const Color(0xFF64748B)),
                               ),
                             ),
                     ),
@@ -488,7 +494,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
                       color: isActive
                           ? (isDark ? Colors.white : const Color(0xFF0F172A))
-                          : (isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8)),
+                          : (isDark
+                              ? const Color(0xFF64748B)
+                              : const Color(0xFF94A3B8)),
                     ),
                   ),
                 ],
@@ -524,7 +532,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(height: 6),
         Text(
-          l10n?.onboarding_lang_subtitle ?? 'Select an arena to start training your speaking skills',
+          l10n?.onboarding_lang_subtitle ??
+              'Select an arena to start training your speaking skills',
           textAlign: TextAlign.center,
           style: GoogleFonts.inter(
             fontSize: 13,
@@ -584,8 +593,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   colors: isSelected
                       ? [const Color(0xFFFA5A3A), const Color(0xFFFF4B72)]
                       : [
-                          isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
-                          isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
+                          isDark
+                              ? const Color(0xFF334155)
+                              : const Color(0xFFF1F5F9),
+                          isDark
+                              ? const Color(0xFF1E293B)
+                              : const Color(0xFFE2E8F0),
                         ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -593,7 +606,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Icon(
                 Icons.groups_rounded,
-                color: isSelected ? Colors.white : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
+                color: isSelected
+                    ? Colors.white
+                    : (isDark
+                        ? const Color(0xFF94A3B8)
+                        : const Color(0xFF64748B)),
                 size: 26,
               ),
             ),
@@ -611,7 +628,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: GoogleFonts.outfit(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : const Color(0xFF0F172A),
+                            color:
+                                isDark ? Colors.white : const Color(0xFF0F172A),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -619,7 +637,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(width: 6),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFA5A3A).withOpacity(0.15),
                           borderRadius: BorderRadius.circular(6),
@@ -638,10 +657,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    l10n?.mode_gd_desc ?? 'Talk, share ideas, and grow with AI peers.',
+                    l10n?.mode_gd_desc ??
+                        'Talk, share ideas, and grow with AI peers.',
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                      color: isDark
+                          ? const Color(0xFF94A3B8)
+                          : const Color(0xFF64748B),
                     ),
                   ),
                 ],
@@ -655,11 +677,14 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 22,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isSelected ? const Color(0xFFFA5A3A) : Colors.transparent,
+                color:
+                    isSelected ? const Color(0xFFFA5A3A) : Colors.transparent,
                 border: Border.all(
                   color: isSelected
                       ? const Color(0xFFFA5A3A)
-                      : (isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                      : (isDark
+                          ? const Color(0xFF475569)
+                          : const Color(0xFFCBD5E1)),
                   width: 2,
                 ),
               ),
@@ -713,8 +738,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   colors: isSelected
                       ? [const Color(0xFFFA5A3A), const Color(0xFFFF4B72)]
                       : [
-                          isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
-                          isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
+                          isDark
+                              ? const Color(0xFF334155)
+                              : const Color(0xFFF1F5F9),
+                          isDark
+                              ? const Color(0xFF1E293B)
+                              : const Color(0xFFE2E8F0),
                         ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -722,7 +751,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Icon(
                 Icons.record_voice_over_rounded,
-                color: isSelected ? Colors.white : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
+                color: isSelected
+                    ? Colors.white
+                    : (isDark
+                        ? const Color(0xFF94A3B8)
+                        : const Color(0xFF64748B)),
                 size: 26,
               ),
             ),
@@ -744,10 +777,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    l10n?.mode_debate_desc ?? 'Challenge an AI opponent and sharpen arguments.',
+                    l10n?.mode_debate_desc ??
+                        'Challenge an AI opponent and sharpen arguments.',
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                      color: isDark
+                          ? const Color(0xFF94A3B8)
+                          : const Color(0xFF64748B),
                     ),
                   ),
                 ],
@@ -761,11 +797,14 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 22,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isSelected ? const Color(0xFFFA5A3A) : Colors.transparent,
+                color:
+                    isSelected ? const Color(0xFFFA5A3A) : Colors.transparent,
                 border: Border.all(
                   color: isSelected
                       ? const Color(0xFFFA5A3A)
-                      : (isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                      : (isDark
+                          ? const Color(0xFF475569)
+                          : const Color(0xFFCBD5E1)),
                   width: 2,
                 ),
               ),
@@ -778,7 +817,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 
   /// STEP 2: Choose Topic / Prompt
   Widget _buildStep2Topic(
@@ -938,9 +976,7 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          isDebate
-              ? 'Select AI Debate Opponent'
-              : 'Select AI Voice Partners',
+          isDebate ? 'Select AI Debate Opponent' : 'Select AI Voice Partners',
           textAlign: TextAlign.center,
           style: GoogleFonts.outfit(
             fontSize: 22,
@@ -1020,7 +1056,8 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                color:
+                    isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
                 shape: BoxShape.circle,
               ),
               child: Center(

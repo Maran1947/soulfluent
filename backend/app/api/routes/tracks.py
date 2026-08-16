@@ -425,17 +425,58 @@ async def get_curriculum_legacy(
                     persona_key = "alex"
 
                 activities_payload = []
+                phrases_a = []
+                phrases_b = []
+                rescue_phrases = []
+                ai_line = None
+
                 for act in node.activities:
                     act_type_str = act.activity_type.value if hasattr(act.activity_type, "value") else str(act.activity_type)
+                    cfg = act.config or {}
                     activities_payload.append(
                         {
                             "id": str(act.id),
                             "sequence": act.sequence,
                             "title": act.title,
                             "type": act_type_str,
-                            "config": act.config or {},
+                            "config": cfg,
                         }
                     )
+
+                    if not ai_line and cfg.get("instruction"):
+                        ai_line = cfg.get("instruction")
+
+                    content = cfg.get("content", {})
+                    if isinstance(content, dict):
+                        if "items" in content:
+                            for it in content["items"]:
+                                if isinstance(it, dict):
+                                    val = it.get("example") or it.get("word") or it.get("phrase")
+                                    if val and val not in phrases_a:
+                                        phrases_a.append(val)
+                        if "sentence_starters" in content:
+                            for st in content["sentence_starters"]:
+                                if isinstance(st, str) and st not in phrases_b:
+                                    phrases_b.append(st)
+                        if "prompts" in content:
+                            for pr in content["prompts"]:
+                                if isinstance(pr, str) and pr not in phrases_b:
+                                    phrases_b.append(pr)
+                                elif isinstance(pr, dict):
+                                    text_val = pr.get("text") or pr.get("prompt")
+                                    if text_val and text_val not in phrases_b:
+                                        phrases_b.append(text_val)
+
+                if not phrases_a:
+                    phrases_a = [f"Let's practice {node.name}.", f"Focus on core expressions for {node.name}."]
+                if not phrases_b:
+                    phrases_b = [f"In my opinion...", f"I think..."]
+                if not rescue_phrases:
+                    rescue_phrases = ["Give me a sec...", "Let me think about that...", "How do I say this..."]
+
+                node_instruction = node.learning_goal or node.description or f"Complete activities for {node.name}."
+                if not ai_line:
+                    ai_line = f"Let's practice {node.name}. Focus on flow and speed."
 
                 days.append(
                     {
@@ -445,13 +486,13 @@ async def get_curriculum_legacy(
                         "theme": node.name or f"Node {node.sequence}",
                         "persona": persona_key,
                         "mode": "foundation",
-                        "aiLine": f"Let's practice {node.name}. Focus on flow and speed.",
-                        "instruction": node.learning_goal or node.description or f"Complete activities for {node.name}.",
-                        "phrasesA": ["In my opinion...", "I think..."],
-                        "phrasesB": ["I feel...", "My perspective is..."],
-                        "rescuePhrases": ["Let me think...", "That's an interesting question..."],
-                        "script": [f"Coach: Ready to practice {node.name}?"],
-                        "wpm": 90 + (stage.sequence * 3),
+                        "aiLine": ai_line,
+                        "instruction": node_instruction,
+                        "phrasesA": phrases_a,
+                        "phrasesB": phrases_b,
+                        "rescuePhrases": rescue_phrases,
+                        "script": [f"{persona_key.capitalize()}: Ready to practice {node.name}?", f"You: Yes, let's start!"],
+                        "wpm": 80 + (stage.sequence * 3),
                         "filler": "≤5/min",
                         "milestoneReport": (node.sequence == len(stage.nodes)),
                         "graduatesToTrackA": False,

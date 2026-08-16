@@ -27,7 +27,8 @@ class ProfileScreen extends StatelessWidget {
     final headingColor = isDark ? AppTheme.textMain : AppTheme.textMainLight;
     final subtitleColor = isDark ? AppTheme.textMuted : AppTheme.textMutedLight;
 
-    final initial = user?.name.isNotEmpty == true ? user!.name[0].toUpperCase() : 'U';
+    final initial =
+        user?.name.isNotEmpty == true ? user!.name[0].toUpperCase() : 'U';
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -35,7 +36,8 @@ class ProfileScreen extends StatelessWidget {
         backgroundColor: bgColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: headingColor, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: headingColor, size: 20),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -134,7 +136,8 @@ class ProfileScreen extends StatelessWidget {
                         value: localeProvider.languageString,
                         isExpanded: true,
                         dropdownColor: cardBg,
-                        icon: const Icon(Icons.translate_rounded, color: AppTheme.primary),
+                        icon: const Icon(Icons.translate_rounded,
+                            color: AppTheme.primary),
                         style: GoogleFonts.inter(
                           fontSize: 14.5,
                           fontWeight: FontWeight.bold,
@@ -143,7 +146,9 @@ class ProfileScreen extends StatelessWidget {
                         onChanged: (val) {
                           if (val != null) {
                             localeProvider.setLanguageString(val);
-                            context.read<GDProvider>().fetchTopics(language: val);
+                            context
+                                .read<GDProvider>()
+                                .fetchTopics(language: val);
                           }
                         },
                         items: const [
@@ -195,7 +200,8 @@ class ProfileScreen extends StatelessWidget {
                         value: gd.activeTrack,
                         isExpanded: true,
                         dropdownColor: cardBg,
-                        icon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppTheme.primary),
+                        icon: const Icon(Icons.keyboard_arrow_down_rounded,
+                            color: AppTheme.primary),
                         style: GoogleFonts.inter(
                           fontSize: 14.5,
                           fontWeight: FontWeight.bold,
@@ -253,7 +259,9 @@ class ProfileScreen extends StatelessWidget {
                             icon: '🔥',
                             title: 'Streak',
                             value: '${gd.streakDays} Days',
-                            cardBg: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                            cardBg: isDark
+                                ? const Color(0xFF0F172A)
+                                : const Color(0xFFF1F5F9),
                             headingColor: headingColor,
                             subtitleColor: subtitleColor,
                           ),
@@ -264,7 +272,9 @@ class ProfileScreen extends StatelessWidget {
                             icon: '🏆',
                             title: 'Current Unit',
                             value: 'Unit ${gd.currentPathDay}',
-                            cardBg: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                            cardBg: isDark
+                                ? const Color(0xFF0F172A)
+                                : const Color(0xFFF1F5F9),
                             headingColor: headingColor,
                             subtitleColor: subtitleColor,
                           ),
@@ -289,17 +299,32 @@ class ProfileScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       ListTile(
-                        leading: const Icon(Icons.history_rounded, color: AppTheme.primary),
-                        title: Text('Session History', style: GoogleFonts.inter(fontWeight: FontWeight.w600, color: headingColor)),
-                        trailing: const Icon(Icons.chevron_right_rounded, color: Colors.grey),
+                        leading: const Icon(Icons.history_rounded,
+                            color: AppTheme.primary),
+                        title: Text('Session History',
+                            style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w600,
+                                color: headingColor)),
+                        trailing: const Icon(Icons.chevron_right_rounded,
+                            color: Colors.grey),
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => const HistoryScreen()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const HistoryScreen()));
                         },
                       ),
                       Divider(height: 1, color: borderColor),
                       ListTile(
-                        leading: Icon(isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded, color: AppTheme.primary),
-                        title: Text('Dark Theme', style: GoogleFonts.inter(fontWeight: FontWeight.w600, color: headingColor)),
+                        leading: Icon(
+                            isDark
+                                ? Icons.dark_mode_rounded
+                                : Icons.light_mode_rounded,
+                            color: AppTheme.primary),
+                        title: Text('Dark Theme',
+                            style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w600,
+                                color: headingColor)),
                         trailing: Switch(
                           value: isDark,
                           activeColor: AppTheme.primary,
@@ -322,7 +347,8 @@ class ProfileScreen extends StatelessWidget {
                     elevation: 0,
                     side: const BorderSide(color: Colors.red, width: 1),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                   ),
                   onPressed: () async {
                     await auth.logout();
@@ -330,7 +356,8 @@ class ProfileScreen extends StatelessWidget {
                       Navigator.pop(context);
                     }
                   },
-                  icon: const Icon(Icons.logout_rounded, color: Colors.red, size: 20),
+                  icon: const Icon(Icons.logout_rounded,
+                      color: Colors.red, size: 20),
                   label: Text(
                     'Logout Account',
                     style: GoogleFonts.inter(
@@ -369,11 +396,19 @@ class ProfileScreen extends StatelessWidget {
             children: [
               Text(icon, style: const TextStyle(fontSize: 16)),
               const SizedBox(width: 6),
-              Text(title, style: GoogleFonts.inter(fontSize: 12, color: subtitleColor, fontWeight: FontWeight.w600)),
+              Text(title,
+                  style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: subtitleColor,
+                      fontWeight: FontWeight.w600)),
             ],
           ),
           const SizedBox(height: 6),
-          Text(value, style: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.bold, color: headingColor)),
+          Text(value,
+              style: GoogleFonts.outfit(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: headingColor)),
         ],
       ),
     );

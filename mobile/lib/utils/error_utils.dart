@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 String formatUserFriendlyError(Object error) {
-  if (error is SocketException ||
-      error is TimeoutException) {
+  if (error is SocketException || error is TimeoutException) {
     return 'Unable to connect. Please try again.';
   }
 
@@ -22,8 +21,7 @@ String formatUserFriendlyError(Object error) {
     return 'Unable to connect to the server. Please try again.';
   }
 
-  if (rawMsg.contains('500') ||
-      rawMsg.contains('Internal Server Error')) {
+  if (rawMsg.contains('500') || rawMsg.contains('Internal Server Error')) {
     return 'Server error. Please try again later.';
   }
 

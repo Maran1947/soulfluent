@@ -10,7 +10,8 @@ class WordSearchGameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? const Color(0xFF131829) : const Color(0xFFF8FAFC);
-    final headingColor = isDark ? const Color(0xFFEDEFF7) : const Color(0xFF0F172A);
+    final headingColor =
+        isDark ? const Color(0xFFEDEFF7) : const Color(0xFF0F172A);
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -18,7 +19,8 @@ class WordSearchGameScreen extends StatelessWidget {
         backgroundColor: bgColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: headingColor, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: headingColor, size: 20),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(

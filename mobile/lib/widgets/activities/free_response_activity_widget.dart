@@ -29,9 +29,11 @@ class _FreeResponseActivityWidgetState
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardBg = isDark ? const Color(0xFF131C2E) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final borderColor =
+        isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
     final headingColor = isDark ? Colors.white : const Color(0xFF0F172A);
-    final subtitleColor = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+    final subtitleColor =
+        isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
 
     final prompt = widget.activity.config['instruction']?.toString() ??
         'Produce spontaneous speech for ${widget.node.theme}.';
@@ -52,7 +54,8 @@ class _FreeResponseActivityWidgetState
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.mic_rounded, size: 14, color: AppTheme.primary),
+                const Icon(Icons.mic_rounded,
+                    size: 14, color: AppTheme.primary),
                 const SizedBox(width: 6),
                 Text(
                   'FREE SPEECH',
@@ -117,7 +120,8 @@ class _FreeResponseActivityWidgetState
                           : 'Tap record button below and state your thoughts in English.'),
                   style: GoogleFonts.inter(
                     fontSize: 15,
-                    color: _transcript.isNotEmpty ? headingColor : subtitleColor,
+                    color:
+                        _transcript.isNotEmpty ? headingColor : subtitleColor,
                     height: 1.4,
                   ),
                 ),
@@ -149,7 +153,9 @@ class _FreeResponseActivityWidgetState
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: (_isRecording ? Colors.redAccent : AppTheme.primary)
+                          color: (_isRecording
+                                  ? Colors.redAccent
+                                  : AppTheme.primary)
                               .withOpacity(0.4),
                           blurRadius: 18,
                           spreadRadius: 2,
@@ -167,7 +173,9 @@ class _FreeResponseActivityWidgetState
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  _isRecording ? 'Recording... Tap to finish' : 'Tap mic to speak',
+                  _isRecording
+                      ? 'Recording... Tap to finish'
+                      : 'Tap mic to speak',
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,

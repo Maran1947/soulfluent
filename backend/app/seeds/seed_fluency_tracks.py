@@ -163,29 +163,67 @@ INITIAL_TRACKS: list[dict[str, Any]] = [
     },
 ]
 
-# Load UNFREEZE JSON data if present
-json_path = Path(__file__).parent / "data" / "unfreeze_roadmap.json"
-if json_path.exists():
-    try:
-        with open(json_path, "r", encoding="utf-8") as f:
-            roadmap_data = json.load(f)
-            unfreeze_stages = roadmap_data.get("stages", [])
-            for s in unfreeze_stages:
-                for n in s.get("nodes", []):
-                    for a in n.get("activities", []):
-                        act_str = a.get("type", "lesson")
-                        try:
-                            a["type"] = ActivityType(act_str)
-                        except ValueError:
-                            a["type"] = ActivityType.lesson
-            for t in INITIAL_TRACKS:
-                if t["slug"] == "unfreeze":
-                    t["stages"] = unfreeze_stages
-    except Exception as exc:
-        logger.error(f"Error loading unfreeze_roadmap.json: {exc}")
-
+TYPE_MAPPING = {
+    "context_vocab": ActivityType.lesson,
+    "listen_understand": ActivityType.listen_select,
+    "sentence_builder": ActivityType.forming_sentence,
+    "express_image": ActivityType.express_image,
+    "guided_speaking": ActivityType.echo_repeat,
+    "speaking_challenge": ActivityType.free_response,
+    "roleplay": ActivityType.roleplay,
+    "repair_roleplay": ActivityType.roleplay,
+    "persuasion_roleplay": ActivityType.roleplay,
+    "role_switch": ActivityType.roleplay,
+    "long_conversation": ActivityType.roleplay,
+    "situation_twist": ActivityType.roleplay,
+    "freeze_breaker": ActivityType.rescue_phrase_drill,
+    "recovery_drill": ActivityType.rescue_phrase_drill,
+    "story_rescue": ActivityType.rescue_phrase_drill,
+    "rephrase": ActivityType.sentence_correction,
+    "register_switch": ActivityType.sentence_correction,
+    "tone_switch": ActivityType.sentence_correction,
+    "circumlocution": ActivityType.free_response,
+    "timed_speaking": ActivityType.free_response,
+    "no_preparation": ActivityType.free_response,
+    "think_aloud": ActivityType.free_response,
+    "topic_bridge": ActivityType.free_response,
+    "answer_ladder": ActivityType.forming_sentence,
+    "thought_ladder": ActivityType.forming_sentence,
+    "conversation_chain": ActivityType.echo_repeat,
+    "story_builder": ActivityType.forming_sentence,
+    "image_flash": ActivityType.express_image,
+}
+for v in ActivityType:
+    TYPE_MAPPING[v.value] = v
 
 async def seed_fluency_tracks(db: AsyncSession) -> None:
+    # Load UNFREEZE JSON data
+    json_path = Path(__file__).parent / "data" / "unfreeze_roadmap.json"
+    if json_path.exists():
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                roadmap_data = json.load(f)
+                unfreeze_stages = roadmap_data.get("stages", [])
+                for idx_s, s in enumerate(unfreeze_stages, start=1):
+                    if "sequence" not in s:
+                        s["sequence"] = idx_s
+                    for idx_n, n in enumerate(s.get("nodes", []), start=1):
+                        if "sequence" not in n:
+                            n["sequence"] = n.get("node_number", idx_n)
+                        for idx_a, a in enumerate(n.get("activities", []), start=1):
+                            if "sequence" not in a:
+                                a["sequence"] = a.get("order", idx_a)
+                            raw_val = a.get("activity_type") or a.get("type") or "lesson"
+                            if hasattr(raw_val, "value"):
+                                raw_val = raw_val.value
+                            act_str = str(raw_val).lower()
+                            a["type"] = TYPE_MAPPING.get(act_str, ActivityType.lesson)
+                for t in INITIAL_TRACKS:
+                    if t["slug"] == "unfreeze":
+                        t["stages"] = unfreeze_stages
+        except Exception as exc:
+            logger.error(f"Error loading unfreeze_roadmap.json: {exc}")
+
     for stmt in INIT_SQL_STATEMENTS:
         try:
             await db.execute(text(stmt))
@@ -218,11 +256,12 @@ async def seed_fluency_tracks(db: AsyncSession) -> None:
             track.sequence = t_data.get("sequence", 1)
 
         stages: list[dict[str, Any]] = t_data.get("stages", [])
-        for s_data in stages:
+        for idx_s, s_data in enumerate(stages, start=1):
+            s_seq = s_data.get("sequence", idx_s)
             res_s = await db.execute(
                 select(Stage).where(
                     Stage.fluency_track_id == track.id,
-                    Stage.sequence == s_data["sequence"],
+                    Stage.sequence == s_seq,
                 )
             )
             stage = res_s.scalars().first()
@@ -230,12 +269,12 @@ async def seed_fluency_tracks(db: AsyncSession) -> None:
                 stage = Stage(
                     fluency_track_id=track.id,
                     name=s_data["name"],
-                    slug=s_data.get("slug", f"stage-{s_data['sequence']}"),
-                    description=s_data.get("description", ""),
-                    cefr_min=s_data.get("cefr_min", "A1"),
+                    slug=s_data.get("slug", f"stage-{s_seq}"),
+                    description=s_data.get("description", s_data.get("goal", "")),
+                    cefr_min=s_data.get("cefr_min", s_data.get("cefr", "A1")),
                     cefr_max=s_data.get("cefr_max", "C2"),
                     primary_goals=s_data.get("primary_goals", []),
-                    sequence=s_data["sequence"],
+                    sequence=s_seq,
                     is_active=True,
                 )
                 db.add(stage)
@@ -243,29 +282,30 @@ async def seed_fluency_tracks(db: AsyncSession) -> None:
             else:
                 stage.name = s_data["name"]
                 stage.slug = s_data.get("slug", stage.slug)
-                stage.description = s_data.get("description", stage.description)
+                stage.description = s_data.get("description", s_data.get("goal", stage.description))
 
             nodes: list[dict[str, Any]] = s_data.get("nodes", [])
-            for n_data in nodes:
+            for idx_n, n_data in enumerate(nodes, start=1):
+                n_seq = n_data.get("sequence", n_data.get("node_number", idx_n))
                 res_n = await db.execute(
                     select(StageNode).where(
                         StageNode.stage_id == stage.id,
-                        StageNode.sequence == n_data["sequence"],
+                        StageNode.sequence == n_seq,
                     )
                 )
                 node = res_n.scalars().first()
                 if not node:
                     node = StageNode(
                         stage_id=stage.id,
-                        name=n_data.get("name", f"Node {n_data['sequence']}"),
-                        slug=n_data.get("slug", f"node-{n_data['sequence']}"),
+                        name=n_data.get("name", f"Node {n_seq}"),
+                        slug=n_data.get("slug", f"node-{n_seq}"),
                         description=n_data.get("description", ""),
                         cefr_min=n_data.get("cefr_min", "A1"),
                         cefr_max=n_data.get("cefr_max", "C2"),
-                        learning_goal=n_data.get("learning_goal", ""),
+                        learning_goal=n_data.get("learning_goal", n_data.get("name", "")),
                         primary_skill=n_data.get("primary_skill", ""),
                         estimated_minutes=n_data.get("estimated_minutes", 10),
-                        sequence=n_data["sequence"],
+                        sequence=n_seq,
                         is_active=True,
                     )
                     db.add(node)
@@ -273,30 +313,40 @@ async def seed_fluency_tracks(db: AsyncSession) -> None:
                 else:
                     node.name = n_data.get("name", node.name)
                     node.slug = n_data.get("slug", node.slug)
+                    node.estimated_minutes = n_data.get("estimated_minutes", node.estimated_minutes)
 
                 activities: list[dict[str, Any]] = n_data.get("activities", [])
-                for idx, a_data in enumerate(activities, start=1):
+                for idx_a, a_data in enumerate(activities, start=1):
+                    a_seq = a_data.get("sequence", a_data.get("order", idx_a))
                     res_a = await db.execute(
                         select(NodeActivity).where(
                             NodeActivity.stage_node_id == node.id,
-                            NodeActivity.sequence == a_data.get("sequence", idx),
+                            NodeActivity.sequence == a_seq,
                         )
                     )
                     act = res_a.scalars().first()
+                    raw_val = a_data.get("type") or a_data.get("activity_type") or "lesson"
+                    if hasattr(raw_val, "value"):
+                        raw_val = raw_val.value
+                    act_str = str(raw_val).lower()
+                    a_type = TYPE_MAPPING.get(act_str, ActivityType.lesson)
+                    a_config = a_data.get("config", {})
+
                     if not act:
                         act = NodeActivity(
                             stage_node_id=node.id,
-                            sequence=a_data.get("sequence", idx),
+                            sequence=a_seq,
                             title=a_data.get("title", ""),
-                            activity_type=a_data["type"],
-                            config=a_data.get("config", {}),
-                            is_required=a_data.get("is_required", True),
+                            activity_type=a_type,
+                            config=a_config,
+                            is_required=a_data.get("required", a_data.get("is_required", True)),
                             is_active=True,
                         )
                         db.add(act)
                     else:
                         act.title = a_data.get("title", act.title)
-                        act.config = a_data.get("config", act.config)
+                        act.activity_type = a_type
+                        act.config = a_config
 
     await db.commit()
     logger.info("Successfully seeded Fluency Tracks!")

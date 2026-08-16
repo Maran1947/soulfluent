@@ -83,7 +83,8 @@ class ApiService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception(_extractErrorMessage(response, 'Failed to load user profile'));
+      throw Exception(
+          _extractErrorMessage(response, 'Failed to load user profile'));
     }
 
     return User.fromJson(jsonDecode(response.body));
@@ -134,7 +135,8 @@ class ApiService {
     );
 
     if (response.statusCode != 201) {
-      throw Exception(_extractErrorMessage(response, 'Failed to create session'));
+      throw Exception(
+          _extractErrorMessage(response, 'Failed to create session'));
     }
 
     return GDSession.fromJson(jsonDecode(response.body));
@@ -256,7 +258,8 @@ class ApiService {
     final response = await http.Response.fromStream(streamedResponse);
 
     if (response.statusCode != 200) {
-      throw Exception(_extractErrorMessage(response, 'Failed to submit voice turn'));
+      throw Exception(
+          _extractErrorMessage(response, 'Failed to submit voice turn'));
     }
 
     return TurnResponse.fromJson(jsonDecode(response.body));
@@ -270,7 +273,8 @@ class ApiService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception(_extractErrorMessage(response, 'Failed to fetch session messages'));
+      throw Exception(
+          _extractErrorMessage(response, 'Failed to fetch session messages'));
     }
 
     final List<dynamic> jsonList = jsonDecode(response.body);

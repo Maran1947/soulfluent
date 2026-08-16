@@ -41,7 +41,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
         : 'Practitioner';
     final timeGreeting = hour < 12
         ? (l10n?.good_morning ?? 'Good Morning')
-        : (hour < 17 ? (l10n?.good_afternoon ?? 'Good Afternoon') : (l10n?.good_evening ?? 'Good Evening'));
+        : (hour < 17
+            ? (l10n?.good_afternoon ?? 'Good Afternoon')
+            : (l10n?.good_evening ?? 'Good Evening'));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

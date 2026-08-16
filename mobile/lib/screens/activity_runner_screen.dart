@@ -68,7 +68,9 @@ class _ActivityRunnerScreenState extends State<ActivityRunnerScreen> {
         node: widget.node,
         onCompleted: _nextActivity,
       );
-    } else if (type.contains('sentence') || type.contains('forming') || type.contains('production')) {
+    } else if (type.contains('sentence') ||
+        type.contains('forming') ||
+        type.contains('production')) {
       return FormingSentenceActivityWidget(
         activity: act,
         node: widget.node,
@@ -80,7 +82,9 @@ class _ActivityRunnerScreenState extends State<ActivityRunnerScreen> {
         node: widget.node,
         onCompleted: _nextActivity,
       );
-    } else if (type.contains('free') || type.contains('response') || type.contains('speech')) {
+    } else if (type.contains('free') ||
+        type.contains('response') ||
+        type.contains('speech')) {
       return FreeResponseActivityWidget(
         activity: act,
         node: widget.node,
@@ -107,7 +111,8 @@ class _ActivityRunnerScreenState extends State<ActivityRunnerScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? const Color(0xFF090D16) : const Color(0xFFF8FAFC);
     final headingColor = isDark ? Colors.white : const Color(0xFF0F172A);
-    final subtitleColor = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+    final subtitleColor =
+        isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
 
     final activities = widget.node.activities.isNotEmpty
         ? widget.node.activities
@@ -143,7 +148,6 @@ class _ActivityRunnerScreenState extends State<ActivityRunnerScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-
                   Text(
                     'Unit Completed!',
                     style: GoogleFonts.outfit(
@@ -153,7 +157,6 @@ class _ActivityRunnerScreenState extends State<ActivityRunnerScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-
                   Text(
                     'You finished all ${activities.length} activities for ${widget.node.theme}. Keep building fluency!',
                     textAlign: TextAlign.center,
@@ -164,13 +167,14 @@ class _ActivityRunnerScreenState extends State<ActivityRunnerScreen> {
                     ),
                   ),
                   const SizedBox(height: 28),
-
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF1E293B) : Colors.white,
                       borderRadius: BorderRadius.circular(100),
-                      border: Border.all(color: AppTheme.primary.withOpacity(0.4)),
+                      border:
+                          Border.all(color: AppTheme.primary.withOpacity(0.4)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -189,7 +193,6 @@ class _ActivityRunnerScreenState extends State<ActivityRunnerScreen> {
                     ),
                   ),
                   const SizedBox(height: 40),
-
                   SizedBox(
                     width: double.infinity,
                     height: 52,

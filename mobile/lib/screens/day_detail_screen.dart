@@ -218,7 +218,8 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                       ),
                       const SizedBox(height: 12),
                       ...day.activities.map((act) {
-                        final actInst = act.config['instruction']?.toString() ?? '';
+                        final actInst =
+                            act.config['instruction']?.toString() ?? '';
                         return Container(
                           margin: const EdgeInsets.only(bottom: 12),
                           padding: const EdgeInsets.all(16),
@@ -231,7 +232,8 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Text(
@@ -250,7 +252,8 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
                                       color: AppTheme.primary.withOpacity(0.12),
                                       borderRadius: BorderRadius.circular(100),
                                       border: Border.all(
-                                          color: AppTheme.primary.withOpacity(0.3)),
+                                          color: AppTheme.primary
+                                              .withOpacity(0.3)),
                                     ),
                                     child: Text(
                                       act.typeLabel,
