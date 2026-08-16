@@ -62,23 +62,23 @@ BEGINNER_RESCUE_PHRASES: list[str] = [
 
 MOOD_OPTIONS: list[str] = ["😰 Nervous", "😐 Neutral", "😊 Confident"]
 
-TRACK_A_WEEKS: list[dict[str, Any]] = []
-TRACK_B_WEEKS: list[dict[str, Any]] = []
+TRACK_A_STAGES: list[dict[str, Any]] = []
+TRACK_B_STAGES: list[dict[str, Any]] = []
 
-WEEKS_DATA = TRACK_A_WEEKS
+STAGES_DATA = TRACK_A_STAGES
 
 TRACKS: dict[str, dict[str, Any]] = {
     "track_a": {
         "id": "track_a",
         "name": "Unfreeze",
         "subtitle": "For learners who understand English but blank when speaking",
-        "weeks": TRACK_A_WEEKS,
+        "stages": TRACK_A_STAGES,
     },
     "track_b": {
         "id": "track_b",
         "name": "From Scratch",
         "subtitle": "For true beginners — builds into Track A automatically",
-        "weeks": TRACK_B_WEEKS,
+        "stages": TRACK_B_STAGES,
     },
 }
 
@@ -94,8 +94,9 @@ def get_all_days(track_id: str) -> list[dict[str, Any]]:
     if not track:
         return []
     days: list[dict[str, Any]] = []
-    for w in track["weeks"]:
-        days.extend(w["days"])
+    stages = track.get("stages", [])
+    for s in stages:
+        days.extend(s.get("nodes") or s.get("days", []))
     return days
 
 
@@ -107,14 +108,16 @@ def get_day_by_number(track_id: str, day_num: int) -> dict[str, Any] | None:
     return None
 
 
-def get_week_for_day(track_id: str, day_num: int) -> dict[str, Any] | None:
-    """Return the week block (title/range) that contains the given day number."""
+def get_stage_for_day(track_id: str, day_num: int) -> dict[str, Any] | None:
+    """Return the stage block (title/range) that contains the given day number."""
     track = get_track(track_id)
     if not track:
         return None
-    for w in track["weeks"]:
-        if any(d["d"] == day_num for d in w["days"]):
-            return w
+    stages = track.get("stages", [])
+    for s in stages:
+        nodes = s.get("nodes") or s.get("days", [])
+        if any(d["d"] == day_num for d in nodes):
+            return s
     return None
 
 

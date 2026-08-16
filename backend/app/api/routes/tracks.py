@@ -10,7 +10,6 @@ from app.api.deps import get_current_user, get_current_user_optional, get_db
 from app.models.fluency_track import (
     ActivityStatus,
     FluencyTrack,
-    FluencyTrackType,
     NodeActivity,
     Stage,
     StageNode,
@@ -363,7 +362,9 @@ async def get_curriculum_legacy(
             if tr_norm in ["B", "SCRATCH"] and (t_type_str == "SCRATCH" or t_slug_str == "SCRATCH"):
                 target_track = t
                 break
-            elif tr_norm in ["A", "UNFREEZE"] and (t_type_str == "UNFREEZE" or t_slug_str == "UNFREEZE"):
+            elif tr_norm in ["A", "UNFREEZE"] and (
+                t_type_str == "UNFREEZE" or t_slug_str == "UNFREEZE"
+            ):
                 target_track = t
                 break
             elif tr_norm == t_slug_str or tr_norm == t_type_str or tr_norm == str(t.id).upper():
@@ -379,7 +380,7 @@ async def get_curriculum_legacy(
         if not target_track and tracks_out.tracks:
             target_track = tracks_out.tracks[0]
 
-    weeks = []
+    stages_list = []
     global_day_counter = 1
     personas_map = {
         "riya": {
@@ -431,7 +432,11 @@ async def get_curriculum_legacy(
                 ai_line = None
 
                 for act in node.activities:
-                    act_type_str = act.activity_type.value if hasattr(act.activity_type, "value") else str(act.activity_type)
+                    act_type_str = (
+                        act.activity_type.value
+                        if hasattr(act.activity_type, "value")
+                        else str(act.activity_type)
+                    )
                     cfg = act.config or {}
                     activities_payload.append(
                         {
@@ -467,14 +472,34 @@ async def get_curriculum_legacy(
                                     if text_val and text_val not in phrases_b:
                                         phrases_b.append(text_val)
 
-                if not phrases_a:
-                    phrases_a = [f"Let's practice {node.name}.", f"Focus on core expressions for {node.name}."]
-                if not phrases_b:
-                    phrases_b = [f"In my opinion...", f"I think..."]
-                if not rescue_phrases:
-                    rescue_phrases = ["Give me a sec...", "Let me think about that...", "How do I say this..."]
+                    if not phrases_a and cfg.get("phrasesA"):
+                        phrases_a = cfg["phrasesA"]
+                    if not phrases_b and cfg.get("phrasesB"):
+                        phrases_b = cfg["phrasesB"]
+                    if not rescue_phrases and cfg.get("rescuePhrases"):
+                        rescue_phrases = cfg["rescuePhrases"]
+                    if not ai_line and cfg.get("aiLine"):
+                        ai_line = cfg["aiLine"]
 
-                node_instruction = node.learning_goal or node.description or f"Complete activities for {node.name}."
+                if not phrases_a:
+                    phrases_a = [
+                        f"Let's practice {node.name}.",
+                        f"Focus on core expressions for {node.name}.",
+                    ]
+                if not phrases_b:
+                    phrases_b = ["In my opinion...", "I think..."]
+                if not rescue_phrases:
+                    rescue_phrases = [
+                        "Give me a sec...",
+                        "Let me think about that...",
+                        "How do I say this...",
+                    ]
+
+                node_instruction = (
+                    node.learning_goal
+                    or node.description
+                    or f"Complete activities for {node.name}."
+                )
                 if not ai_line:
                     ai_line = f"Let's practice {node.name}. Focus on flow and speed."
 
@@ -491,7 +516,10 @@ async def get_curriculum_legacy(
                         "phrasesA": phrases_a,
                         "phrasesB": phrases_b,
                         "rescuePhrases": rescue_phrases,
-                        "script": [f"{persona_key.capitalize()}: Ready to practice {node.name}?", f"You: Yes, let's start!"],
+                        "script": [
+                            f"{persona_key.capitalize()}: Ready to practice {node.name}?",
+                            "You: Yes, let's start!",
+                        ],
                         "wpm": 80 + (stage.sequence * 3),
                         "filler": "≤5/min",
                         "milestoneReport": (node.sequence == len(stage.nodes)),
@@ -501,15 +529,16 @@ async def get_curriculum_legacy(
                 )
                 global_day_counter += 1
 
-            weeks.append(
+            stages_list.append(
                 {
                     "title": stage.name,
                     "range": f"Nodes 1–{len(stage.nodes)}",
                     "days": days,
+                    "nodes": days,
                 }
             )
 
-    res_dict["weeks"] = weeks
+    res_dict["stages"] = stages_list
     res_dict["personas"] = personas_map
     return res_dict
 

@@ -94,4 +94,3 @@ def random_topic(language: str = "English") -> str:
     topics_map = list_topics(language)
     category = random.choice(list(topics_map.keys()))
     return random.choice(topics_map[category])
-

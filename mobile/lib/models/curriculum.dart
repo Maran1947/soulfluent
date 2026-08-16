@@ -35,7 +35,6 @@ class PersonaInfo {
 }
 
 typedef CurriculumDay = TrackNode;
-typedef CurriculumWeek = RoadmapStage;
 typedef CurriculumProgress = TrackProgress;
 
 class TrackActivity {
@@ -288,4 +287,3 @@ class TrackProgress {
 }
 
 final List<Map<String, dynamic>> ROADMAP_STAGES_DATA = const [];
-final List<Map<String, dynamic>> WEEKS_DATA = const [];

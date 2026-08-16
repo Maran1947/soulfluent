@@ -24,19 +24,20 @@ class CurriculumDayOut(BaseModel):
     milestoneReport: bool = False
 
 
-class CurriculumWeekOut(BaseModel):
+class CurriculumStageOut(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     title: str
     range: str
-    days: list[CurriculumDayOut]
+    days: list[CurriculumDayOut] = Field(default_factory=list)
+    nodes: list[CurriculumDayOut] = Field(default_factory=list)
 
 
 class CurriculumLibraryOut(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     personas: dict[str, Any]
-    weeks: list[CurriculumWeekOut]
+    stages: list[CurriculumStageOut] = Field(default_factory=list)
     tracks: dict[str, Any] | None = None
 
 

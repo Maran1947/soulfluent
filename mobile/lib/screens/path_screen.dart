@@ -93,19 +93,19 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
     final activeTrack = gd.activeTrack;
     final reviewMode = gd.reviewMode;
     final completedDays = gd.completedPathDays;
-    final weeksToRender = gd.weeks;
+    final stagesToRender = gd.stages;
 
     // Flatten all days into a single continuous list & map stage headers
     final List<CurriculumDay> allDays = [];
     final Map<int, String> stageHeaders = {};
 
     int count = 0;
-    for (final week in weeksToRender) {
-      for (int i = 0; i < week.days.length; i++) {
+    for (final stage in stagesToRender) {
+      for (int i = 0; i < stage.nodes.length; i++) {
         if (i == 0) {
-          stageHeaders[count] = week.title;
+          stageHeaders[count] = stage.title;
         }
-        allDays.add(week.days[i]);
+        allDays.add(stage.nodes[i]);
         count++;
       }
     }
@@ -127,7 +127,7 @@ class _PathScreenState extends State<PathScreen> with TickerProviderStateMixin {
           SafeArea(
             child: gd.isLoadingCurriculum
                 ? const PathSkeletonLoader()
-                : weeksToRender.isEmpty
+                : stagesToRender.isEmpty
                     ? _buildEmptyState(context, isDark, cardBg, borderColor,
                         headingColor, subtitleColor, gd)
                     : SingleChildScrollView(

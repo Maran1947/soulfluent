@@ -26,7 +26,7 @@ class GDProvider extends ChangeNotifier {
   List<int> _completedPathDays = [];
   CurriculumDay? _activePathDay;
   List<String> _activeScaffoldPhrases = [];
-  List<CurriculumWeek> _weeks = [];
+  List<RoadmapStage> _stages = [];
   Map<String, PersonaInfo> _personas = {};
   bool _isLoadingCurriculum = false;
 
@@ -50,7 +50,7 @@ class GDProvider extends ChangeNotifier {
   List<int> get completedPathDays => _completedPathDays;
   CurriculumDay? get activePathDay => _activePathDay;
   List<String> get activeScaffoldPhrases => _activeScaffoldPhrases;
-  List<CurriculumWeek> get weeks => _weeks;
+  List<RoadmapStage> get stages => _stages;
   Map<String, PersonaInfo> get personas => _personas;
   bool get isLoadingCurriculum => _isLoadingCurriculum;
 
@@ -63,7 +63,7 @@ class GDProvider extends ChangeNotifier {
   AudioService get audioService => _audioService;
 
   GDProvider(this._apiService) {
-    _weeks = [];
+    _stages = [];
     fetchCurriculum();
   }
 
@@ -78,10 +78,10 @@ class GDProvider extends ChangeNotifier {
     notifyListeners();
     try {
       final data = await _apiService.getCurriculum(track: trackToFetch);
-      final rawWeeks = data['weeks'] as List?;
-      if (rawWeeks != null && rawWeeks.isNotEmpty) {
-        _weeks = rawWeeks
-            .map((w) => CurriculumWeek.fromJson(w as Map<String, dynamic>))
+      final rawStages = data['stages'] as List?;
+      if (rawStages != null && rawStages.isNotEmpty) {
+        _stages = rawStages
+            .map((s) => RoadmapStage.fromJson(s as Map<String, dynamic>))
             .toList();
       }
 

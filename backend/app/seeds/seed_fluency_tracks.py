@@ -196,12 +196,13 @@ TYPE_MAPPING = {
 for v in ActivityType:
     TYPE_MAPPING[v.value] = v
 
+
 async def seed_fluency_tracks(db: AsyncSession) -> None:
     # Load UNFREEZE JSON data
     json_path = Path(__file__).parent / "data" / "unfreeze_roadmap.json"
     if json_path.exists():
         try:
-            with open(json_path, "r", encoding="utf-8") as f:
+            with open(json_path, encoding="utf-8") as f:
                 roadmap_data = json.load(f)
                 unfreeze_stages = roadmap_data.get("stages", [])
                 for idx_s, s in enumerate(unfreeze_stages, start=1):
@@ -214,8 +215,7 @@ async def seed_fluency_tracks(db: AsyncSession) -> None:
                             if "sequence" not in a:
                                 a["sequence"] = a.get("order", idx_a)
                             raw_val = a.get("activity_type") or a.get("type") or "lesson"
-                            if hasattr(raw_val, "value"):
-                                raw_val = raw_val.value
+                            raw_val = getattr(raw_val, "value", raw_val)
                             act_str = str(raw_val).lower()
                             a["type"] = TYPE_MAPPING.get(act_str, ActivityType.lesson)
                 for t in INITIAL_TRACKS:
@@ -326,8 +326,7 @@ async def seed_fluency_tracks(db: AsyncSession) -> None:
                     )
                     act = res_a.scalars().first()
                     raw_val = a_data.get("type") or a_data.get("activity_type") or "lesson"
-                    if hasattr(raw_val, "value"):
-                        raw_val = raw_val.value
+                    raw_val = getattr(raw_val, "value", raw_val)
                     act_str = str(raw_val).lower()
                     a_type = TYPE_MAPPING.get(act_str, ActivityType.lesson)
                     a_config = a_data.get("config", {})
