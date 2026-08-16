@@ -355,12 +355,29 @@ async def get_curriculum_legacy(
     res_dict = tracks_out.model_dump()
 
     target_track = None
-    for t in tracks_out.tracks:
-        if t.type == FluencyTrackType.UNFREEZE:
-            target_track = t
-            break
-    if not target_track and tracks_out.tracks:
-        target_track = tracks_out.tracks[0]
+    if track:
+        tr_norm = track.strip().upper()
+        for t in tracks_out.tracks:
+            t_type_str = t.type.value.upper() if hasattr(t.type, "value") else str(t.type).upper()
+            t_slug_str = (t.slug or "").upper()
+            if tr_norm in ["B", "SCRATCH"] and (t_type_str == "SCRATCH" or t_slug_str == "SCRATCH"):
+                target_track = t
+                break
+            elif tr_norm in ["A", "UNFREEZE"] and (t_type_str == "UNFREEZE" or t_slug_str == "UNFREEZE"):
+                target_track = t
+                break
+            elif tr_norm == t_slug_str or tr_norm == t_type_str or tr_norm == str(t.id).upper():
+                target_track = t
+                break
+
+    if not target_track:
+        for t in tracks_out.tracks:
+            t_type_str = t.type.value.upper() if hasattr(t.type, "value") else str(t.type).upper()
+            if t_type_str == "UNFREEZE":
+                target_track = t
+                break
+        if not target_track and tracks_out.tracks:
+            target_track = tracks_out.tracks[0]
 
     weeks = []
     global_day_counter = 1
