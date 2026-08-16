@@ -98,7 +98,8 @@ class ApiService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to load topic library');
+      throw Exception(
+          _extractErrorMessage(response, 'Failed to load topic library'));
     }
 
     return jsonDecode(response.body) as Map<String, dynamic>;
@@ -149,7 +150,8 @@ class ApiService {
       headers: _headers,
     );
     if (response.statusCode != 200) {
-      throw Exception('Failed to load fluency tracks');
+      throw Exception(
+          _extractErrorMessage(response, 'Failed to load fluency tracks'));
     }
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
@@ -163,7 +165,8 @@ class ApiService {
       headers: _headers,
     );
     if (response.statusCode != 200) {
-      throw Exception('Failed to load curriculum');
+      throw Exception(
+          _extractErrorMessage(response, 'Failed to load curriculum'));
     }
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
@@ -174,7 +177,8 @@ class ApiService {
       headers: _headers,
     );
     if (response.statusCode != 200) {
-      throw Exception('Failed to load curriculum progress');
+      throw Exception(
+          _extractErrorMessage(response, 'Failed to load curriculum progress'));
     }
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
@@ -198,7 +202,8 @@ class ApiService {
       }),
     );
     if (response.statusCode != 200) {
-      throw Exception('Failed to update curriculum progress');
+      throw Exception(_extractErrorMessage(
+          response, 'Failed to update curriculum progress'));
     }
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
@@ -210,7 +215,8 @@ class ApiService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to fetch session details');
+      throw Exception(
+          _extractErrorMessage(response, 'Failed to fetch session details'));
     }
 
     return GDSession.fromJson(jsonDecode(response.body));
@@ -223,7 +229,8 @@ class ApiService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to fetch sessions history');
+      throw Exception(
+          _extractErrorMessage(response, 'Failed to fetch sessions history'));
     }
 
     final List<dynamic> jsonList = jsonDecode(response.body);
@@ -303,7 +310,8 @@ class ApiService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to load session report');
+      throw Exception(
+          _extractErrorMessage(response, 'Failed to load session report'));
     }
 
     return FeedbackReport.fromJson(jsonDecode(response.body));
@@ -317,7 +325,8 @@ class ApiService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to load session usage');
+      throw Exception(
+          _extractErrorMessage(response, 'Failed to load session usage'));
     }
 
     return jsonDecode(response.body) as Map<String, dynamic>;
