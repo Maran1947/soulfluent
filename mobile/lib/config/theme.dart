@@ -39,15 +39,15 @@ class AppTheme {
       textTheme:
           GoogleFonts.plusJakartaSansTextTheme(ThemeData.dark().textTheme)
               .copyWith(
-        displayLarge: GoogleFonts.outfit(
+        displayLarge: GoogleFonts.sora(
           color: textMain,
           fontWeight: FontWeight.bold,
         ),
-        headlineMedium: GoogleFonts.outfit(
+        headlineMedium: GoogleFonts.sora(
           color: textMain,
           fontWeight: FontWeight.bold,
         ),
-        titleLarge: GoogleFonts.outfit(
+        titleLarge: GoogleFonts.sora(
           color: textMain,
           fontWeight: FontWeight.w600,
         ),
@@ -57,7 +57,7 @@ class AppTheme {
         elevation: 0,
         centerTitle: false,
         iconTheme: const IconThemeData(color: textMain),
-        titleTextStyle: GoogleFonts.outfit(
+        titleTextStyle: GoogleFonts.sora(
           color: textMain,
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -97,7 +97,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          textStyle: GoogleFonts.outfit(
+          textStyle: GoogleFonts.sora(
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -105,7 +105,7 @@ class AppTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: const Color(0xFF1E293B),
-        contentTextStyle: GoogleFonts.inter(
+        contentTextStyle: GoogleFonts.plusJakartaSans(
           color: Colors.white,
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -135,15 +135,15 @@ class AppTheme {
       textTheme:
           GoogleFonts.plusJakartaSansTextTheme(ThemeData.light().textTheme)
               .copyWith(
-        displayLarge: GoogleFonts.outfit(
+        displayLarge: GoogleFonts.sora(
           color: textMainLight,
           fontWeight: FontWeight.bold,
         ),
-        headlineMedium: GoogleFonts.outfit(
+        headlineMedium: GoogleFonts.sora(
           color: textMainLight,
           fontWeight: FontWeight.bold,
         ),
-        titleLarge: GoogleFonts.outfit(
+        titleLarge: GoogleFonts.sora(
           color: textMainLight,
           fontWeight: FontWeight.w600,
         ),
@@ -153,7 +153,7 @@ class AppTheme {
         elevation: 0,
         centerTitle: false,
         iconTheme: const IconThemeData(color: textMainLight),
-        titleTextStyle: GoogleFonts.outfit(
+        titleTextStyle: GoogleFonts.sora(
           color: textMainLight,
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -193,7 +193,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          textStyle: GoogleFonts.outfit(
+          textStyle: GoogleFonts.sora(
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -201,7 +201,7 @@ class AppTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: const Color(0xFF1E293B),
-        contentTextStyle: GoogleFonts.inter(
+        contentTextStyle: GoogleFonts.plusJakartaSans(
           color: Colors.white,
           fontSize: 14,
           fontWeight: FontWeight.w500,

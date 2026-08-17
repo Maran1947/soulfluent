@@ -154,7 +154,7 @@ class _LessonActivityWidgetState extends State<LessonActivityWidget> {
                           const SizedBox(width: 6),
                           Text(
                             'KEY EXPRESSIONS',
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.plusJakartaSans(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
                               color: AppTheme.primary,
@@ -175,7 +175,7 @@ class _LessonActivityWidgetState extends State<LessonActivityWidget> {
                       ),
                       child: Text(
                         '${_currentPhraseIndex + 1} / $totalPhrases',
-                        style: GoogleFonts.outfit(
+                        style: GoogleFonts.sora(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
                           color: subtitleColor,
@@ -218,7 +218,7 @@ class _LessonActivityWidgetState extends State<LessonActivityWidget> {
                       children: [
                         Text(
                           'LISTEN & LEARN',
-                          style: GoogleFonts.outfit(
+                          style: GoogleFonts.plusJakartaSans(
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
                             color: AppTheme.primary,
@@ -231,7 +231,7 @@ class _LessonActivityWidgetState extends State<LessonActivityWidget> {
                         Text(
                           currentPhrase,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.outfit(
+                          style: GoogleFonts.sora(
                             fontSize: 22,
                             fontWeight: FontWeight.w800,
                             color: headingColor,
@@ -274,7 +274,7 @@ class _LessonActivityWidgetState extends State<LessonActivityWidget> {
                                   _isPlayingAudio
                                       ? 'Playing Audio...'
                                       : 'Tap to Listen Again',
-                                  style: GoogleFonts.outfit(
+                                  style: GoogleFonts.sora(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: _isPlayingAudio
@@ -324,7 +324,7 @@ class _LessonActivityWidgetState extends State<LessonActivityWidget> {
                           children: [
                             Text(
                               'USAGE TIP',
-                              style: GoogleFonts.outfit(
+                              style: GoogleFonts.plusJakartaSans(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
                                 color: headingColor,
@@ -334,7 +334,7 @@ class _LessonActivityWidgetState extends State<LessonActivityWidget> {
                             const SizedBox(height: 2),
                             Text(
                               'Practice saying this phrase out loud 2-3 times to lock it in memory.',
-                              style: GoogleFonts.inter(
+                              style: GoogleFonts.plusJakartaSans(
                                 fontSize: 12.5,
                                 color: subtitleColor,
                                 height: 1.35,
@@ -408,7 +408,7 @@ class _LessonActivityWidgetState extends State<LessonActivityWidget> {
                             _currentPhraseIndex == totalPhrases - 1
                                 ? 'Finish Lesson'
                                 : 'Next Expression',
-                            style: GoogleFonts.outfit(
+                            style: GoogleFonts.sora(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
