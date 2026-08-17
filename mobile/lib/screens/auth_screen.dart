@@ -44,20 +44,24 @@ class _AuthScreenState extends State<AuthScreen> {
         _emailController.text.trim(),
         _passwordController.text,
       );
+      if (success && mounted) {
+        final onboarding = context.read<OnboardingProvider>();
+        if (!onboarding.isOnboarded) {
+          Navigator.pushReplacementNamed(context, '/onboarding');
+        } else {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
+      }
     } else {
       success = await auth.register(
         _emailController.text.trim(),
         _passwordController.text,
         _nameController.text.trim(),
       );
-    }
-
-    if (success && mounted) {
-      final onboarding = context.read<OnboardingProvider>();
-      if (!onboarding.isOnboarded) {
+      if (success && mounted) {
+        final onboarding = context.read<OnboardingProvider>();
+        await onboarding.resetOnboarding();
         Navigator.pushReplacementNamed(context, '/onboarding');
-      } else {
-        Navigator.pushReplacementNamed(context, '/home');
       }
     }
   }

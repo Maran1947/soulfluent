@@ -9,6 +9,7 @@ import 'package:fluentsoul_mobile/widgets/onboarding/steps/goals_step_widget.dar
 import 'package:fluentsoul_mobile/widgets/onboarding/steps/language_step_widget.dart';
 import 'package:fluentsoul_mobile/widgets/onboarding/steps/plan_generator_step_widget.dart';
 import 'package:fluentsoul_mobile/widgets/onboarding/steps/time_step_widget.dart';
+import 'package:fluentsoul_mobile/widgets/onboarding/steps/voice_exercise_step_widget.dart';
 
 class OnboardingProvider extends ChangeNotifier {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
@@ -22,7 +23,7 @@ class OnboardingProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get isOnboarded => _data.isOnboarded;
 
-  /// Dynamic step registry with AI Preview Step 0
+  /// Dynamic step registry with AI Preview Step 0 & Voice Exercise Step 5
   final List<OnboardingStepConfig> _steps = [
     OnboardingStepConfig(
       id: 'ai_preview',
@@ -63,6 +64,14 @@ class OnboardingProvider extends ChangeNotifier {
       icon: Icons.timer_rounded,
       isValid: (data) => (data as OnboardingData).dailyGoalMinutes > 0,
       builder: (context) => const TimeStepWidget(),
+    ),
+    OnboardingStepConfig(
+      id: 'voice_exercise',
+      title: 'Voice Warmup',
+      subtitle: 'Prime your voice for daily speaking practice',
+      icon: Icons.graphic_eq_rounded,
+      isValid: (_) => true,
+      builder: (context) => const VoiceExerciseStepWidget(),
     ),
     OnboardingStepConfig(
       id: 'plan_reveal',
@@ -170,8 +179,32 @@ class OnboardingProvider extends ChangeNotifier {
     }
   }
 
+  int _voiceExerciseLine = 0;
+  int get voiceExerciseLine => _voiceExerciseLine;
+  bool get isVoiceExerciseLastLine => _voiceExerciseLine >= 5;
+
+  void setVoiceExerciseLine(int index) {
+    _voiceExerciseLine = index;
+    notifyListeners();
+  }
+
+  void nextVoiceExerciseLine() {
+    if (_voiceExerciseLine < 5) {
+      _voiceExerciseLine++;
+      notifyListeners();
+    }
+  }
+
+  void prevVoiceExerciseLine() {
+    if (_voiceExerciseLine > 0) {
+      _voiceExerciseLine--;
+      notifyListeners();
+    }
+  }
+
   Future<void> resetOnboarding() async {
     _currentIndex = 0;
+    _voiceExerciseLine = 0;
     _data = OnboardingData();
     await _storage.delete(key: AppConstants.onboardingKey);
     await _storage.delete(key: AppConstants.isOnboardedKey);

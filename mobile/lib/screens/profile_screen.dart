@@ -5,6 +5,7 @@ import 'package:fluentsoul_mobile/config/theme.dart';
 import 'package:fluentsoul_mobile/providers/auth_provider.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
 import 'package:fluentsoul_mobile/providers/locale_provider.dart';
+import 'package:fluentsoul_mobile/providers/onboarding_provider.dart';
 import 'package:fluentsoul_mobile/providers/theme_provider.dart';
 import 'package:fluentsoul_mobile/screens/history_screen.dart';
 
@@ -351,6 +352,8 @@ class ProfileScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16)),
                   ),
                   onPressed: () async {
+                    final onboarding = context.read<OnboardingProvider>();
+                    await onboarding.resetOnboarding();
                     await auth.logout();
                     if (context.mounted) {
                       Navigator.pop(context);

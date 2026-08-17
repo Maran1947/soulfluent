@@ -18,8 +18,9 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 4),
-    )..repeat(reverse: true);
+      duration: const Duration(milliseconds: 1800),
+    );
+    _controller.forward();
   }
 
   @override
@@ -44,27 +45,28 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
           Text(
             'How You Grow With FluentSoul',
             textAlign: TextAlign.center,
-            style: GoogleFonts.outfit(
+            style: GoogleFonts.sora(
               fontSize: 22,
               fontWeight: FontWeight.bold,
               color: isDark ? AppTheme.textMain : AppTheme.textMainLight,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 6),
           Text(
             'Watch your speaking confidence & vocabulary compound over time.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 13.5,
               color: isDark ? AppTheme.textMuted : AppTheme.textMutedLight,
+              height: 1.35,
             ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 22),
 
           // Main Hero Growth Journey Card
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(22),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: isDark
@@ -81,13 +83,15 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
               ),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: isDark ? AppTheme.borderDark : AppTheme.borderLight,
+                color: isDark
+                    ? AppTheme.primary.withOpacity(0.3)
+                    : AppTheme.borderLight,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.primary.withOpacity(0.15),
-                  blurRadius: 16,
-                  offset: const Offset(0, 6),
+                  color: AppTheme.primary.withOpacity(0.12),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
                 ),
               ],
             ),
@@ -99,8 +103,8 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                   children: [
                     Text(
                       'Fluency Progression',
-                      style: TextStyle(
-                        fontSize: 14,
+                      style: GoogleFonts.sora(
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color:
                             isDark ? AppTheme.textMain : AppTheme.textMainLight,
@@ -108,14 +112,17 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                          horizontal: 12, vertical: 5),
                       decoration: BoxDecoration(
-                        color: AppTheme.primary.withOpacity(0.18),
-                        borderRadius: BorderRadius.circular(12),
+                        color: AppTheme.primary.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: AppTheme.primary.withOpacity(0.3),
+                        ),
                       ),
-                      child: const Text(
+                      child: Text(
                         '+95% Mastery',
-                        style: TextStyle(
+                        style: GoogleFonts.sora(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: AppTheme.primary,
@@ -125,18 +132,21 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                   ],
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 18),
 
                 // Animated Growth Graph Canvas (No Days)
                 SizedBox(
-                  height: 150,
+                  height: 155,
                   width: double.infinity,
                   child: AnimatedBuilder(
                     animation: _controller,
                     builder: (context, child) {
                       return CustomPaint(
                         painter: _GrowthProgressionPainter(
-                          progress: _controller.value,
+                          progress: CurvedAnimation(
+                            parent: _controller,
+                            curve: Curves.easeOutCubic,
+                          ).value,
                           isDark: isDark,
                           primaryColor: AppTheme.primary,
                         ),
@@ -145,7 +155,7 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 18),
 
                 // Before vs. After Comparison Row
                 Row(
@@ -153,10 +163,10 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                     // Starting Out Card
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
                           color: isDark
-                              ? Colors.white.withOpacity(0.05)
+                              ? Colors.white.withOpacity(0.04)
                               : Colors.black.withOpacity(0.03),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
@@ -170,7 +180,7 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                           children: [
                             Text(
                               'Starting Out',
-                              style: TextStyle(
+                              style: GoogleFonts.plusJakartaSans(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
                                 color: isDark
@@ -178,10 +188,10 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                                     : AppTheme.textMutedLight,
                               ),
                             ),
-                            const SizedBox(height: 3),
+                            const SizedBox(height: 4),
                             Text(
                               'Hesitant & Pausing',
-                              style: TextStyle(
+                              style: GoogleFonts.sora(
                                 fontSize: 12.5,
                                 fontWeight: FontWeight.bold,
                                 color: isDark
@@ -189,10 +199,12 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                                     : AppTheme.textMainLight,
                               ),
                             ),
-                            const Text(
+                            const SizedBox(height: 2),
+                            Text(
                               '45% Confidence',
-                              style: TextStyle(
-                                fontSize: 10.5,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
                                 color: Colors.orangeAccent,
                               ),
                             ),
@@ -200,37 +212,37 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 10),
                     const Icon(Icons.arrow_forward_rounded,
-                        color: AppTheme.primary, size: 18),
-                    const SizedBox(width: 8),
+                        color: AppTheme.primary, size: 20),
+                    const SizedBox(width: 10),
                     // With FluentSoul Card
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
                           color:
-                              AppTheme.primary.withOpacity(isDark ? 0.2 : 0.1),
+                              AppTheme.primary.withOpacity(isDark ? 0.18 : 0.08),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: AppTheme.primary.withOpacity(0.5),
+                            color: AppTheme.primary.withOpacity(0.4),
                           ),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'With FluentSoul',
-                              style: TextStyle(
+                              style: GoogleFonts.plusJakartaSans(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
                                 color: AppTheme.primary,
                               ),
                             ),
-                            const SizedBox(height: 3),
+                            const SizedBox(height: 4),
                             Text(
                               'Fluent & Natural',
-                              style: TextStyle(
+                              style: GoogleFonts.sora(
                                 fontSize: 12.5,
                                 fontWeight: FontWeight.bold,
                                 color: isDark
@@ -238,12 +250,13 @@ class _AIPreviewStepWidgetState extends State<AIPreviewStepWidget>
                                     : AppTheme.textMainLight,
                               ),
                             ),
-                            const Text(
+                            const SizedBox(height: 2),
+                            Text(
                               '95% Fluency Goal',
-                              style: TextStyle(
-                                fontSize: 10.5,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 11,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.greenAccent,
+                                color: const Color(0xFF22C55E),
                               ),
                             ),
                           ],

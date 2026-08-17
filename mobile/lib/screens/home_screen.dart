@@ -6,6 +6,7 @@ import 'package:fluentsoul_mobile/l10n/app_localizations.dart';
 import 'package:fluentsoul_mobile/providers/auth_provider.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
 import 'package:fluentsoul_mobile/providers/locale_provider.dart';
+import 'package:fluentsoul_mobile/providers/onboarding_provider.dart';
 import 'package:fluentsoul_mobile/screens/daily_speak_screen.dart';
 import 'package:fluentsoul_mobile/screens/path_screen.dart';
 import 'package:fluentsoul_mobile/widgets/app_header.dart';
@@ -192,10 +193,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
     final gd = context.watch<GDProvider>();
+    final onboarding = context.watch<OnboardingProvider>();
     final localeProvider = context.watch<LocaleProvider>();
     final l10n = AppLocalizations.of(context);
     final user = auth.currentUser;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    if (!onboarding.isOnboarded) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/onboarding');
+        }
+      });
+      return Scaffold(
+        backgroundColor: isDark ? AppTheme.background : AppTheme.lightBackground,
+        body: const Center(
+          child: CircularProgressIndicator(color: AppTheme.primary),
+        ),
+      );
+    }
 
     final cardBg = isDark ? AppTheme.cardDark : AppTheme.cardLight;
     final borderColor = isDark ? AppTheme.borderDark : AppTheme.borderLight;

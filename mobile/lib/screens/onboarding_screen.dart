@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
 import 'package:fluentsoul_mobile/l10n/app_localizations.dart';
@@ -35,6 +36,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _nextStep() {
     final provider = context.read<OnboardingProvider>();
+    if (provider.currentStep.id == 'voice_exercise' &&
+        !provider.isVoiceExerciseLastLine) {
+      provider.nextVoiceExerciseLine();
+      return;
+    }
+
     if (!provider.isLastStep && provider.currentStep.isValid(provider.data)) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 350),
@@ -45,6 +52,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _previousStep() {
     final provider = context.read<OnboardingProvider>();
+    if (provider.currentStep.id == 'voice_exercise' &&
+        provider.voiceExerciseLine > 0) {
+      provider.prevVoiceExerciseLine();
+      return;
+    }
+
     if (!provider.isFirstStep) {
       _pageController.previousPage(
         duration: const Duration(milliseconds: 350),
@@ -62,6 +75,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final currentStep = provider.currentStep;
     final isLastStep = provider.isLastStep;
     final isValid = currentStep.isValid(provider.data);
+
+    String primaryButtonLabel = 'Continue';
+    if (provider.isFirstStep) {
+      primaryButtonLabel = 'Get Started';
+    } else if (currentStep.id == 'voice_exercise' &&
+        !provider.isVoiceExerciseLastLine) {
+      primaryButtonLabel = 'Next Line';
+    }
 
     return Scaffold(
       backgroundColor: isDark ? AppTheme.background : AppTheme.lightBackground,
@@ -99,7 +120,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             const SizedBox(height: 2),
                             Text(
                               'Step ${provider.currentIndex + 1} of ${provider.steps.length}',
-                              style: TextStyle(
+                              style: GoogleFonts.plusJakartaSans(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
                                 color: isDark
@@ -131,7 +152,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
             // Step Title & Subtitle Header
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
@@ -145,7 +166,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Expanded(
                           child: Text(
                             currentStep.title,
-                            style: TextStyle(
+                            style: GoogleFonts.sora(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: isDark
@@ -156,11 +177,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 3),
                     Text(
                       currentStep.subtitle,
-                      style: TextStyle(
-                        fontSize: 12,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 12.5,
                         color: isDark
                             ? AppTheme.textMuted
                             : AppTheme.textMutedLight,
@@ -220,9 +241,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                           child: Text(
                             'Back',
-                            style: TextStyle(
+                            style: GoogleFonts.sora(
                               fontSize: 15,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.bold,
                               color: isDark
                                   ? AppTheme.textMain
                                   : AppTheme.textMainLight,
@@ -250,8 +271,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           onPressed: isValid ? _nextStep : null,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.primary,
-                            disabledBackgroundColor:
-                                isDark ? Colors.white10 : Colors.black12,
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -261,22 +280,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                provider.isFirstStep
-                                    ? 'Get Started'
-                                    : 'Continue',
-                                style: TextStyle(
+                                primaryButtonLabel,
+                                style: GoogleFonts.sora(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color:
-                                      isValid ? Colors.white : Colors.white38,
+                                  color: Colors.white,
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              Icon(
-                                Icons.arrow_forward_rounded,
-                                size: 18,
-                                color: isValid ? Colors.white : Colors.white38,
-                              ),
+                              const Icon(Icons.arrow_forward_rounded,
+                                  size: 18, color: Colors.white),
                             ],
                           ),
                         ),
