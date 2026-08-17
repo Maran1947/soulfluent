@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:record/record.dart';
 
 import 'package:fluentsoul_mobile/config/theme.dart';
 import 'package:fluentsoul_mobile/providers/gd_provider.dart';
@@ -12,12 +13,16 @@ class DailySpeakRecordingScreen extends StatefulWidget {
   final String topic;
   final String subtitle;
   final int streakDays;
+  final List<String> talkingPoints;
+  final List<String> starterPhrases;
 
   const DailySpeakRecordingScreen({
     super.key,
     required this.topic,
     required this.subtitle,
-    this.streakDays = 4,
+    required this.streakDays,
+    this.talkingPoints = const [],
+    this.starterPhrases = const [],
   });
 
   @override
@@ -29,10 +34,31 @@ class _DailySpeakRecordingScreenState extends State<DailySpeakRecordingScreen>
     with SingleTickerProviderStateMixin {
   final AudioService _audioService = AudioService();
   Timer? _timer;
+  StreamSubscription<Amplitude>? _amplitudeSubscription;
   int _secondsElapsed = 0;
   final int _maxSeconds = 60;
   bool _isFinished = false;
   bool _isSubmitting = false;
+  bool _showHints = false;
+  bool _isSpeaking = false;
+  double _currentVolume = 0.0;
+
+  List<String> get _activeTalkingPoints => widget.talkingPoints.isNotEmpty
+      ? widget.talkingPoints
+      : const [
+          'Remote work saves daily commute time and offers flexible hours',
+          'In-office environments foster faster team collaboration & bonding',
+          'A hybrid model combines flexibility and human connection',
+        ];
+
+  List<String> get _activeStarterPhrases => widget.starterPhrases.isNotEmpty
+      ? widget.starterPhrases
+      : const [
+          'In my experience, working from home...',
+          'While office collaboration is essential, I believe...',
+          'The main reason I prefer...',
+          'On the balance, a hybrid approach...',
+        ];
 
   late AnimationController _waveAnimationController;
 
@@ -50,6 +76,16 @@ class _DailySpeakRecordingScreenState extends State<DailySpeakRecordingScreen>
   Future<void> _startRecordingSession() async {
     try {
       await _audioService.startRecording();
+      _amplitudeSubscription =
+          _audioService.onAmplitudeChanged().listen((amp) {
+        if (!mounted) return;
+        // Normalize decibels: amp.current ranges from -160 (silent) to 0 (loud)
+        final norm = ((amp.current + 50.0) / 50.0).clamp(0.0, 1.0);
+        setState(() {
+          _isSpeaking = norm > 0.08;
+          _currentVolume = norm;
+        });
+      });
     } catch (e) {
       debugPrint('Audio recording start error: $e');
     }
@@ -70,6 +106,7 @@ class _DailySpeakRecordingScreenState extends State<DailySpeakRecordingScreen>
     if (_isFinished || _isSubmitting) return;
     _isFinished = true;
     _timer?.cancel();
+    _amplitudeSubscription?.cancel();
 
     setState(() {
       _isSubmitting = true;
@@ -79,15 +116,15 @@ class _DailySpeakRecordingScreenState extends State<DailySpeakRecordingScreen>
 
     try {
       final recordedPath = await _audioService.stopRecording();
-
-      // Submit recording and generate report for this single Daily Speak conversation
       if (recordedPath != null && gd.currentSession != null) {
-        await _apiServiceSubmitTurnAndReport(gd, recordedPath);
-      } else {
-        await gd.endSession();
+        await gd.submitRecordedFile(recordedPath);
       }
+      await gd.endSession();
     } catch (e) {
       debugPrint('Error finishing speaking: $e');
+      try {
+        await gd.endSession();
+      } catch (_) {}
     }
 
     if (mounted) {
@@ -95,17 +132,10 @@ class _DailySpeakRecordingScreenState extends State<DailySpeakRecordingScreen>
     }
   }
 
-  Future<void> _apiServiceSubmitTurnAndReport(
-      GDProvider gd, String recordedPath) async {
-    try {
-      await gd.stopRecordingAndSubmit();
-    } catch (_) {}
-    await gd.endSession();
-  }
-
   @override
   void dispose() {
     _timer?.cancel();
+    _amplitudeSubscription?.cancel();
     _waveAnimationController.dispose();
     _audioService.dispose();
     super.dispose();
@@ -291,7 +321,46 @@ class _DailySpeakRecordingScreenState extends State<DailySpeakRecordingScreen>
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 14),
+
+                    // Hints Toggle Pill (Starts OFF by default)
+                    GestureDetector(
+                      onTap: () => setState(() => _showHints = !_showHints),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 7),
+                        decoration: BoxDecoration(
+                          color: _showHints
+                              ? primaryColor.withOpacity(0.14)
+                              : cardBg,
+                          borderRadius: BorderRadius.circular(18),
+                          border: Border.all(
+                            color: _showHints
+                                ? primaryColor.withOpacity(0.35)
+                                : borderColor,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text('💡', style: TextStyle(fontSize: 13)),
+                            const SizedBox(width: 6),
+                            Text(
+                              _showHints ? 'Hide Hints & Ideas' : 'Need Hints or Ideas?',
+                              style: GoogleFonts.outfit(
+                                fontSize: 12.5,
+                                fontWeight: FontWeight.bold,
+                                color: _showHints
+                                    ? primaryColor
+                                    : subtitleColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
 
                     // Center Hero Circle with Progress Ring, Waveforms & Mic Image
                     SizedBox(
@@ -427,57 +496,117 @@ class _DailySpeakRecordingScreenState extends State<DailySpeakRecordingScreen>
 
                     const SizedBox(height: 28),
 
-                    // Tip Card
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? AppTheme.cardDark
-                            : const Color(0xFFF8FAFC),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: borderColor),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 42,
-                            height: 42,
-                            decoration: BoxDecoration(
-                              color: primaryColor.withOpacity(0.12),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Center(
-                              child: Text('💡', style: TextStyle(fontSize: 20)),
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                    // 💡 Hints & Starter Phrases Card
+                    if (_showHints) ...[
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: cardBg,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: borderColor, width: 1.2),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               children: [
-                                Text(
-                                  'Tip',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: primaryColor,
+                                Container(
+                                  width: 34,
+                                  height: 34,
+                                  decoration: BoxDecoration(
+                                    color: primaryColor.withOpacity(0.12),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Center(
+                                    child: Text('💡', style: TextStyle(fontSize: 16)),
                                   ),
                                 ),
-                                const SizedBox(height: 2),
+                                const SizedBox(width: 10),
                                 Text(
-                                  'Try to give 2–3 reasons to support your answer.',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 13,
-                                    color: subtitleColor,
-                                    fontWeight: FontWeight.w500,
+                                  'IDEAS & HINTS TO SUPPORT YOUR ANSWER',
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: primaryColor,
+                                    letterSpacing: 0.5,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 12),
+                            ..._activeTalkingPoints.map(
+                              (point) => Padding(
+                                padding: const EdgeInsets.only(bottom: 6),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '• ',
+                                      style: TextStyle(
+                                        color: primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        point,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 12.5,
+                                          color: headingColor.withOpacity(0.9),
+                                          height: 1.35,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'STARTER PHRASES:',
+                              style: GoogleFonts.outfit(
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.bold,
+                                color: subtitleColor,
+                                letterSpacing: 0.6,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: _activeStarterPhrases.map((phrase) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 7),
+                                      decoration: BoxDecoration(
+                                        color: primaryColor.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(
+                                          color: primaryColor.withOpacity(0.25),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        phrase,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
 
                     const SizedBox(height: 28),
 
@@ -534,6 +663,24 @@ class _DailySpeakRecordingScreenState extends State<DailySpeakRecordingScreen>
   }
 
   Widget _buildWaveformBars(Color color, bool isLeft) {
+    if (!_isSpeaking) {
+      // Silent State (Google Meet style flat dim bars)
+      return Row(
+        children: List.generate(4, (index) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 2),
+            width: 3.5,
+            height: 6,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.25),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          );
+        }),
+      );
+    }
+
+    // Active Voice State (Live audio amplitude visualizer)
     return AnimatedBuilder(
       animation: _waveAnimationController,
       builder: (context, _) {
@@ -542,13 +689,13 @@ class _DailySpeakRecordingScreenState extends State<DailySpeakRecordingScreen>
           children: List.generate(4, (index) {
             final multiplier =
                 math.sin((val * math.pi) + (index * 0.8)) * 0.5 + 0.5;
-            final h = 12 + (multiplier * 24);
+            final h = 10 + (_currentVolume * multiplier * 26);
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 2),
               width: 3.5,
               height: h,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.4 + (multiplier * 0.5)),
+                color: color.withOpacity(0.5 + (_currentVolume * 0.5)),
                 borderRadius: BorderRadius.circular(2),
               ),
             );

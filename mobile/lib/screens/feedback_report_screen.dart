@@ -43,7 +43,7 @@ class _FeedbackReportScreenState extends State<FeedbackReportScreen> {
     final headingColor = isDark ? AppTheme.textMain : AppTheme.textMainLight;
     final subtitleColor = isDark ? AppTheme.textMuted : AppTheme.textMutedLight;
 
-    if (gd.isLoading || (report == null && gd.errorMessage == null)) {
+    if (gd.isLoading) {
       return Scaffold(
         appBar: AppHeader(
           title: 'Feedback Report',

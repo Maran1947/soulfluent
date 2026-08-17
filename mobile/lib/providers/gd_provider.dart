@@ -281,6 +281,32 @@ class GDProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> submitRecordedFile(String filePath) async {
+    if (_currentSession == null) return;
+    _isProcessingTurn = true;
+    notifyListeners();
+    try {
+      final file = File(filePath);
+      if (await file.exists() && await file.length() > 0) {
+        final turnRes =
+            await _apiService.submitTurn(_currentSession!.id, filePath);
+        _messages.add(GDMessage(
+          id: 'user_${turnRes.turnIndex - 1}',
+          sessionId: _currentSession!.id,
+          speakerType: 'user',
+          personaKey: null,
+          transcript: turnRes.userTranscript,
+          createdAt: DateTime.now().toIso8601String(),
+        ));
+      }
+    } catch (e) {
+      debugPrint('Error submitting recorded file turn: $e');
+    } finally {
+      _isProcessingTurn = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> stopRecordingAndSubmit() async {
     if (!_isRecording || _currentSession == null) return;
 
@@ -407,8 +433,19 @@ class GDProvider extends ChangeNotifier {
       } catch (_) {
         // If report is not generated yet and session has messages, generate it via endSession
         if (_messages.isNotEmpty) {
-          _currentReport = await _apiService.endSession(sessionId);
+          try {
+            _currentReport = await _apiService.endSession(sessionId);
+          } catch (endErr) {
+            _errorMessage = formatUserFriendlyError(endErr);
+          }
+        } else {
+          _errorMessage =
+              'No speech audio recorded for this session. Speak into the microphone during a session to generate an AI performance report!';
         }
+      }
+      if (_currentReport == null && _errorMessage == null) {
+        _errorMessage =
+            'Unable to load performance report. Please try speaking in a new session.';
       }
     } catch (e) {
       _errorMessage = formatUserFriendlyError(e);

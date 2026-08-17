@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluentsoul_mobile/config/theme.dart';
 import 'package:fluentsoul_mobile/models/curriculum.dart';
+import 'package:fluentsoul_mobile/services/audio_service.dart';
 
 class LessonActivityWidget extends StatefulWidget {
   final TrackActivity activity;
@@ -20,22 +21,52 @@ class LessonActivityWidget extends StatefulWidget {
 }
 
 class _LessonActivityWidgetState extends State<LessonActivityWidget> {
+  final AudioService _audioService = AudioService();
+  int _currentPhraseIndex = 0;
   bool _isPlayingAudio = false;
-  int? _selectedPhraseIndex;
 
   @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardBg = isDark ? const Color(0xFF131C2E) : Colors.white;
-    final borderColor =
-        isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
-    final headingColor = isDark ? Colors.white : const Color(0xFF0F172A);
-    final subtitleColor =
-        isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+  void initState() {
+    super.initState();
+    // Auto-play first expression pronunciation when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _autoPlayCurrentPhrase();
+    });
+  }
 
-    final instruction = widget.activity.config['instruction']?.toString() ??
-        'Learn core expressions and context for ${widget.node.theme}.';
+  @override
+  void dispose() {
+    _audioService.dispose();
+    super.dispose();
+  }
 
+  void _autoPlayCurrentPhrase() {
+    final phrases = _extractPhrases();
+    if (phrases.isNotEmpty && _currentPhraseIndex < phrases.length) {
+      _playPronunciation(phrases[_currentPhraseIndex]);
+    }
+  }
+
+  Future<void> _playPronunciation(String phrase) async {
+    setState(() {
+      _isPlayingAudio = true;
+    });
+
+    try {
+      final encoded = Uri.encodeComponent(phrase);
+      final ttsUrl =
+          'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=$encoded';
+      await _audioService.playAudioUrl(ttsUrl);
+    } catch (e) {
+      debugPrint('Error playing pronunciation audio: $e');
+    } finally {
+      if (mounted) {
+        setState(() => _isPlayingAudio = false);
+      }
+    }
+  }
+
+  List<String> _extractPhrases() {
     final List<String> phrases = [];
     final config = widget.activity.config;
     if (config['content'] is Map && config['content']['items'] is List) {
@@ -55,218 +86,344 @@ class _LessonActivityWidgetState extends State<LessonActivityWidget> {
       phrases.addAll(
           ['Hello, nice to meet you!', 'Good morning! How are you doing?']);
     }
+    return phrases;
+  }
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Badge & Header
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: AppTheme.primary.withOpacity(0.12),
-              borderRadius: BorderRadius.circular(100),
-              border: Border.all(color: AppTheme.primary.withOpacity(0.3)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
+  void _goToNext(int total) {
+    if (_currentPhraseIndex < total - 1) {
+      setState(() {
+        _currentPhraseIndex++;
+      });
+      _autoPlayCurrentPhrase();
+    } else {
+      widget.onCompleted();
+    }
+  }
+
+  void _goToPrevious() {
+    if (_currentPhraseIndex > 0) {
+      setState(() {
+        _currentPhraseIndex--;
+      });
+      _autoPlayCurrentPhrase();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? const Color(0xFF131C2E) : Colors.white;
+    final borderColor =
+        isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final headingColor = isDark ? Colors.white : const Color(0xFF0F172A);
+    final subtitleColor =
+        isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+
+    final phrases = _extractPhrases();
+    final totalPhrases = phrases.length;
+    final currentPhrase = phrases[_currentPhraseIndex];
+
+    return Column(
+      children: [
+        // Scrollable Focus Card Content
+        Expanded(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.menu_book_rounded,
-                    size: 14, color: AppTheme.primary),
-                const SizedBox(width: 6),
-                Text(
-                  'CONTEXT LESSON',
-                  style: GoogleFonts.inter(
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.primary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
-
-          Text(
-            widget.activity.title,
-            style: GoogleFonts.outfit(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: headingColor,
-            ),
-          ),
-          const SizedBox(height: 8),
-
-          Text(
-            instruction,
-            style: GoogleFonts.inter(
-              fontSize: 15,
-              color: subtitleColor,
-              height: 1.45,
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Key Phrases Section
-          Text(
-            'Key Expressions',
-            style: GoogleFonts.outfit(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: headingColor,
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          ...phrases.asMap().entries.map((entry) {
-            final idx = entry.key;
-            final phrase = entry.value;
-            final isSelected = _selectedPhraseIndex == idx;
-
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedPhraseIndex = idx;
-                  _isPlayingAudio = true;
-                });
-                Future.delayed(const Duration(seconds: 2), () {
-                  if (mounted) setState(() => _isPlayingAudio = false);
-                });
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color:
-                      isSelected ? AppTheme.primary.withOpacity(0.1) : cardBg,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isSelected ? AppTheme.primary : borderColor,
-                    width: isSelected ? 1.5 : 1.0,
-                  ),
-                ),
-                child: Row(
+                // Header Row (Clean & Non-Redundant)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      width: 40,
-                      height: 40,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppTheme.primary
-                            : AppTheme.primary.withOpacity(0.12),
-                        shape: BoxShape.circle,
+                        color: AppTheme.primary.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(
+                            color: AppTheme.primary.withOpacity(0.3)),
                       ),
-                      child: Center(
-                        child: Icon(
-                          (isSelected && _isPlayingAudio)
-                              ? Icons.volume_up_rounded
-                              : Icons.play_arrow_rounded,
-                          color: isSelected ? Colors.white : AppTheme.primary,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
+                          const Icon(Icons.menu_book_rounded,
+                              size: 14, color: AppTheme.primary),
+                          const SizedBox(width: 6),
                           Text(
-                            phrase,
-                            style: GoogleFonts.outfit(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: headingColor,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Tap to listen pronunciation',
+                            'KEY EXPRESSIONS',
                             style: GoogleFonts.inter(
-                              fontSize: 12,
-                              color: subtitleColor,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.primary,
+                              letterSpacing: 0.6,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            );
-          }),
-
-          const SizedBox(height: 20),
-
-          // Context Usage Box
-          Container(
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: isDark
-                  ? const Color(0xFF1E293B).withOpacity(0.6)
-                  : const Color(0xFFF1F5F9),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: borderColor),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.lightbulb_outline_rounded,
-                        size: 18, color: Color(0xFFEAB308)),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Usage Tip',
-                      style: GoogleFonts.outfit(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: headingColor,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? const Color(0xFF1E293B)
+                            : const Color(0xFFF1F5F9),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        '${_currentPhraseIndex + 1} / $totalPhrases',
+                        style: GoogleFonts.outfit(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: subtitleColor,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'Use these expressions naturally in daily greetings without overthinking translations.',
-                  style: GoogleFonts.inter(
-                    fontSize: 13.5,
-                    color: subtitleColor,
-                    height: 1.4,
+
+                const SizedBox(height: 18),
+
+                // 🌟 Hero Focus Card for Current Expression
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (child, animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: ScaleTransition(scale: animation, child: child),
+                    );
+                  },
+                  child: Container(
+                    key: ValueKey<int>(_currentPhraseIndex),
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: cardBg,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                          color: AppTheme.primary.withOpacity(0.4),
+                          width: 1.5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.primary.withOpacity(0.08),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'LISTEN & LEARN',
+                          style: GoogleFonts.outfit(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.primary,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Expression Text
+                        Text(
+                          currentPhrase,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.outfit(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                            color: headingColor,
+                            height: 1.28,
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // Replay Audio Pronunciation Button
+                        GestureDetector(
+                          onTap: () => _playPronunciation(currentPhrase),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 12),
+                            decoration: BoxDecoration(
+                              color: _isPlayingAudio
+                                  ? AppTheme.primary
+                                  : AppTheme.primary.withOpacity(0.12),
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(
+                                color: AppTheme.primary.withOpacity(0.4),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  _isPlayingAudio
+                                      ? Icons.volume_up_rounded
+                                      : Icons.play_arrow_rounded,
+                                  color: _isPlayingAudio
+                                      ? Colors.white
+                                      : AppTheme.primary,
+                                  size: 22,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  _isPlayingAudio
+                                      ? 'Playing Audio...'
+                                      : 'Tap to Listen Again',
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: _isPlayingAudio
+                                        ? Colors.white
+                                        : AppTheme.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                // Context Usage Tip Box
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? const Color(0xFF1E293B).withOpacity(0.6)
+                        : const Color(0xFFF1F5F9),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(color: borderColor),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFEAB308).withOpacity(0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.lightbulb_outline_rounded,
+                              size: 20, color: Color(0xFFEAB308)),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'USAGE TIP',
+                              style: GoogleFonts.outfit(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: headingColor,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'Practice saying this phrase out loud 2-3 times to lock it in memory.',
+                              style: GoogleFonts.inter(
+                                fontSize: 12.5,
+                                color: subtitleColor,
+                                height: 1.35,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 32),
+        ),
 
-          // Continue Button
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: ElevatedButton(
-              onPressed: widget.onCompleted,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: 0,
-              ),
-              child: Text(
-                'Understand & Continue',
-                style: GoogleFonts.outfit(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+        // Pinned Bottom Navigation Action Bar
+        SafeArea(
+          top: false,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            decoration: BoxDecoration(
+              color: cardBg,
+              border: Border(
+                top: BorderSide(color: borderColor.withOpacity(0.5)),
               ),
             ),
+            child: Row(
+              children: [
+                if (_currentPhraseIndex > 0)
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: SizedBox(
+                        height: 52,
+                        child: OutlinedButton(
+                          onPressed: _goToPrevious,
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: borderColor, width: 1.5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.arrow_back_rounded,
+                            color: headingColor,
+                            size: 22,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                Expanded(
+                  flex: 2,
+                  child: SizedBox(
+                    height: 52,
+                    child: ElevatedButton(
+                      onPressed: () => _goToNext(totalPhrases),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _currentPhraseIndex == totalPhrases - 1
+                                ? 'Finish Lesson'
+                                : 'Next Expression',
+                            style: GoogleFonts.outfit(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -18,6 +18,10 @@ class AudioService {
 
   Stream<PlayerState> get playerStateStream => _player.playerStateStream;
 
+  Stream<Amplitude> onAmplitudeChanged([Duration interval = const Duration(milliseconds: 100)]) {
+    return _recorder.onAmplitudeChanged(interval);
+  }
+
   Future<bool> hasPermission() async {
     return await _recorder.hasPermission();
   }

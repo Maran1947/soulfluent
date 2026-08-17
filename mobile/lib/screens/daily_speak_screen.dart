@@ -20,14 +20,17 @@ class _DailySpeakScreenState extends State<DailySpeakScreen> {
   String _topic = "Would you rather work from home or from an office?";
   String _subtitle = "Share your thoughts and reasons.";
   int _durationSeconds = 60;
-  int _streakDays = 4;
-  int _completedDaysCount = 4;
+  int _streakDays = 0;
+  int _completedDaysCount = 0;
   int _totalDaysCount = 7;
+  List<String> _talkingPoints = [];
+  List<String> _starterPhrases = [];
+
   List<Map<String, dynamic>> _weeklyProgress = [
-    {'day': 'M', 'completed': true},
-    {'day': 'T', 'completed': true},
-    {'day': 'W', 'completed': true},
-    {'day': 'T', 'completed': true},
+    {'day': 'M', 'completed': false},
+    {'day': 'T', 'completed': false},
+    {'day': 'W', 'completed': false},
+    {'day': 'T', 'completed': false},
     {'day': 'F', 'completed': false},
     {'day': 'S', 'completed': false},
     {'day': 'S', 'completed': false},
@@ -61,9 +64,16 @@ class _DailySpeakScreenState extends State<DailySpeakScreen> {
             _weeklyProgress =
                 List<Map<String, dynamic>>.from(data['weekly_progress']);
           }
+          if (data['talking_points'] != null) {
+            _talkingPoints = List<String>.from(data['talking_points']);
+          }
+          if (data['starter_phrases'] != null) {
+            _starterPhrases = List<String>.from(data['starter_phrases']);
+          }
           _isLoading = false;
         });
       }
+
     } catch (_) {
       if (mounted) {
         setState(() {
@@ -73,7 +83,12 @@ class _DailySpeakScreenState extends State<DailySpeakScreen> {
     }
   }
 
+  bool _isStartingSession = false;
+
   Future<void> _startDailySpeaking() async {
+    if (_isStartingSession) return;
+    setState(() => _isStartingSession = true);
+
     final gd = context.read<GDProvider>();
     final success = await gd.startSession(
       topic: _topic,
@@ -81,6 +96,11 @@ class _DailySpeakScreenState extends State<DailySpeakScreen> {
       difficulty: 'intermediate',
       personaKeys: ['riya'],
     );
+
+    if (mounted) {
+      setState(() => _isStartingSession = false);
+    }
+
     if (success && mounted) {
       Navigator.push(
         context,
@@ -89,10 +109,332 @@ class _DailySpeakScreenState extends State<DailySpeakScreen> {
             topic: _topic,
             subtitle: _subtitle,
             streakDays: _streakDays,
+            talkingPoints: _talkingPoints,
+            starterPhrases: _starterPhrases,
           ),
         ),
       );
+    } else if (mounted) {
+      final errorMsg = gd.errorMessage ??
+          'Unable to start session. Please check your network connection.';
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.error_outline_rounded,
+                  color: Colors.white, size: 20),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  errorMsg,
+                  style: GoogleFonts.inter(fontSize: 13, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12)),
+          duration: const Duration(seconds: 4),
+        ),
+      );
     }
+  }
+
+  void _showProgressDetailsSheet() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? AppTheme.cardDark : Colors.white;
+    final headingColor = isDark ? AppTheme.textMain : const Color(0xFF0F172A);
+    final subtitleColor = isDark ? AppTheme.textMuted : const Color(0xFF64748B);
+    final primaryColor = AppTheme.primary;
+    final borderColor = isDark ? AppTheme.borderDark : const Color(0xFFE2E8F0);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: isDark ? AppTheme.background : const Color(0xFFF8FAFC),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            border: Border.all(color: borderColor),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Drag Handle
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: subtitleColor.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Title Row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Weekly Analytics & History',
+                        style: GoogleFonts.outfit(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: headingColor,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'Your daily speaking consistency breakdown',
+                        style: GoogleFonts.inter(
+                          fontSize: 13,
+                          color: subtitleColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.close_rounded, color: subtitleColor),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              // 3 Metric Cards Row
+              Row(
+                children: [
+                  _buildMetricCard(
+                    icon: '🔥',
+                    title: 'Current Streak',
+                    value: '$_streakDays Days',
+                    color: const Color(0xFFEA580C),
+                    cardBg: cardBg,
+                    borderColor: borderColor,
+                  ),
+                  const SizedBox(width: 10),
+                  _buildMetricCard(
+                    icon: '🎯',
+                    title: 'This Week',
+                    value: '$_completedDaysCount/$_totalDaysCount Days',
+                    color: primaryColor,
+                    cardBg: cardBg,
+                    borderColor: borderColor,
+                  ),
+                  const SizedBox(width: 10),
+                  _buildMetricCard(
+                    icon: '⏱️',
+                    title: 'Speaking Time',
+                    value: '${_completedDaysCount * 1} Mins',
+                    color: Colors.green,
+                    cardBg: cardBg,
+                    borderColor: borderColor,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+
+              // Detailed Weekly Breakdown Header
+              Text(
+                'THIS WEEK\'S SCHEDULE',
+                style: GoogleFonts.outfit(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: primaryColor,
+                  letterSpacing: 0.8,
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // 7-Day Matrix List
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: cardBg,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: borderColor),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: _weeklyProgress.map((item) {
+                    final day = item['day'] ?? 'M';
+                    final completed = item['completed'] == true;
+                    return Column(
+                      children: [
+                        Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: completed
+                                ? primaryColor
+                                : primaryColor.withOpacity(0.08),
+                            border: Border.all(
+                              color: completed
+                                  ? primaryColor
+                                  : borderColor,
+                            ),
+                          ),
+                          child: Center(
+                            child: completed
+                                ? const Icon(Icons.check_rounded,
+                                    color: Colors.white, size: 20)
+                                : Text(
+                                    day,
+                                    style: GoogleFonts.outfit(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: subtitleColor,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          day,
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: completed ? primaryColor : subtitleColor,
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Recent Topics Log
+              Text(
+                'RECENT TOPICS PRACTICED',
+                style: GoogleFonts.outfit(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: subtitleColor,
+                  letterSpacing: 0.8,
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: cardBg,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: borderColor),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: primaryColor.withOpacity(0.12),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: Text('🎙️', style: TextStyle(fontSize: 16)),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _topic,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.outfit(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: headingColor,
+                            ),
+                          ),
+                          Text(
+                            _completedDaysCount > 0
+                                ? 'Completed Today • 60s Session'
+                                : 'Scheduled For Today • 60s Session',
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              color: _completedDaysCount > 0
+                                  ? Colors.green
+                                  : subtitleColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (_completedDaysCount > 0)
+                      const Icon(Icons.check_circle_rounded,
+                          color: Colors.green, size: 22),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildMetricCard({
+    required String icon,
+    required String title,
+    required String value,
+    required Color color,
+    required Color cardBg,
+    required Color borderColor,
+  }) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: cardBg,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: borderColor),
+        ),
+        child: Column(
+          children: [
+            Text(icon, style: const TextStyle(fontSize: 20)),
+            const SizedBox(height: 6),
+            Text(
+              value,
+              style: GoogleFonts.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.inter(
+                fontSize: 10.5,
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -162,7 +504,7 @@ class _DailySpeakScreenState extends State<DailySpeakScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Daily Speak',
+                                  'Speak Daily',
                                   style: GoogleFonts.outfit(
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold,
@@ -170,7 +512,7 @@ class _DailySpeakScreenState extends State<DailySpeakScreen> {
                                   ),
                                 ),
                                 Text(
-                                  'Speak daily. Become confident.',
+                                  'Become confident.',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.inter(
@@ -344,10 +686,10 @@ class _DailySpeakScreenState extends State<DailySpeakScreen> {
                           ],
                         ),
                       ),
-
                       const SizedBox(height: 24),
 
                       // CTA Start Speaking Button (Sleek Purple Button with Vector Mic Badge)
+
                       Container(
                         width: double.infinity,
                         height: 60,
@@ -370,42 +712,53 @@ class _DailySpeakScreenState extends State<DailySpeakScreen> {
                           ],
                         ),
                         child: ElevatedButton(
-                          onPressed: _startDailySpeaking,
+                          onPressed:
+                              _isStartingSession ? null : _startDailySpeaking,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             shadowColor: Colors.transparent,
+                            disabledBackgroundColor: Colors.transparent,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
                             padding: EdgeInsets.zero,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 34,
-                                height: 34,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
-                                  shape: BoxShape.circle,
+                          child: _isStartingSession
+                              ? const SizedBox(
+                                  width: 26,
+                                  height: 26,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2.5,
+                                  ),
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 34,
+                                      height: 34,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.2),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.mic_rounded,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Text(
+                                      'Start Speaking',
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                child: const Icon(
-                                  Icons.mic_rounded,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Text(
-                                'Start Speaking',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     ],
@@ -447,14 +800,7 @@ class _DailySpeakScreenState extends State<DailySpeakScreen> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Weekly history log'),
-                                  duration: Duration(seconds: 1),
-                                ),
-                              );
-                            },
+                            onTap: _showProgressDetailsSheet,
                             child: Text(
                               'View All',
                               style: GoogleFonts.inter(

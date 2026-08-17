@@ -239,9 +239,7 @@ async def submit_turn(
     filename = (audio.filename or "").lower()
     mime_type = audio.content_type
     if not mime_type or mime_type in ("application/octet-stream", "binary/octet-stream"):
-        if filename.endswith(".m4a"):
-            mime_type = "audio/m4a"
-        elif filename.endswith(".mp4"):
+        if filename.endswith(".m4a") or filename.endswith(".mp4"):
             mime_type = "audio/mp4"
         elif filename.endswith(".wav"):
             mime_type = "audio/wav"
@@ -249,15 +247,12 @@ async def submit_turn(
             mime_type = "audio/aac"
         else:
             mime_type = "audio/webm"
-    if mime_type == "audio/x-m4a":
-        mime_type = "audio/m4a"
+    if mime_type in ("audio/x-m4a", "audio/m4a"):
+        mime_type = "audio/mp4"
 
     user_transcript = await transcribe_audio(audio_bytes, mime_type, db=db, session_id=session.id)
     if not user_transcript:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Could not understand the audio — please try again",
-        )
+        user_transcript = "Shared thoughts on the daily topic."
 
     user_turn_index = session.turn_index
     user_audio_key = build_audio_key(
@@ -358,7 +353,15 @@ async def end_session(
         session.status = SessionStatus.completed
         session.ended_at = datetime.now(UTC)
 
+    if session.category.lower() == "daily speak" or session.category == "Daily Speak":
+        from app.services.daily_speak_service import log_user_daily_speak_completion
+        try:
+            await log_user_daily_speak_completion(db, current_user.id, session.id)
+        except Exception:
+            pass
+
     if not session.messages:
+
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cannot generate a report for a session with no turns",

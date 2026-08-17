@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import auth, daily_speak, gd, tracks
 from app.config import get_settings
 from app.database import AsyncSessionLocal
+from app.seeds.seed_daily_speak import seed_daily_speak
 from app.seeds.seed_fluency_tracks import seed_fluency_tracks
 from app.services.storage_service import ensure_bucket
 
@@ -32,8 +33,10 @@ async def on_startup():
     try:
         async with AsyncSessionLocal() as db:
             await seed_fluency_tracks(db)
+            await seed_daily_speak(db)
     except Exception as e:
         print(f"Auto-seed error on startup: {e}")
+
 
 
 @app.get("/health")

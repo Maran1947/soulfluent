@@ -4,6 +4,7 @@ post-session feedback analysis.
 """
 
 import io
+import logging
 import uuid
 import wave
 
@@ -16,6 +17,8 @@ from app.config import get_settings
 from app.models.llm_usage import CallType
 from app.services.persona import Persona
 from app.services.usage_service import log_usage
+
+logger = logging.getLogger(__name__)
 
 settings = get_settings()
 _client = genai.Client(api_key=settings.gemini_api_key)
@@ -31,6 +34,7 @@ async def transcribe_audio(
     session_id: uuid.UUID | None = None,
 ) -> str:
     """Transcribe a user's spoken turn using Gemini's audio understanding."""
+    logger.info(f"🎙️ [Gemini STT] Sending {len(audio_bytes)} bytes audio ({mime_type}) for transcription...")
     response = await _client.aio.models.generate_content(
         model=settings.gemini_text_model,
         contents=[
@@ -42,7 +46,9 @@ async def transcribe_audio(
         ],
     )
     await log_usage(db, session_id, CallType.stt, settings.gemini_text_model, response)
-    return (response.text or "").strip()
+    transcript = (response.text or "").strip()
+    logger.info(f"✅ [Gemini STT Result]: '{transcript}'")
+    return transcript
 
 
 # ---------------------------------------------------------------------------
@@ -115,6 +121,7 @@ async def generate_next_turn(
     db: AsyncSession | None = None,
     session_id: uuid.UUID | None = None,
 ) -> NextTurn:
+    logger.info(f"🤖 [Gemini Turn Generation] Topic: '{topic}', Last Speaker: '{last_speaker}'...")
     prompt = _build_turn_prompt(
         topic, personas, recent_turns, last_speaker, silent_turns, time_remaining_seconds
     )
@@ -128,7 +135,9 @@ async def generate_next_turn(
         ),
     )
     await log_usage(db, session_id, CallType.turn, settings.gemini_text_model, response)
-    return NextTurn.model_validate_json(response.text or "{}")
+    result = NextTurn.model_validate_json(response.text or "{}")
+    logger.info(f"✨ [Gemini Turn Generated] Speaker: '{result.speaker}', Text: '{result.text}'")
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -151,6 +160,7 @@ async def synthesize_speech(
     session_id: uuid.UUID | None = None,
 ) -> bytes:
     """Returns WAV audio bytes for the given text using a Gemini TTS voice."""
+    logger.info(f"🔊 [Gemini TTS] Synthesizing speech for voice '{voice_name}': '{text[:40]}...'")
     response = await _client.aio.models.generate_content(
         model=settings.gemini_tts_model,
         contents=text,
@@ -170,7 +180,9 @@ async def synthesize_speech(
     inline_data = candidates[0].content.parts[0].inline_data
     if not inline_data or not inline_data.data:
         raise RuntimeError("Gemini TTS response missing audio data")
-    return _pcm_to_wav(inline_data.data)
+    wav_bytes = _pcm_to_wav(inline_data.data)
+    logger.info(f"🔊 [Gemini TTS] Audio synthesized successfully ({len(wav_bytes)} bytes WAV).")
+    return wav_bytes
 
 
 # ---------------------------------------------------------------------------
@@ -209,6 +221,7 @@ async def analyze_session(
     db: AsyncSession | None = None,
     session_id: uuid.UUID | None = None,
 ) -> QualitativeFeedback:
+    logger.info(f"📊 [Gemini Analysis] Analyzing session transcript for topic: '{topic}'...")
     prompt = f"""
 You are an expert English-speaking and Group Discussion coach analyzing a
 practice session transcript.
@@ -234,4 +247,6 @@ and specific analysis following the requested schema exactly.
         ),
     )
     await log_usage(db, session_id, CallType.analysis, settings.gemini_text_model, response)
-    return QualitativeFeedback.model_validate_json(response.text or "{}")
+    feedback = QualitativeFeedback.model_validate_json(response.text or "{}")
+    logger.info(f"📊 [Gemini Analysis Complete] Overall Score: {feedback.overall_score}/100")
+    return feedback

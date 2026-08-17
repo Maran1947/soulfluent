@@ -16,6 +16,9 @@ from app.models.session import Difficulty, GDSession, Session, SessionMode, Sess
 from app.models.user import User, UserRole
 from app.models.user_preference import UserPreference
 
+from app.models.daily_speak_topic import DailySpeakTopic
+from app.models.user_daily_speak import UserDailySpeak
+
 __all__ = [
     "Account",
     "AccountStatus",
@@ -41,4 +44,7 @@ __all__ = [
     "ActivityType",
     "ActivityStatus",
     "UserActivityProgress",
+    "DailySpeakTopic",
+    "UserDailySpeak",
 ]
+
