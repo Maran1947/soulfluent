@@ -130,76 +130,46 @@ function getAuthHeaders(): Record<string, string> {
 }
 
 export async function loginAdmin(email: string, password: string): Promise<AdminUser> {
-  try {
-    const res = await fetch(`${API_BASE}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+  const res = await fetch(`${API_BASE}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
 
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.detail || "Invalid email or password.");
-    }
-
-    const data = await res.json();
-    const user = data.user;
-
-    if (user.role !== "ADMIN") {
-      throw new Error(
-        `Access Denied: Account '${email}' does not have ADMIN role permissions. Only users with role ADMIN can access this dashboard.`
-      );
-    }
-
-    localStorage.setItem("fluent_admin_token", data.access_token);
-    localStorage.setItem("fluent_admin_user", JSON.stringify(user));
-    return user;
-  } catch (err: any) {
-    if (err.message && err.message.includes("Access Denied")) {
-      throw err;
-    }
-    if (email === "admin.fluentsoul@qurutu.com" && password === "admin12345") {
-      const demoUser: AdminUser = {
-        id: "admin-demo-1",
-        email: "admin.fluentsoul@qurutu.com",
-        name: "System Administrator",
-        role: "ADMIN",
-      };
-      localStorage.setItem("fluent_admin_token", "demo-admin-jwt-token");
-      localStorage.setItem("fluent_admin_user", JSON.stringify(demoUser));
-      return demoUser;
-    }
-    throw err;
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.detail || "Invalid email or password.");
   }
+
+  const data = await res.json();
+  const user = data.user;
+
+  if (user.role !== "ADMIN") {
+    throw new Error(
+      `Access Denied: Account '${email}' does not have ADMIN role permissions. Only users with role ADMIN can access this dashboard.`
+    );
+  }
+
+  localStorage.setItem("fluent_admin_token", data.access_token);
+  localStorage.setItem("fluent_admin_user", JSON.stringify(user));
+  return user;
 }
 
 export async function fetchOverviewStats(startDate?: string, endDate?: string): Promise<OverviewStats> {
-  try {
-    const params = new URLSearchParams();
-    if (startDate) params.append("start_date", startDate);
-    if (endDate) params.append("end_date", endDate);
-    const res = await fetch(`${API_BASE}/admin/stats/overview?${params.toString()}`, {
-      headers: getAuthHeaders(),
-      cache: "no-store",
-    });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    console.warn("Backend API not reachable, loading fallback overview stats.");
+  const params = new URLSearchParams();
+  if (startDate) params.append("start_date", startDate);
+  if (endDate) params.append("end_date", endDate);
+
+  const res = await fetch(`${API_BASE}/admin/stats/overview?${params.toString()}`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to load overview stats from server.");
   }
-  return {
-    total_signups: 148,
-    onboarded_users: 112,
-    onboarded_percentage: 75.7,
-    started_tracks_users: 89,
-    total_sessions: 342,
-    completed_sessions_count: 280,
-    active_sessions_count: 14,
-    abandoned_sessions_count: 48,
-    total_daily_speaks: 610,
-    total_cost_usd: 14.852,
-    signup_sources: { EMAIL: 92, GOOGLE: 56 },
-    cefr_distribution: { A2: 24, B1: 68, B2: 42, C1: 14 },
-  };
+
+  return await res.json();
 }
 
 export async function fetchSessions(
@@ -208,200 +178,63 @@ export async function fetchSessions(
   startDate?: string,
   endDate?: string
 ): Promise<SessionListItem[]> {
-  try {
-    const params = new URLSearchParams();
-    if (status) params.append("status", status);
-    if (mode) params.append("mode", mode);
-    if (startDate) params.append("start_date", startDate);
-    if (endDate) params.append("end_date", endDate);
-    const res = await fetch(`${API_BASE}/admin/sessions?${params.toString()}`, {
-      headers: getAuthHeaders(),
-      cache: "no-store",
-    });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    console.warn("Backend API not reachable, loading fallback sessions.");
+  const params = new URLSearchParams();
+  if (status) params.append("status", status);
+  if (mode) params.append("mode", mode);
+  if (startDate) params.append("start_date", startDate);
+  if (endDate) params.append("end_date", endDate);
+
+  const res = await fetch(`${API_BASE}/admin/sessions?${params.toString()}`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to load user sessions from server.");
   }
-  return [
-    {
-      id: "7c9e6679-7425-40de-944b-e07fc1f90ae7",
-      user_id: "u-101",
-      user_name: "Aarav Sharma",
-      user_email: "aarav@example.com",
-      mode: "gd",
-      topic: "Will AI Replace Humans in Software Engineering?",
-      category: "Tech & Career",
-      status: "completed",
-      duration_minutes: 10,
-      turn_index: 8,
-      started_at: new Date(Date.now() - 3600000).toISOString(),
-      ended_at: new Date(Date.now() - 3000000).toISOString(),
-      total_tokens: 14250,
-      total_cost_usd: 0.142,
-    },
-    {
-      id: "9b12a831-28fa-41e9-86ab-48d8b12e8412",
-      user_id: "u-102",
-      user_name: "Priya Patel",
-      user_email: "priya@example.com",
-      mode: "debate",
-      topic: "Remote Work vs Office Culture",
-      category: "Workplace",
-      status: "completed",
-      duration_minutes: 15,
-      turn_index: 12,
-      started_at: new Date(Date.now() - 7200000).toISOString(),
-      ended_at: new Date(Date.now() - 6300000).toISOString(),
-      total_tokens: 22100,
-      total_cost_usd: 0.218,
-    },
-    {
-      id: "3e54b111-9f22-4811-a881-12efbc39219a",
-      user_id: "u-103",
-      user_name: "Rohan Verma",
-      user_email: "rohan@example.com",
-      mode: "conversation",
-      topic: "Daily Speak: Morning Routine & Productivity Habits",
-      category: "Daily Speak",
-      status: "completed",
-      duration_minutes: 5,
-      turn_index: 4,
-      started_at: new Date(Date.now() - 14400000).toISOString(),
-      ended_at: new Date(Date.now() - 14100000).toISOString(),
-      total_tokens: 6500,
-      total_cost_usd: 0.065,
-    },
-  ];
+
+  return await res.json();
 }
 
 export async function fetchSessionDetail(id: string): Promise<SessionDetail> {
-  try {
-    const res = await fetch(`${API_BASE}/admin/sessions/${id}`, {
-      headers: getAuthHeaders(),
-      cache: "no-store",
-    });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    console.warn("Backend API not reachable, loading fallback session detail.");
+  const res = await fetch(`${API_BASE}/admin/sessions/${id}`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to load session details from server.");
   }
-  return {
-    session: {
-      id: id,
-      user_id: "u-101",
-      user_name: "Aarav Sharma",
-      user_email: "aarav@example.com",
-      mode: "gd",
-      topic: "Will AI Replace Humans in Software Engineering?",
-      category: "Tech & Career",
-      status: "completed",
-      duration_minutes: 10,
-      turn_index: 4,
-      started_at: new Date(Date.now() - 3600000).toISOString(),
-      ended_at: new Date(Date.now() - 3000000).toISOString(),
-      total_tokens: 14250,
-      total_cost_usd: 0.142,
-    },
-    messages: [
-      {
-        id: "m-1",
-        turn_index: 1,
-        speaker: "user",
-        speaker_role: "user",
-        text: "I believe AI will automate repetitive tasks in coding, but software architecture requires human creativity.",
-        audio_duration_seconds: 9.4,
-        created_at: new Date(Date.now() - 3500000).toISOString(),
-      },
-      {
-        id: "m-2",
-        turn_index: 2,
-        speaker: "Riya",
-        speaker_role: "peer",
-        text: "That is a balanced viewpoint, Aarav! Riya here. However, won't advanced AI agents quickly learn system design and architecture as well?",
-        audio_duration_seconds: 8.2,
-        created_at: new Date(Date.now() - 3450000).toISOString(),
-      },
-    ],
-    usage_logs: [
-      {
-        id: "u-log-1",
-        call_type: "stt",
-        model: "gemini-3.5-flash",
-        input_tokens: 2400,
-        output_tokens: 120,
-        total_tokens: 2520,
-        cost_usd: 0.0046,
-        created_at: new Date(Date.now() - 3500000).toISOString(),
-      },
-    ],
-    report: {
-      wpm: 124,
-      filler_words_count: 2,
-      user_talk_time_seconds: 17.2,
-      vocabulary_feedback: "Strong usage of professional terms.",
-      argument_quality: "Articulate and logical points.",
-      key_highlights: "Great confidence in handling Meera's points.",
-      actionable_recommendations: "Try expanding on real-world industry examples.",
-      overall_score: 8.8,
-    },
-    total_cost_usd: 0.0862,
-  };
+
+  return await res.json();
 }
 
 export async function fetchDailySpeakList(startDate?: string, endDate?: string): Promise<DailySpeakListResponse> {
-  try {
-    const params = new URLSearchParams();
-    if (startDate) params.append("start_date", startDate);
-    if (endDate) params.append("end_date", endDate);
-    const res = await fetch(`${API_BASE}/admin/daily-speak?${params.toString()}`, {
-      headers: getAuthHeaders(),
-      cache: "no-store",
-    });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    console.warn("Backend API not reachable, loading fallback daily speak list.");
+  const params = new URLSearchParams();
+  if (startDate) params.append("start_date", startDate);
+  if (endDate) params.append("end_date", endDate);
+
+  const res = await fetch(`${API_BASE}/admin/daily-speak?${params.toString()}`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to load daily speak list from server.");
   }
-  return {
-    total_completions: 610,
-    total_cost_usd: 28.45,
-    items: [
-      {
-        id: "ds-1",
-        user_id: "u-101",
-        user_name: "Aarav Sharma",
-        user_email: "aarav@example.com",
-        completed_at_date: new Date().toISOString(),
-        topic_title: "Would you rather work from home or from an office?",
-        session_id: "7c9e6679-7425-40de-944b-e07fc1f90ae7",
-        cost_usd: 0.045,
-      },
-    ],
-  };
+
+  return await res.json();
 }
 
 export async function fetchLeaderboard(): Promise<LeaderboardUser[]> {
-  try {
-    const res = await fetch(`${API_BASE}/admin/users/leaderboard`, {
-      headers: getAuthHeaders(),
-      cache: "no-store",
-    });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    console.warn("Backend API not reachable, loading fallback leaderboard.");
+  const res = await fetch(`${API_BASE}/admin/users/leaderboard`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to load user leaderboard from server.");
   }
-  return [
-    {
-      rank: 1,
-      user_id: "u-101",
-      user_name: "Aarav Sharma",
-      user_email: "aarav@example.com",
-      streak_days: 14,
-      completed_sessions: 28,
-      completed_daily_speaks: 14,
-      completed_activities: 42,
-      total_speak_seconds: 1420.5,
-      cefr_level: "B2",
-      is_onboarded: true,
-      created_at: new Date(Date.now() - 30 * 86400000).toISOString(),
-    },
-  ];
+
+  return await res.json();
 }
