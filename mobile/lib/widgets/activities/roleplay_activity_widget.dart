@@ -20,14 +20,20 @@ class RoleplayActivityWidget extends StatefulWidget {
 }
 
 class _RoleplayActivityWidgetState extends State<RoleplayActivityWidget> {
-  final List<Map<String, String>> _messages = [
-    {
-      'sender': 'coach',
-      'text':
-          'Hello there! Good morning, welcome to our session. How are you doing today?'
-    },
-  ];
+  late List<Map<String, String>> _messages;
   bool _isRecording = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final initialText = widget.node.aiLine.isNotEmpty
+        ? widget.node.aiLine
+        : (widget.activity.config['initial_message']?.toString() ??
+            'Hello there! Welcome to our session. How are you doing today?');
+    _messages = [
+      {'sender': 'coach', 'text': initialText},
+    ];
+  }
 
   void _sendReply(String text) {
     setState(() {

@@ -22,14 +22,7 @@ class FormingSentenceActivityWidget extends StatefulWidget {
 
 class _FormingSentenceActivityWidgetState
     extends State<FormingSentenceActivityWidget> {
-  final List<String> _targetWords = [
-    'Good',
-    'morning,',
-    'nice',
-    'to',
-    'meet',
-    'you'
-  ];
+  late List<String> _targetWords;
   late List<String> _availableTiles;
   final List<String> _selectedTiles = [];
   bool? _isCorrect;
@@ -37,6 +30,19 @@ class _FormingSentenceActivityWidgetState
   @override
   void initState() {
     super.initState();
+    String rawSentence = '';
+    final config = widget.activity.config;
+    if (config['sentence'] is String && (config['sentence'] as String).isNotEmpty) {
+      rawSentence = config['sentence'];
+    } else if (config['target'] is String && (config['target'] as String).isNotEmpty) {
+      rawSentence = config['target'];
+    } else if (widget.node.phrasesA.isNotEmpty) {
+      rawSentence = widget.node.phrasesA.first;
+    }
+    if (rawSentence.isEmpty) {
+      rawSentence = 'Good morning, nice to meet you';
+    }
+    _targetWords = rawSentence.split(RegExp(r'\s+'));
     _availableTiles = List.from(_targetWords)..shuffle();
   }
 

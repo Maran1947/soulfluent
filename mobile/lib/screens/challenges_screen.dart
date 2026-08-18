@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import 'package:fluentsoul_mobile/config/theme.dart';
+import 'package:fluentsoul_mobile/providers/challenges_provider.dart';
 import 'package:fluentsoul_mobile/screens/word_search_game_screen.dart';
 
 class ChallengesScreen extends StatefulWidget {
@@ -92,7 +94,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                         const Text('⚡', style: TextStyle(fontSize: 14)),
                         const SizedBox(width: 4),
                         Text(
-                          '120 XP',
+                          '${context.watch<ChallengesProvider>().xp} XP',
                           style: GoogleFonts.outfit(
                             fontSize: 13,
                             fontWeight: FontWeight.bold,

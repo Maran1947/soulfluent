@@ -194,9 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final auth = context.watch<AuthProvider>();
     final gd = context.watch<GDProvider>();
     final onboarding = context.watch<OnboardingProvider>();
-    final localeProvider = context.watch<LocaleProvider>();
     final l10n = AppLocalizations.of(context);
-    final user = auth.currentUser;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (!onboarding.isOnboarded) {
@@ -251,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderColor, cardBg, gd, l10n)
                         else if (currentStep == 3)
                           _buildStep3VoicePartners(isDark, headingColor,
-                              subtitleColor, borderColor, cardBg, l10n)
+                              subtitleColor, borderColor, cardBg, gd, l10n)
                         else
                           _buildStep4Launch(isDark, headingColor, subtitleColor,
                               borderColor, cardBg, l10n),
@@ -844,14 +842,22 @@ class _HomeScreenState extends State<HomeScreen> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: [
-              _buildCategoryChip(
-                  'current_affairs', 'Current Affairs', Icons.public, isDark),
-              _buildCategoryChip('tech', 'Technology', Icons.memory, isDark),
-              _buildCategoryChip('business', 'Business', Icons.work, isDark),
-              _buildCategoryChip(
-                  'education', 'Education', Icons.school, isDark),
-            ],
+            children: (topicsMap.keys.isNotEmpty
+                    ? topicsMap.keys.toList()
+                    : ['current_affairs', 'tech', 'business', 'education'])
+                .map((catKey) {
+              final label = catKey
+                  .replaceAll('_', ' ')
+                  .split(' ')
+                  .map((w) => w.isNotEmpty ? '${w[0].toUpperCase()}${w.substring(1)}' : '')
+                  .join(' ');
+              IconData iconData = Icons.public;
+              if (catKey.contains('tech')) iconData = Icons.memory;
+              if (catKey.contains('bus')) iconData = Icons.work;
+              if (catKey.contains('edu')) iconData = Icons.school;
+
+              return _buildCategoryChip(catKey, label, iconData, isDark);
+            }).toList(),
           ),
         ),
 
@@ -951,9 +957,21 @@ class _HomeScreenState extends State<HomeScreen> {
     Color subtitleColor,
     Color borderColor,
     Color cardBg,
+    GDProvider gd,
     AppLocalizations? l10n,
   ) {
     final isDebate = selectedMode == 'debate';
+    final dynamicOpponents = gd.personas.isNotEmpty
+        ? gd.personas.values
+            .map((p) => {
+                  'key': p.key,
+                  'name': p.name,
+                  'title': p.sub,
+                  'flag': p.flag.isNotEmpty ? p.flag : '🌐',
+                  'desc': 'AI Voice Partner (${p.sub})',
+                })
+            .toList()
+        : debateOpponents;
 
     return Column(
       key: const ValueKey(3),
@@ -982,7 +1000,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(height: 18),
         Column(
-          children: debateOpponents.map((opp) {
+          children: dynamicOpponents.map((opp) {
             final key = opp['key']!;
             final isSelected = isDebate
                 ? selectedDebateOpponent == key

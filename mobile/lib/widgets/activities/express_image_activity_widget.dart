@@ -28,7 +28,6 @@ class _ExpressImageActivityWidgetState
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardBg = isDark ? const Color(0xFF131C2E) : Colors.white;
     final borderColor =
         isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
     final headingColor = isDark ? Colors.white : const Color(0xFF0F172A);
